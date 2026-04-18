@@ -2,12 +2,777 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Saufpokal Live – Dashboard</title>
+  <style>
+    :root {
+      --bg: #08101d;
+      --panel: rgba(15, 23, 42, 0.92);
+      --panel-2: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #ef4444;
+      --accent-2: #f97316;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --blue: #3b82f6;
+      --shadow: 0 22px 50px rgba(0, 0, 0, 0.3);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top, #14203b 0%, #08101d 48%),
+        linear-gradient(180deg, #08101d 0%, #050b15 100%);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 18px;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 16px;
+    }
+
+    .topbar,
+    .hero,
+    .debug-panel,
+    .ranking-card,
+    .overlay {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1.4fr auto;
+      gap: 16px;
+      padding: 16px 18px;
+      align-items: center;
+    }
+
+    .brand {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 2.6vw, 2rem);
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(0.9rem, 1.7vw, 1rem);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .pill,
+    .btn {
+      min-height: 46px;
+      border-radius: 999px;
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      white-space: nowrap;
+    }
+
+    .pill {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .pill .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16);
+      flex: 0 0 auto;
+    }
+
+    .pill.warning .dot {
+      background: var(--yellow);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.16);
+    }
+
+    .pill.closed .dot {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.16);
+    }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: var(--shadow);
+    }
+
+    .btn.ghost {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .hero {
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: 1.2fr repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .hero-main,
+    .hero-stat {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      min-height: 116px;
+    }
+
+    .hero-main {
+      display: grid;
+      gap: 10px;
+      align-content: space-between;
+    }
+
+    .hero-main-title {
+      font-size: 1.12rem;
+      font-weight: 900;
+    }
+
+    .hero-main-sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }
+
+    .hero-main-bottom {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      display: grid;
+      align-content: space-between;
+      gap: 8px;
+    }
+
+    .hero-stat-label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .hero-stat-value {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .hero-stat-sub {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .ranking-card {
+      min-height: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .ranking-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .ranking-head h2 {
+      margin: 0;
+      font-size: 1.12rem;
+    }
+
+    .ranking-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .ranking-grid {
+      min-height: 0;
+      overflow: auto;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      align-content: start;
+    }
+
+    .ranking-item {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      padding: 14px 16px;
+      overflow: hidden;
+      min-height: 104px;
+      display: grid;
+      gap: 10px;
+      align-content: space-between;
+    }
+
+    .ranking-item.flash {
+      animation: flashPulse 1.1s ease;
+      border-color: rgba(59,130,246,0.48);
+    }
+
+    .ranking-item.top1 {
+      border-color: rgba(245, 158, 11, 0.32);
+      background: linear-gradient(180deg, rgba(245,158,11,0.14), rgba(255,255,255,0.04));
+    }
+
+    .ranking-item-header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .rank-badge {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.06);
+      font-weight: 900;
+      font-size: 1.1rem;
+      flex: 0 0 auto;
+    }
+
+    .group-block {
+      min-width: 0;
+      display: grid;
+      gap: 4px;
+    }
+
+    .group-name {
+      font-size: 1.08rem;
+      font-weight: 900;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .group-meta {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .points-block {
+      text-align: right;
+      display: grid;
+      gap: 4px;
+      flex: 0 0 auto;
+    }
+
+    .points-value {
+      font-size: 1.45rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .points-label {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .bar-wrap {
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), #60a5fa);
+      transition: width 0.45s ease;
+    }
+
+    .top1 .bar {
+      background: linear-gradient(90deg, #f59e0b, #fde68a);
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 24px;
+      z-index: 50;
+      display: none;
+      place-items: center;
+      background: rgba(8, 16, 29, 0.86);
+      border: 1px solid rgba(239,68,68,0.24);
+      backdrop-filter: blur(10px);
+    }
+
+    .overlay.open {
+      display: grid;
+    }
+
+    .overlay-box {
+      text-align: center;
+      display: grid;
+      gap: 14px;
+      max-width: 760px;
+      padding: 24px;
+    }
+
+    .overlay-box h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .overlay-box p {
+      margin: 0;
+      color: #dbeafe;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      line-height: 1.4;
+    }
+
+    .debug-panel {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 40;
+      display: none;
+      gap: 10px;
+      padding: 14px;
+      width: min(420px, calc(100vw - 36px));
+      background: rgba(15,23,42,0.96);
+    }
+
+    .debug-panel.open {
+      display: grid;
+    }
+
+    .debug-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @keyframes flashPulse {
+      0% { box-shadow: 0 0 0 rgba(59,130,246,0); transform: scale(1); }
+      20% { box-shadow: 0 0 0 6px rgba(59,130,246,0.12); transform: scale(1.01); }
+      100% { box-shadow: 0 0 0 rgba(59,130,246,0); transform: scale(1); }
+    }
+
+    @media (max-width: 1280px) {
+      body {
+        padding: 12px;
+      }
+
+      .hero {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .ranking-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body style="font-family: Arial, sans-serif; background:#000; color:#fff; padding:40px;">
-  <h1>Dashboard</h1>
-  <p>Die Dashboard-Seite funktioniert.</p>
-  <p><a href="/" style="color:#4da3ff;">Zurück zur Startseite</a></p>
+<body>
+  <section class="topbar">
+    <div class="brand">
+      <h1>Saufpokal Live</h1>
+      <p>Live-Ranking für TV / Laptop · reagiert später direkt auf Buchungen</p>
+    </div>
+
+    <div class="top-actions">
+      <div class="pill" id="statusPill">
+        <span class="dot"></span>
+        <span id="statusText">Zählung läuft</span>
+      </div>
+      <div class="pill">
+        <span>Ende:</span>
+        <strong id="eventEndText">23:30 Uhr</strong>
+      </div>
+      <button class="btn ghost" id="soundBtn" type="button">Ton aktivieren</button>
+      <button class="btn ghost hidden" id="debugToggleBtn" type="button">Debug</button>
+    </div>
+  </section>
+
+  <section class="hero">
+    <div class="hero-main">
+      <div>
+        <div class="hero-main-title">BIB Dance Night · Saufpokal</div>
+        <div class="hero-main-sub" id="heroSubtext">Jede neue Buchung hebt die betroffene Gruppe direkt im Ranking hervor. Das ist aktuell eine Demo ohne Backend.</div>
+      </div>
+      <div class="hero-main-bottom">
+        <div class="pill"><span>Letztes Update:</span><strong id="lastUpdateText">–</strong></div>
+        <div class="pill"><span>Ton:</span><strong id="soundStateText">aus</strong></div>
+      </div>
+    </div>
+
+    <div class="hero-stat">
+      <div class="hero-stat-label">Führende Gruppe</div>
+      <div class="hero-stat-value" id="leaderName">–</div>
+      <div class="hero-stat-sub">aktuelle Spitze</div>
+    </div>
+
+    <div class="hero-stat">
+      <div class="hero-stat-label">Punktestand Platz 1</div>
+      <div class="hero-stat-value" id="leaderPoints">0</div>
+      <div class="hero-stat-sub">live berechnet</div>
+    </div>
+
+    <div class="hero-stat">
+      <div class="hero-stat-label">Buchungen gesamt</div>
+      <div class="hero-stat-value" id="bookingCount">0</div>
+      <div class="hero-stat-sub">Demo-Zähler</div>
+    </div>
+  </section>
+
+  <section class="ranking-card">
+    <div class="ranking-head">
+      <div>
+        <h2>Aktuelles Ranking</h2>
+        <p>Spaltenlayout passt sich der verfügbaren Bildschirmbreite an.</p>
+      </div>
+      <div class="pill"><span>Gruppen:</span><strong id="groupCount">0</strong></div>
+    </div>
+
+    <div class="ranking-grid" id="rankingGrid"></div>
+  </section>
+
+  <section class="overlay" id="closedOverlay">
+    <div class="overlay-box">
+      <h2>Zählung beendet</h2>
+      <p>Die Wertung ist abgeschlossen. Die Siegerehrung findet in Kürze statt.</p>
+    </div>
+  </section>
+
+  <section class="debug-panel" id="debugPanel">
+    <div style="font-weight:900;">Debug / Demo</div>
+    <div class="debug-row">
+      <button class="btn ghost" id="demoRandomBtn" type="button">Zufallsupdate</button>
+      <button class="btn ghost" id="demoCloseBtn" type="button">Zählung beenden</button>
+      <button class="btn ghost" id="demoResetBtn" type="button">Demo reset</button>
+    </div>
+  </section>
+
+  <script>
+    const CONFIG = {
+      EVENT_END_LABEL: "23:30 Uhr",
+      DEBUG_ENABLED: new URLSearchParams(window.location.search).get("debug") === "1",
+      INITIAL_GROUPS: [
+        { name: "Illastix", points: 182 },
+        { name: "Lucky Stars", points: 176 },
+        { name: "Golden Dancers", points: 164 },
+        { name: "Showtanzgruppe Infinity", points: 160 },
+        { name: "Bürvenicher Danzspektakel", points: 149 },
+        { name: "Remix", points: 142 },
+        { name: "Red Steps", points: 140 },
+        { name: "Crew of Dance", points: 134 },
+        { name: "Hotstuff", points: 129 },
+        { name: "Funky Vibes", points: 124 },
+        { name: "Tanzfabrik", points: 118 },
+        { name: "FireFlames", points: 115 },
+        { name: "Funtastics", points: 111 },
+        { name: "Plattföös", points: 108 },
+        { name: "Hotsteppers", points: 104 },
+        { name: "Déjà Vu", points: 101 },
+        { name: "Lightnings", points: 96 }
+      ]
+    };
+
+    const state = {
+      soundEnabled: false,
+      closed: false,
+      bookingCount: 42,
+      lastUpdatedGroup: null,
+      groups: [],
+      audioContext: null
+    };
+
+    const els = {
+      statusPill: document.getElementById("statusPill"),
+      statusText: document.getElementById("statusText"),
+      eventEndText: document.getElementById("eventEndText"),
+      soundBtn: document.getElementById("soundBtn"),
+      soundStateText: document.getElementById("soundStateText"),
+      debugToggleBtn: document.getElementById("debugToggleBtn"),
+      debugPanel: document.getElementById("debugPanel"),
+      demoRandomBtn: document.getElementById("demoRandomBtn"),
+      demoCloseBtn: document.getElementById("demoCloseBtn"),
+      demoResetBtn: document.getElementById("demoResetBtn"),
+      heroSubtext: document.getElementById("heroSubtext"),
+      lastUpdateText: document.getElementById("lastUpdateText"),
+      leaderName: document.getElementById("leaderName"),
+      leaderPoints: document.getElementById("leaderPoints"),
+      bookingCount: document.getElementById("bookingCount"),
+      groupCount: document.getElementById("groupCount"),
+      rankingGrid: document.getElementById("rankingGrid"),
+      closedOverlay: document.getElementById("closedOverlay")
+    };
+
+    function init() {
+      state.groups = CONFIG.INITIAL_GROUPS.map(group => ({ ...group }));
+      els.eventEndText.textContent = CONFIG.EVENT_END_LABEL;
+      els.debugToggleBtn.classList.toggle("hidden", !CONFIG.DEBUG_ENABLED);
+      els.debugPanel.classList.toggle("open", CONFIG.DEBUG_ENABLED);
+      bindEvents();
+      render();
+    }
+
+    function bindEvents() {
+      els.soundBtn.addEventListener("click", enableSound);
+
+      if (CONFIG.DEBUG_ENABLED) {
+        els.debugToggleBtn.addEventListener("click", () => {
+          els.debugPanel.classList.toggle("open");
+        });
+
+        els.demoRandomBtn.addEventListener("click", () => {
+          const index = Math.floor(Math.random() * state.groups.length);
+          const delta = [2, 5, 7, 10, 20][Math.floor(Math.random() * 5)];
+          applyUpdate(index, delta);
+        });
+
+        els.demoCloseBtn.addEventListener("click", () => {
+          setClosed(true);
+        });
+
+        els.demoResetBtn.addEventListener("click", resetDemo);
+      }
+    }
+
+    function render() {
+      const sorted = [...state.groups].sort((a, b) => b.points - a.points || a.name.localeCompare(b.name, "de"));
+      const maxPoints = Math.max(...sorted.map(group => group.points), 1);
+
+      els.rankingGrid.innerHTML = "";
+      els.groupCount.textContent = String(sorted.length);
+      els.bookingCount.textContent = String(state.bookingCount);
+      els.lastUpdateText.textContent = state.lastUpdatedGroup ? formatTime(new Date()) : "–";
+
+      const leader = sorted[0] || { name: "–", points: 0 };
+      els.leaderName.textContent = leader.name;
+      els.leaderPoints.textContent = String(leader.points);
+
+      sorted.forEach((group, index) => {
+        const item = document.createElement("div");
+        item.className = "ranking-item";
+        if (index === 0) item.classList.add("top1");
+        if (state.lastUpdatedGroup === group.name) item.classList.add("flash");
+
+        const width = Math.max(10, Math.round((group.points / maxPoints) * 100));
+
+        item.innerHTML = `
+          <div class="ranking-item-header">
+            <div class="rank-badge">${index + 1}</div>
+            <div class="group-block">
+              <div class="group-name">${escapeHtml(group.name)}</div>
+              <div class="group-meta">${index === 0 ? "aktuelle Führung" : `Abstand zu Platz 1: ${leader.points - group.points}`}</div>
+            </div>
+            <div class="points-block">
+              <div class="points-value">${group.points}</div>
+              <div class="points-label">Punkte</div>
+            </div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar" style="width:${width}%"></div>
+          </div>
+        `;
+
+        els.rankingGrid.appendChild(item);
+      });
+
+      updateStatusUi();
+    }
+
+    function updateStatusUi() {
+      els.closedOverlay.classList.toggle("open", state.closed);
+      els.statusPill.classList.remove("warning", "closed");
+
+      if (state.closed) {
+        els.statusPill.classList.add("closed");
+        els.statusText.textContent = "Zählung beendet";
+        els.heroSubtext.textContent = "Die Wertung ist abgeschlossen. Das Dashboard bleibt zur Anzeige des Endstands sichtbar.";
+      } else {
+        els.statusText.textContent = "Zählung läuft";
+        els.heroSubtext.textContent = "Jede neue Buchung hebt die betroffene Gruppe direkt im Ranking hervor. Das ist aktuell eine Demo ohne Backend.";
+      }
+
+      els.soundStateText.textContent = state.soundEnabled ? "an" : "aus";
+      els.soundBtn.textContent = state.soundEnabled ? "Ton aktiv" : "Ton aktivieren";
+    }
+
+    async function enableSound() {
+      try {
+        if (!state.audioContext) {
+          state.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (state.audioContext.state === "suspended") {
+          await state.audioContext.resume();
+        }
+        state.soundEnabled = true;
+        pingSound();
+        updateStatusUi();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function pingSound() {
+      if (!state.soundEnabled || !state.audioContext) return;
+
+      const ctx = state.audioContext;
+      const now = ctx.currentTime;
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.exponentialRampToValueAtTime(1320, now + 0.08);
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.17);
+    }
+
+    function applyUpdate(index, delta) {
+      if (state.closed) return;
+      if (!state.groups[index]) return;
+
+      state.groups[index].points += delta;
+      state.lastUpdatedGroup = state.groups[index].name;
+      state.bookingCount += 1;
+      render();
+      pingSound();
+
+      setTimeout(() => {
+        state.lastUpdatedGroup = null;
+        render();
+      }, 1200);
+    }
+
+    function setClosed(value) {
+      state.closed = Boolean(value);
+      render();
+    }
+
+    function resetDemo() {
+      state.groups = CONFIG.INITIAL_GROUPS.map(group => ({ ...group }));
+      state.closed = false;
+      state.bookingCount = 42;
+      state.lastUpdatedGroup = null;
+      render();
+    }
+
+    function formatTime(date) {
+      return date.toLocaleTimeString("de-DE", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    // Spätere Live-Anbindung: diese Funktionen können direkt von SignalR / API benutzt werden.
+    window.dashboardApplyUpdateByName = function(name, delta) {
+      const index = state.groups.findIndex(group => group.name === name);
+      if (index >= 0) applyUpdate(index, delta);
+    };
+
+    window.dashboardReplaceData = function(groups, bookingCount = state.bookingCount) {
+      if (!Array.isArray(groups)) return;
+      state.groups = groups.map(group => ({ ...group }));
+      state.bookingCount = bookingCount;
+      state.lastUpdatedGroup = null;
+      render();
+    };
+
+    window.dashboardCloseCounting = function() {
+      setClosed(true);
+    };
+
+    init();
+  </script>
 </body>
 </html>

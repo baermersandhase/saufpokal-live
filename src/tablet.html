@@ -21,9 +21,7 @@
       --orange: #ea580c;
       --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
       --radius: 24px;
-      --radius-sm: 18px;
-      --gap: 16px;
-      --header-h: 82px;
+      --header-h: 78px;
     }
 
     * {
@@ -39,38 +37,40 @@
         linear-gradient(180deg, #0b1220 0%, #08101d 100%);
       color: var(--text);
       font-family: Inter, Arial, sans-serif;
+      overflow: hidden;
     }
 
     body {
       display: grid;
       grid-template-rows: var(--header-h) 1fr;
       min-height: 100vh;
-      overflow: hidden;
     }
 
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      padding: 16px 20px;
+      gap: 12px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--border);
       background: rgba(11, 18, 32, 0.88);
       backdrop-filter: blur(14px);
       position: sticky;
       top: 0;
       z-index: 30;
+      min-height: var(--header-h);
     }
 
     .brand {
       display: flex;
       flex-direction: column;
       gap: 4px;
+      min-width: 0;
     }
 
     .brand h1 {
       margin: 0;
-      font-size: 1.4rem;
+      font-size: clamp(1.1rem, 2.6vw, 1.35rem);
       line-height: 1;
       font-weight: 800;
       letter-spacing: 0.02em;
@@ -79,13 +79,16 @@
     .brand p {
       margin: 0;
       color: var(--muted);
-      font-size: 0.94rem;
+      font-size: clamp(0.8rem, 2vw, 0.92rem);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
       justify-content: flex-end;
     }
@@ -94,14 +97,15 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      min-height: 46px;
-      padding: 0 16px;
+      min-height: 40px;
+      padding: 0 14px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border);
       color: var(--text);
       font-weight: 700;
       white-space: nowrap;
+      font-size: 0.92rem;
     }
 
     .dot {
@@ -114,10 +118,10 @@
 
     .btn {
       border: 0;
-      border-radius: 18px;
-      min-height: 54px;
-      padding: 0 18px;
-      font-size: 1rem;
+      border-radius: 16px;
+      min-height: 50px;
+      padding: 0 16px;
+      font-size: 0.98rem;
       font-weight: 800;
       color: var(--text);
       cursor: pointer;
@@ -145,16 +149,16 @@
     }
 
     .btn.small {
-      min-height: 46px;
+      min-height: 42px;
       padding: 0 14px;
       border-radius: 14px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
     }
 
     main {
       min-height: 0;
       overflow: hidden;
-      padding: 18px 20px 20px;
+      padding: 12px;
     }
 
     .screen {
@@ -169,26 +173,26 @@
 
     .screen.single {
       grid-template-rows: auto 1fr;
-      gap: 16px;
+      gap: 12px;
     }
 
     .screen-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .screen-header h2 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: clamp(1.15rem, 2.8vw, 1.4rem);
     }
 
     .screen-header p {
       margin: 4px 0 0;
       color: var(--muted);
-      font-size: 0.96rem;
+      font-size: 0.92rem;
     }
 
     .screen-actions {
@@ -211,31 +215,31 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 18px 20px;
+      padding: 14px 16px;
       border-bottom: 1px solid var(--border);
       background: rgba(255,255,255,0.03);
     }
 
     .panel-head h3 {
       margin: 0;
-      font-size: 1.08rem;
+      font-size: 1rem;
     }
 
     .panel-head p {
       margin: 4px 0 0;
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.88rem;
     }
 
     .panel-body {
-      padding: 18px 20px 20px;
+      padding: 14px 16px 16px;
       min-height: 0;
     }
 
     .role-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
       align-content: start;
     }
 
@@ -274,57 +278,57 @@
     }
 
     .role-card {
-      padding: 20px;
-      min-height: 150px;
+      padding: 18px;
+      min-height: 128px;
       display: grid;
       align-content: space-between;
       text-align: left;
     }
 
     .role-card .title {
-      font-size: 1.28rem;
+      font-size: 1.15rem;
       font-weight: 800;
     }
 
     .role-card .sub {
       color: var(--muted);
-      font-size: 0.96rem;
+      font-size: 0.94rem;
       line-height: 1.35;
     }
 
     .search-row {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 12px;
-      margin-bottom: 14px;
+      gap: 10px;
+      margin-bottom: 12px;
     }
 
     .search-input,
     .number-input {
       width: 100%;
-      min-height: 56px;
-      border-radius: 18px;
+      min-height: 52px;
+      border-radius: 16px;
       border: 1px solid var(--border);
       background: #0f172a;
       color: var(--text);
       font-size: 1rem;
-      padding: 0 18px;
+      padding: 0 16px;
       outline: none;
     }
 
     .group-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
       max-height: 100%;
       overflow: auto;
-      padding-right: 4px;
+      padding-right: 2px;
       align-content: start;
     }
 
     .group-card {
-      min-height: 108px;
-      padding: 16px;
+      min-height: 76px;
+      padding: 14px;
       display: grid;
       align-content: center;
       text-align: left;
@@ -337,26 +341,27 @@
     }
 
     .group-name {
-      font-size: 1.08rem;
+      font-size: 1rem;
       font-weight: 800;
       line-height: 1.25;
     }
 
     .booking-layout {
       display: grid;
-      grid-template-columns: 3fr 1.2fr;
-      gap: 18px;
+      grid-template-columns: minmax(0, 1.8fr) minmax(300px, 1fr);
+      gap: 14px;
       min-height: 0;
+      height: 100%;
     }
 
     .left-col,
     .right-col {
       min-height: 0;
       display: grid;
-      gap: 16px;
+      gap: 14px;
     }
 
-    .top-summary {
+    .info-row {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
@@ -365,14 +370,14 @@
     .type-grid,
     .quick-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
     }
 
     .type-card,
     .quick-card {
-      min-height: 108px;
-      padding: 16px;
+      min-height: 98px;
+      padding: 14px;
       display: grid;
       align-content: space-between;
       text-align: left;
@@ -380,14 +385,14 @@
 
     .type-card .title,
     .quick-card .title {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 800;
     }
 
     .type-card .sub,
     .quick-card .sub {
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.86rem;
       line-height: 1.25;
     }
 
@@ -396,18 +401,18 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 64px;
-      min-height: 34px;
+      min-width: 58px;
+      min-height: 32px;
       padding: 0 10px;
       border-radius: 999px;
       background: rgba(255,255,255,0.08);
       font-weight: 800;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
     }
 
     .step {
       display: grid;
-      gap: 14px;
+      gap: 12px;
     }
 
     .step small {
@@ -416,7 +421,7 @@
 
     .stack {
       display: grid;
-      gap: 16px;
+      gap: 14px;
     }
 
     .hidden {
@@ -426,35 +431,35 @@
     .custom-marks-wrap,
     .pitter-wrap {
       display: grid;
-      gap: 12px;
+      gap: 10px;
     }
 
     .quick-buttons {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
     }
 
     .quick-buttons button {
-      min-height: 58px;
-      border-radius: 16px;
+      min-height: 54px;
+      border-radius: 14px;
       border: 1px solid var(--border);
       background: rgba(255,255,255,0.06);
       color: var(--text);
-      font-size: 1rem;
+      font-size: 0.96rem;
       font-weight: 800;
       cursor: pointer;
     }
 
     .summary-box {
       display: grid;
-      gap: 12px;
+      gap: 10px;
     }
 
     .summary-line {
       display: flex;
       justify-content: space-between;
-      gap: 14px;
+      gap: 12px;
       padding-bottom: 10px;
       border-bottom: 1px dashed rgba(255,255,255,0.08);
     }
@@ -475,19 +480,19 @@
 
     .cart-list {
       display: grid;
-      gap: 12px;
-      max-height: 320px;
+      gap: 10px;
+      max-height: 100%;
       overflow: auto;
-      padding-right: 4px;
+      padding-right: 2px;
     }
 
     .cart-item {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 12px;
-      padding: 14px;
+      gap: 10px;
+      padding: 12px;
       border: 1px solid var(--border);
-      border-radius: 18px;
+      border-radius: 16px;
       background: rgba(255,255,255,0.04);
     }
 
@@ -499,13 +504,13 @@
 
     .cart-item-title {
       font-weight: 800;
-      font-size: 1rem;
+      font-size: 0.98rem;
       line-height: 1.2;
     }
 
     .cart-item-sub {
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.86rem;
       line-height: 1.25;
     }
 
@@ -516,13 +521,13 @@
     }
 
     .icon-btn {
-      min-width: 52px;
-      min-height: 52px;
-      border-radius: 16px;
+      min-width: 48px;
+      min-height: 48px;
+      border-radius: 14px;
       border: 1px solid var(--border);
       background: rgba(255,255,255,0.05);
       color: var(--text);
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 800;
       cursor: pointer;
     }
@@ -530,14 +535,14 @@
     .totals-box {
       display: grid;
       gap: 12px;
-      padding: 16px;
-      border-radius: 20px;
+      padding: 14px;
+      border-radius: 18px;
       background: rgba(255,255,255,0.04);
       border: 1px solid var(--border);
     }
 
     .total-points {
-      font-size: 2rem;
+      font-size: clamp(1.6rem, 4vw, 2rem);
       font-weight: 900;
       line-height: 1;
     }
@@ -551,7 +556,7 @@
     .empty-state {
       display: grid;
       place-items: center;
-      min-height: 160px;
+      min-height: 140px;
       color: var(--muted);
       text-align: center;
       border: 1px dashed rgba(255,255,255,0.12);
@@ -594,7 +599,7 @@
 
     .confirm-modal h3 {
       margin: 0;
-      font-size: 1.35rem;
+      font-size: 1.25rem;
     }
 
     .confirm-modal p {
@@ -615,12 +620,12 @@
       display: grid;
       justify-items: end;
       align-content: end;
-      padding: 18px;
+      padding: 16px;
       gap: 10px;
     }
 
     .toast {
-      min-width: 280px;
+      min-width: 260px;
       max-width: 420px;
       border-radius: 18px;
       border: 1px solid var(--border);
@@ -644,25 +649,37 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1180px) {
       .booking-layout {
         grid-template-columns: 1fr;
+        overflow: auto;
+      }
+
+      .right-col {
+        padding-bottom: 6px;
       }
     }
 
-    @media (max-width: 860px) {
-      .role-grid,
+    @media (max-width: 820px) {
+      header {
+        padding: 10px 12px;
+      }
+
+      main {
+        padding: 10px;
+      }
+
       .type-grid,
       .quick-grid {
         grid-template-columns: 1fr;
       }
 
-      .group-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      .quick-buttons {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
-      .quick-buttons {
-        grid-template-columns: repeat(3, 1fr);
+      .group-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       }
     }
   </style>
@@ -679,17 +696,17 @@
         <span class="dot"></span>
         <span>Demo-Modus ohne Backend</span>
       </div>
-      <button class="btn ghost small" id="resetAllBtn" type="button">Alles zurücksetzen</button>
+      <div class="pill hidden" id="activeRolePill"><strong>Arbeitsplatz:</strong>&nbsp;<span id="activeRoleHeader">–</span></div>
+      <button class="btn ghost small" id="resetAllBtn" type="button">Arbeitsplatz zurücksetzen</button>
     </div>
   </header>
 
   <main>
-    <!-- SCREEN 1 -->
     <section class="screen single active" id="screenRole">
       <div class="screen-header">
         <div>
           <h2>Arbeitsplatz wählen</h2>
-          <p>Das gilt als Einstieg für dieses Gerät.</p>
+          <p>Das wird einmalig für dieses Gerät festgelegt.</p>
         </div>
       </div>
 
@@ -715,15 +732,11 @@
       </div>
     </section>
 
-    <!-- SCREEN 2 -->
     <section class="screen single" id="screenGroup">
       <div class="screen-header">
         <div>
           <h2>Gruppe wählen</h2>
-          <p>Danach springt die Ansicht direkt in die Buchungsmaske.</p>
-        </div>
-        <div class="screen-actions">
-          <button class="btn ghost small" id="backToRoleBtn" type="button">Zurück</button>
+          <p>Nach dem Buchen springt die App automatisch wieder hierhin zurück.</p>
         </div>
       </div>
 
@@ -744,15 +757,13 @@
       </div>
     </section>
 
-    <!-- SCREEN 3 -->
-    <section class="screen" id="screenBooking" style="grid-template-rows:auto 1fr; gap:16px;">
+    <section class="screen" id="screenBooking" style="grid-template-rows:auto 1fr; gap:12px;">
       <div class="screen-header">
         <div>
           <h2>Buchung erfassen</h2>
-          <p>Gruppe und Arbeitsplatz sind gesetzt. Bei Bedarf kannst du zurückspringen.</p>
+          <p>Nach dem Abschicken startet direkt die nächste Gruppe.</p>
         </div>
         <div class="screen-actions">
-          <button class="btn ghost small" id="changeRoleBtn" type="button">Rolle wechseln</button>
           <button class="btn ghost small" id="changeGroupBtn" type="button">Gruppe wechseln</button>
         </div>
       </div>
@@ -762,13 +773,12 @@
           <section class="panel">
             <div class="panel-head">
               <div>
-                <h3>Aktive Auswahl</h3>
-                <p>Diese Werte gelten für die aktuelle Buchung.</p>
+                <h3>Aktive Gruppe</h3>
+                <p>Der Arbeitsplatz steht oben dauerhaft im Kopf.</p>
               </div>
             </div>
             <div class="panel-body">
-              <div class="top-summary">
-                <div class="pill"><strong>Rolle:</strong>&nbsp;<span id="activeRole">–</span></div>
+              <div class="info-row">
                 <div class="pill"><strong>Gruppe:</strong>&nbsp;<span id="activeGroup">–</span></div>
               </div>
             </div>
@@ -919,10 +929,6 @@
                   <span class="summary-label">Gruppe</span>
                   <span class="summary-value" id="cartGroup">–</span>
                 </div>
-                <div class="summary-line">
-                  <span class="summary-label">Quelle</span>
-                  <span class="summary-value" id="cartRole">–</span>
-                </div>
               </div>
             </div>
 
@@ -935,7 +941,7 @@
                   </div>
                   <div style="text-align:right;">
                     <div style="color:var(--muted); font-size:0.92rem;">Positionen</div>
-                    <div style="font-size:1.35rem; font-weight:900;" id="cartCount">0</div>
+                    <div style="font-size:1.25rem; font-weight:900;" id="cartCount">0</div>
                   </div>
                 </div>
               </div>
@@ -1032,16 +1038,15 @@
       screenBooking: document.getElementById("screenBooking"),
 
       roleCards: [...document.querySelectorAll(".role-card")],
-      backToRoleBtn: document.getElementById("backToRoleBtn"),
-      changeRoleBtn: document.getElementById("changeRoleBtn"),
       changeGroupBtn: document.getElementById("changeGroupBtn"),
       groupScreenRoleLabel: document.getElementById("groupScreenRoleLabel"),
+      activeRolePill: document.getElementById("activeRolePill"),
+      activeRoleHeader: document.getElementById("activeRoleHeader"),
 
       groupSearch: document.getElementById("groupSearch"),
       clearSearchBtn: document.getElementById("clearSearchBtn"),
       groupGrid: document.getElementById("groupGrid"),
 
-      activeRole: document.getElementById("activeRole"),
       activeGroup: document.getElementById("activeGroup"),
 
       typeCards: [...document.querySelectorAll(".type-card")],
@@ -1058,7 +1063,6 @@
       summaryPoints: document.getElementById("summaryPoints"),
 
       cartGroup: document.getElementById("cartGroup"),
-      cartRole: document.getElementById("cartRole"),
       cartTotalPoints: document.getElementById("cartTotalPoints"),
       cartCount: document.getElementById("cartCount"),
       cartList: document.getElementById("cartList"),
@@ -1103,25 +1107,13 @@
         });
       });
 
-      els.backToRoleBtn.addEventListener("click", () => {
-        state.group = null;
-        state.cart = [];
-        renderCart();
-        showScreen("role");
-      });
-
-      els.changeRoleBtn.addEventListener("click", () => {
-        state.group = null;
-        state.cart = [];
-        clearCurrentSelection(false);
-        renderCart();
-        showScreen("role");
-      });
-
       els.changeGroupBtn.addEventListener("click", () => {
         state.cart = [];
         clearCurrentSelection(false);
         renderCart();
+        state.group = null;
+        renderGroups();
+        updateBookingHeader();
         showScreen("group");
       });
 
@@ -1220,17 +1212,18 @@
     }
 
     function updateRoleViews() {
-      els.groupScreenRoleLabel.textContent = formatRole(state.role) || "–";
+      const formattedRole = formatRole(state.role) || "–";
+      els.groupScreenRoleLabel.textContent = formattedRole;
+      els.activeRoleHeader.textContent = formattedRole;
+      els.activeRolePill.classList.toggle("hidden", !state.role);
       els.roleCards.forEach(card => {
         card.classList.toggle("active", state.role === card.dataset.role);
       });
     }
 
     function updateBookingHeader() {
-      els.activeRole.textContent = formatRole(state.role) || "–";
       els.activeGroup.textContent = state.group || "–";
       els.cartGroup.textContent = state.group || "–";
-      els.cartRole.textContent = formatRole(state.role) || "–";
     }
 
     function renderGroups() {
@@ -1263,6 +1256,7 @@
         btn.addEventListener("click", () => {
           state.group = group;
           state.cart = [];
+          clearCurrentSelection(false);
           renderGroups();
           renderCart();
           updateBookingHeader();
@@ -1339,7 +1333,7 @@
 
     function addCurrentToCart() {
       if (!state.role) {
-        toast("Erst Rolle auswählen.", "err");
+        toast("Erst Arbeitsplatz wählen.", "err");
         showScreen("role");
         return;
       }
@@ -1392,7 +1386,6 @@
 
     function renderCart() {
       els.cartGroup.textContent = state.group || "–";
-      els.cartRole.textContent = formatRole(state.role) || "–";
       els.cartCount.textContent = String(state.cart.length);
       els.cartTotalPoints.textContent = String(getCartTotal());
 
@@ -1413,7 +1406,7 @@
         row.innerHTML = `
           <div class="cart-item-main">
             <div class="cart-item-title">${escapeHtml(item.label)}</div>
-            <div class="cart-item-sub">${escapeHtml(item.group)} · ${escapeHtml(formatRole(item.role))}</div>
+            <div class="cart-item-sub">${escapeHtml(item.group)}</div>
           </div>
           <div class="cart-item-actions">
             <div style="font-weight:900; text-align:right;">${item.points} P</div>
@@ -1448,7 +1441,7 @@
 
     function openConfirm() {
       if (!state.role) {
-        toast("Erst Rolle auswählen.", "err");
+        toast("Erst Arbeitsplatz wählen.", "err");
         showScreen("role");
         return;
       }
@@ -1503,8 +1496,12 @@
       toast(`Demo-Buchung gesendet: ${payload.group} · ${payload.totalPoints} Punkte`, "ok");
 
       state.cart = [];
+      state.group = null;
       renderCart();
+      renderGroups();
       clearCurrentSelection(false);
+      updateBookingHeader();
+      showScreen("group");
     }
 
     function resetAll() {
@@ -1525,7 +1522,7 @@
       updateBookingHeader();
       updateCurrentSummary();
       showScreen("role");
-      toast("Alles zurückgesetzt.", "ok");
+      toast("Arbeitsplatz zurückgesetzt.", "ok");
     }
 
     function formatRole(role) {

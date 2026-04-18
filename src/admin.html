@@ -2,12 +2,1026 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Saufpokal Live – Admin</title>
+  <style>
+    :root {
+      --bg: #08101d;
+      --panel: rgba(15, 23, 42, 0.94);
+      --panel-2: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #ef4444;
+      --accent-2: #f97316;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --blue: #3b82f6;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top, #14203b 0%, #08101d 48%),
+        linear-gradient(180deg, #08101d 0%, #050b15 100%);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 10px;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 10px;
+    }
+
+    .topbar,
+    .stats,
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1.2fr auto;
+      gap: 10px;
+      padding: 10px 12px;
+      align-items: center;
+    }
+
+    .brand {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.2rem, 2.1vw, 1.6rem);
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(0.76rem, 1vw, 0.86rem);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .pill,
+    .btn {
+      min-height: 38px;
+      border-radius: 999px;
+      padding: 0 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 0.84rem;
+      white-space: nowrap;
+    }
+
+    .pill {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .pill .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16);
+      flex: 0 0 auto;
+    }
+
+    .pill.closed .dot {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.16);
+    }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: var(--shadow);
+    }
+
+    .btn.ghost {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .btn.green {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+    }
+
+    .btn.yellow {
+      background: linear-gradient(135deg, #d97706, #f59e0b);
+    }
+
+    .btn.red {
+      background: linear-gradient(135deg, #b91c1c, #ef4444);
+    }
+
+    .btn.small {
+      min-height: 34px;
+      padding: 0 11px;
+      font-size: 0.8rem;
+    }
+
+    .stats {
+      padding: 10px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 12px;
+      display: grid;
+      gap: 6px;
+      min-height: 76px;
+      align-content: space-between;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .stat-value {
+      font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .layout {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(320px, 1.1fr) minmax(420px, 1.6fr);
+      gap: 10px;
+    }
+
+    .left-col,
+    .right-col {
+      min-height: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .panel {
+      min-height: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 0.98rem;
+    }
+
+    .panel-head p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    .panel-body {
+      padding: 12px;
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      min-height: 42px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      color: var(--text);
+      padding: 0 12px;
+      font-size: 0.92rem;
+      outline: none;
+    }
+
+    .textarea {
+      min-height: 88px;
+      padding: 10px 12px;
+      resize: vertical;
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .group-toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .group-list {
+      display: grid;
+      gap: 8px;
+      min-height: 0;
+    }
+
+    .group-item {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      padding: 10px 12px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .group-rank {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 0.9rem;
+    }
+
+    .group-main {
+      min-width: 0;
+      display: grid;
+      gap: 4px;
+    }
+
+    .group-name {
+      font-size: 0.95rem;
+      font-weight: 900;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .group-meta {
+      color: var(--muted);
+      font-size: 0.75rem;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .group-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .group-item.inactive {
+      opacity: 0.58;
+      border-style: dashed;
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .note-box {
+      border: 1px dashed rgba(255,255,255,0.16);
+      border-radius: 14px;
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      line-height: 1.45;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .toast-wrap {
+      position: fixed;
+      right: 10px;
+      bottom: 10px;
+      z-index: 50;
+      display: grid;
+      gap: 8px;
+      width: min(360px, calc(100vw - 20px));
+      pointer-events: none;
+    }
+
+    .toast {
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(15,23,42,0.96);
+      color: var(--text);
+      padding: 12px 14px;
+      box-shadow: var(--shadow);
+      animation: slideIn 0.18s ease;
+    }
+
+    .toast.ok {
+      border-color: rgba(34,197,94,0.35);
+    }
+
+    .toast.err {
+      border-color: rgba(239,68,68,0.35);
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1280px) {
+      .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      body {
+        padding: 8px;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-2,
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      .group-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .group-item {
+        grid-template-columns: 1fr;
+      }
+
+      .group-actions {
+        justify-content: flex-start;
+      }
+    }
+  </style>
 </head>
-<body style="font-family: Arial, sans-serif; background:#1b1b1b; color:#fff; padding:40px;">
-  <h1>Admin</h1>
-  <p>Die Admin-Seite funktioniert.</p>
-  <p><a href="/" style="color:#4da3ff;">Zurück zur Startseite</a></p>
+<body>
+  <section class="topbar">
+    <div class="brand">
+      <h1>Saufpokal Live – Admin</h1>
+      <p>V1 ohne Backend. Änderungen werden lokal im Browser gespeichert.</p>
+    </div>
+
+    <div class="top-actions">
+      <div class="pill" id="statusPill">
+        <span class="dot"></span>
+        <span id="statusText">Zählung offen</span>
+      </div>
+      <button class="btn ghost" id="exportBtn" type="button">JSON exportieren</button>
+      <button class="btn ghost" id="importBtn" type="button">JSON importieren</button>
+      <button class="btn red" id="resetBtn" type="button">Demo reset</button>
+      <input id="importFileInput" type="file" accept="application/json" hidden />
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Gruppen gesamt</div>
+      <div class="stat-value" id="statGroupsTotal">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Gruppen aktiv</div>
+      <div class="stat-value" id="statGroupsActive">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Endzeit</div>
+      <div class="stat-value" id="statEndTime">–</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pitter-Wert</div>
+      <div class="stat-value" id="statPitter">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Event-Status</div>
+      <div class="stat-value" id="statEventStatus">offen</div>
+    </div>
+  </section>
+
+  <section class="layout">
+    <div class="left-col">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Event-Einstellungen</h2>
+            <p>Grunddaten, Endzeit und Status des Saufpokals.</p>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="stack">
+            <div class="grid-2">
+              <div class="field">
+                <label for="eventNameInput">Event-Name</label>
+                <input id="eventNameInput" class="input" type="text" />
+              </div>
+              <div class="field">
+                <label for="eventDateInput">Event-Datum</label>
+                <input id="eventDateInput" class="input" type="date" />
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field">
+                <label for="eventEndInput">Endzeit der Zählung</label>
+                <input id="eventEndInput" class="input" type="time" />
+              </div>
+              <div class="field">
+                <label for="eventStatusSelect">Status</label>
+                <select id="eventStatusSelect" class="select">
+                  <option value="open">offen</option>
+                  <option value="closed">geschlossen</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="eventNoteInput">Hinweis für Dashboard</label>
+              <textarea id="eventNoteInput" class="textarea" placeholder="Optionaler Hinweis für Dashboard / Orga"></textarea>
+            </div>
+
+            <div class="actions-row">
+              <button class="btn green" id="saveEventBtn" type="button">Event speichern</button>
+              <button class="btn yellow" id="closeNowBtn" type="button">Zählung sofort beenden</button>
+              <button class="btn ghost" id="openNowBtn" type="button">Zählung wieder öffnen</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Punktewerte</h2>
+            <p>Hier legst du fest, was Tablet und Dashboard später rechnen sollen.</p>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="stack">
+            <div class="grid-4">
+              <div class="field">
+                <label for="fullCardInput">Ganze Karte</label>
+                <input id="fullCardInput" class="input" type="number" min="0" step="1" />
+              </div>
+              <div class="field">
+                <label for="halfCardInput">Halbe Karte</label>
+                <input id="halfCardInput" class="input" type="number" min="0" step="1" />
+              </div>
+              <div class="field">
+                <label for="perMarkInput">Einzelne Marke</label>
+                <input id="perMarkInput" class="input" type="number" min="0" step="1" />
+              </div>
+              <div class="field">
+                <label for="perPitterInput">Pittermännchen</label>
+                <input id="perPitterInput" class="input" type="number" min="0" step="1" />
+              </div>
+            </div>
+
+            <div class="actions-row">
+              <button class="btn green" id="savePointsBtn" type="button">Punktewerte speichern</button>
+            </div>
+
+            <div class="note-box">
+              Aktuell ist das nur V1 im Browser. Später gehen genau diese Werte ins Backend, damit Tablet und Dashboard live dieselbe Logik verwenden.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Technischer Zustand</h2>
+            <p>Nur Übersicht für den Moment.</p>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="stack">
+            <div class="note-box mono" id="jsonPreviewBox"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="right-col">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Gruppen verwalten</h2>
+            <p>Anlegen, sortieren, deaktivieren und löschen.</p>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="group-toolbar">
+            <input id="groupSearchInput" class="input" type="search" placeholder="Gruppe suchen…" />
+            <button class="btn ghost" id="showAllGroupsBtn" type="button">Alle</button>
+            <button class="btn green" id="addGroupBtn" type="button">Neue Gruppe</button>
+          </div>
+
+          <div class="group-list" id="groupList"></div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script>
+    const STORAGE_KEY = "saufpokal_admin_v1";
+
+    const DEFAULT_STATE = {
+      event: {
+        name: "BIB Dance Night – Saufpokal",
+        date: "2026-11-21",
+        endTime: "23:30",
+        status: "open",
+        note: ""
+      },
+      points: {
+        fullCard: 20,
+        halfCard: 10,
+        perMark: 1,
+        perPitter: 20
+      },
+      groups: [
+        { id: crypto.randomUUID(), name: "Illastix", active: true },
+        { id: crypto.randomUUID(), name: "Lucky Stars", active: true },
+        { id: crypto.randomUUID(), name: "Golden Dancers", active: true },
+        { id: crypto.randomUUID(), name: "Showtanzgruppe Infinity", active: true },
+        { id: crypto.randomUUID(), name: "Bürvenicher Danzspektakel", active: true },
+        { id: crypto.randomUUID(), name: "Remix", active: true },
+        { id: crypto.randomUUID(), name: "Red Steps", active: true },
+        { id: crypto.randomUUID(), name: "Crew of Dance", active: true },
+        { id: crypto.randomUUID(), name: "Hotstuff", active: true },
+        { id: crypto.randomUUID(), name: "Funky Vibes", active: true },
+        { id: crypto.randomUUID(), name: "Tanzfabrik", active: true },
+        { id: crypto.randomUUID(), name: "FireFlames", active: true },
+        { id: crypto.randomUUID(), name: "Funtastics", active: true },
+        { id: crypto.randomUUID(), name: "Plattföös", active: true },
+        { id: crypto.randomUUID(), name: "Hotsteppers", active: true },
+        { id: crypto.randomUUID(), name: "Déjà Vu", active: true },
+        { id: crypto.randomUUID(), name: "Lightnings", active: true }
+      ]
+    };
+
+    const state = loadState();
+
+    const els = {
+      statusPill: document.getElementById("statusPill"),
+      statusText: document.getElementById("statusText"),
+      exportBtn: document.getElementById("exportBtn"),
+      importBtn: document.getElementById("importBtn"),
+      importFileInput: document.getElementById("importFileInput"),
+      resetBtn: document.getElementById("resetBtn"),
+
+      statGroupsTotal: document.getElementById("statGroupsTotal"),
+      statGroupsActive: document.getElementById("statGroupsActive"),
+      statEndTime: document.getElementById("statEndTime"),
+      statPitter: document.getElementById("statPitter"),
+      statEventStatus: document.getElementById("statEventStatus"),
+
+      eventNameInput: document.getElementById("eventNameInput"),
+      eventDateInput: document.getElementById("eventDateInput"),
+      eventEndInput: document.getElementById("eventEndInput"),
+      eventStatusSelect: document.getElementById("eventStatusSelect"),
+      eventNoteInput: document.getElementById("eventNoteInput"),
+      saveEventBtn: document.getElementById("saveEventBtn"),
+      closeNowBtn: document.getElementById("closeNowBtn"),
+      openNowBtn: document.getElementById("openNowBtn"),
+
+      fullCardInput: document.getElementById("fullCardInput"),
+      halfCardInput: document.getElementById("halfCardInput"),
+      perMarkInput: document.getElementById("perMarkInput"),
+      perPitterInput: document.getElementById("perPitterInput"),
+      savePointsBtn: document.getElementById("savePointsBtn"),
+
+      groupSearchInput: document.getElementById("groupSearchInput"),
+      showAllGroupsBtn: document.getElementById("showAllGroupsBtn"),
+      addGroupBtn: document.getElementById("addGroupBtn"),
+      groupList: document.getElementById("groupList"),
+
+      jsonPreviewBox: document.getElementById("jsonPreviewBox"),
+      toastWrap: document.getElementById("toastWrap")
+    };
+
+    function init() {
+      bindEvents();
+      fillInputs();
+      renderGroups();
+      renderStats();
+      renderJsonPreview();
+    }
+
+    function bindEvents() {
+      els.saveEventBtn.addEventListener("click", saveEventSettings);
+      els.closeNowBtn.addEventListener("click", () => {
+        state.event.status = "closed";
+        saveState();
+        fillInputs();
+        renderStats();
+        renderJsonPreview();
+        toast("Zählung sofort beendet.", "ok");
+      });
+      els.openNowBtn.addEventListener("click", () => {
+        state.event.status = "open";
+        saveState();
+        fillInputs();
+        renderStats();
+        renderJsonPreview();
+        toast("Zählung wieder geöffnet.", "ok");
+      });
+
+      els.savePointsBtn.addEventListener("click", savePointSettings);
+
+      els.groupSearchInput.addEventListener("input", renderGroups);
+      els.showAllGroupsBtn.addEventListener("click", () => {
+        els.groupSearchInput.value = "";
+        renderGroups();
+      });
+      els.addGroupBtn.addEventListener("click", addGroup);
+
+      els.exportBtn.addEventListener("click", exportJson);
+      els.importBtn.addEventListener("click", () => els.importFileInput.click());
+      els.importFileInput.addEventListener("change", importJson);
+      els.resetBtn.addEventListener("click", resetDemo);
+    }
+
+    function fillInputs() {
+      els.eventNameInput.value = state.event.name;
+      els.eventDateInput.value = state.event.date;
+      els.eventEndInput.value = state.event.endTime;
+      els.eventStatusSelect.value = state.event.status;
+      els.eventNoteInput.value = state.event.note;
+
+      els.fullCardInput.value = state.points.fullCard;
+      els.halfCardInput.value = state.points.halfCard;
+      els.perMarkInput.value = state.points.perMark;
+      els.perPitterInput.value = state.points.perPitter;
+    }
+
+    function renderStats() {
+      const activeCount = state.groups.filter(group => group.active).length;
+      els.statGroupsTotal.textContent = String(state.groups.length);
+      els.statGroupsActive.textContent = String(activeCount);
+      els.statEndTime.textContent = state.event.endTime || "–";
+      els.statPitter.textContent = String(state.points.perPitter);
+      els.statEventStatus.textContent = state.event.status === "closed" ? "geschlossen" : "offen";
+
+      els.statusText.textContent = state.event.status === "closed" ? "Zählung beendet" : "Zählung offen";
+      els.statusPill.classList.toggle("closed", state.event.status === "closed");
+    }
+
+    function renderGroups() {
+      const term = els.groupSearchInput.value.trim().toLowerCase();
+      const filtered = state.groups.filter(group => !term || group.name.toLowerCase().includes(term));
+
+      els.groupList.innerHTML = "";
+
+      if (!filtered.length) {
+        els.groupList.innerHTML = `<div class="note-box">Keine Gruppe gefunden.</div>`;
+        return;
+      }
+
+      filtered.forEach((group) => {
+        const absoluteIndex = state.groups.findIndex(item => item.id === group.id);
+        const row = document.createElement("div");
+        row.className = `group-item ${group.active ? "" : "inactive"}`;
+        row.innerHTML = `
+          <div class="group-rank">${absoluteIndex + 1}</div>
+          <div class="group-main">
+            <div class="group-name">${escapeHtml(group.name)}</div>
+            <div class="group-meta">
+              <span>Status: ${group.active ? "aktiv" : "inaktiv"}</span>
+              <span>ID: ${group.id.slice(0, 8)}</span>
+            </div>
+          </div>
+          <div class="group-actions">
+            <button class="btn ghost small" data-action="up">↑</button>
+            <button class="btn ghost small" data-action="down">↓</button>
+            <button class="btn ghost small" data-action="toggle">${group.active ? "Deaktivieren" : "Aktivieren"}</button>
+            <button class="btn ghost small" data-action="rename">Umbenennen</button>
+            <button class="btn red small" data-action="delete">Löschen</button>
+          </div>
+        `;
+
+        row.querySelector('[data-action="up"]').addEventListener("click", () => moveGroup(absoluteIndex, -1));
+        row.querySelector('[data-action="down"]').addEventListener("click", () => moveGroup(absoluteIndex, 1));
+        row.querySelector('[data-action="toggle"]').addEventListener("click", () => toggleGroup(group.id));
+        row.querySelector('[data-action="rename"]').addEventListener("click", () => renameGroup(group.id));
+        row.querySelector('[data-action="delete"]').addEventListener("click", () => deleteGroup(group.id));
+
+        els.groupList.appendChild(row);
+      });
+    }
+
+    function saveEventSettings() {
+      const name = els.eventNameInput.value.trim();
+      const date = els.eventDateInput.value;
+      const endTime = els.eventEndInput.value;
+      const status = els.eventStatusSelect.value;
+      const note = els.eventNoteInput.value.trim();
+
+      if (!name) {
+        toast("Event-Name fehlt.", "err");
+        return;
+      }
+
+      if (!endTime) {
+        toast("Endzeit fehlt.", "err");
+        return;
+      }
+
+      state.event = { name, date, endTime, status, note };
+      saveState();
+      renderStats();
+      renderJsonPreview();
+      toast("Event-Einstellungen gespeichert.", "ok");
+    }
+
+    function savePointSettings() {
+      const fullCard = parseInt(els.fullCardInput.value, 10);
+      const halfCard = parseInt(els.halfCardInput.value, 10);
+      const perMark = parseInt(els.perMarkInput.value, 10);
+      const perPitter = parseInt(els.perPitterInput.value, 10);
+
+      if ([fullCard, halfCard, perMark, perPitter].some(value => !Number.isFinite(value) || value < 0)) {
+        toast("Punktewerte sind ungültig.", "err");
+        return;
+      }
+
+      state.points = { fullCard, halfCard, perMark, perPitter };
+      saveState();
+      renderStats();
+      renderJsonPreview();
+      toast("Punktewerte gespeichert.", "ok");
+    }
+
+    function addGroup() {
+      const name = window.prompt("Name der neuen Gruppe:");
+      if (!name) return;
+
+      const trimmed = name.trim();
+      if (!trimmed) return;
+
+      if (state.groups.some(group => group.name.toLowerCase() === trimmed.toLowerCase())) {
+        toast("Gruppe existiert bereits.", "err");
+        return;
+      }
+
+      state.groups.push({ id: crypto.randomUUID(), name: trimmed, active: true });
+      saveState();
+      renderGroups();
+      renderStats();
+      renderJsonPreview();
+      toast("Gruppe hinzugefügt.", "ok");
+    }
+
+    function renameGroup(id) {
+      const group = state.groups.find(item => item.id === id);
+      if (!group) return;
+
+      const next = window.prompt("Neuer Gruppenname:", group.name);
+      if (!next) return;
+
+      const trimmed = next.trim();
+      if (!trimmed) return;
+
+      group.name = trimmed;
+      saveState();
+      renderGroups();
+      renderJsonPreview();
+      toast("Gruppe umbenannt.", "ok");
+    }
+
+    function toggleGroup(id) {
+      const group = state.groups.find(item => item.id === id);
+      if (!group) return;
+
+      group.active = !group.active;
+      saveState();
+      renderGroups();
+      renderStats();
+      renderJsonPreview();
+      toast(group.active ? "Gruppe aktiviert." : "Gruppe deaktiviert.", "ok");
+    }
+
+    function deleteGroup(id) {
+      const group = state.groups.find(item => item.id === id);
+      if (!group) return;
+
+      const ok = window.confirm(`Gruppe wirklich löschen?\n\n${group.name}`);
+      if (!ok) return;
+
+      state.groups = state.groups.filter(item => item.id !== id);
+      saveState();
+      renderGroups();
+      renderStats();
+      renderJsonPreview();
+      toast("Gruppe gelöscht.", "ok");
+    }
+
+    function moveGroup(index, direction) {
+      const nextIndex = index + direction;
+      if (nextIndex < 0 || nextIndex >= state.groups.length) return;
+
+      [state.groups[index], state.groups[nextIndex]] = [state.groups[nextIndex], state.groups[index]];
+      saveState();
+      renderGroups();
+      renderJsonPreview();
+    }
+
+    function exportJson() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "saufpokal-admin-export.json";
+      a.click();
+      URL.revokeObjectURL(url);
+      toast("JSON exportiert.", "ok");
+    }
+
+    async function importJson(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const imported = JSON.parse(text);
+
+        if (!imported.event || !imported.points || !Array.isArray(imported.groups)) {
+          throw new Error("Ungültige Struktur");
+        }
+
+        state.event = imported.event;
+        state.points = imported.points;
+        state.groups = imported.groups;
+        saveState();
+        fillInputs();
+        renderGroups();
+        renderStats();
+        renderJsonPreview();
+        toast("JSON importiert.", "ok");
+      } catch (error) {
+        console.error(error);
+        toast("Import fehlgeschlagen.", "err");
+      } finally {
+        event.target.value = "";
+      }
+    }
+
+    function resetDemo() {
+      const ok = window.confirm("Demo wirklich komplett zurücksetzen?");
+      if (!ok) return;
+
+      localStorage.removeItem(STORAGE_KEY);
+      window.location.reload();
+    }
+
+    function renderJsonPreview() {
+      const preview = {
+        event: state.event,
+        points: state.points,
+        groupsPreview: state.groups.map((group, index) => ({
+          sort: index + 1,
+          name: group.name,
+          active: group.active
+        }))
+      };
+
+      els.jsonPreviewBox.textContent = JSON.stringify(preview, null, 2);
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return structuredClone(DEFAULT_STATE);
+        const parsed = JSON.parse(raw);
+        if (!parsed?.event || !parsed?.points || !Array.isArray(parsed?.groups)) {
+          return structuredClone(DEFAULT_STATE);
+        }
+        return parsed;
+      } catch {
+        return structuredClone(DEFAULT_STATE);
+      }
+    }
+
+    function toast(message, type = "ok") {
+      const el = document.createElement("div");
+      el.className = `toast ${type}`;
+      el.textContent = message;
+      els.toastWrap.appendChild(el);
+      setTimeout(() => el.remove(), 2600);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    init();
+  </script>
 </body>
 </html>

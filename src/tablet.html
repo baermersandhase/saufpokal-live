@@ -9,7 +9,6 @@
       --bg: #0b1220;
       --panel: #111827;
       --panel-2: #1f2937;
-      --panel-3: #0f172a;
       --card: #182233;
       --card-hover: #22324b;
       --border: rgba(255, 255, 255, 0.08);
@@ -24,7 +23,7 @@
       --radius: 24px;
       --radius-sm: 18px;
       --gap: 16px;
-      --header-h: 86px;
+      --header-h: 82px;
     }
 
     * {
@@ -71,7 +70,7 @@
 
     .brand h1 {
       margin: 0;
-      font-size: 1.45rem;
+      font-size: 1.4rem;
       line-height: 1;
       font-weight: 800;
       letter-spacing: 0.02em;
@@ -80,7 +79,7 @@
     .brand p {
       margin: 0;
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.94rem;
     }
 
     .header-actions {
@@ -95,7 +94,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      min-height: 48px;
+      min-height: 46px;
       padding: 0 16px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.05);
@@ -145,20 +144,57 @@
       box-shadow: none;
     }
 
-    main {
-      display: grid;
-      grid-template-columns: 3fr 1.2fr;
-      gap: 18px;
-      padding: 18px 20px 20px;
-      min-height: 0;
-      overflow: hidden;
+    .btn.small {
+      min-height: 46px;
+      padding: 0 14px;
+      border-radius: 14px;
+      font-size: 0.95rem;
     }
 
-    .left-col,
-    .right-col {
+    main {
       min-height: 0;
+      overflow: hidden;
+      padding: 18px 20px 20px;
+    }
+
+    .screen {
+      display: none;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .screen.active {
       display: grid;
+    }
+
+    .screen.single {
+      grid-template-rows: auto 1fr;
       gap: 16px;
+    }
+
+    .screen-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .screen-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .screen-header p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .screen-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .panel {
@@ -180,9 +216,9 @@
       background: rgba(255,255,255,0.03);
     }
 
-    .panel-head h2 {
+    .panel-head h3 {
       margin: 0;
-      font-size: 1.1rem;
+      font-size: 1.08rem;
     }
 
     .panel-head p {
@@ -199,7 +235,8 @@
     .role-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 16px;
+      align-content: start;
     }
 
     .role-card,
@@ -237,20 +274,22 @@
     }
 
     .role-card {
-      padding: 18px;
-      min-height: 110px;
+      padding: 20px;
+      min-height: 150px;
       display: grid;
       align-content: space-between;
+      text-align: left;
     }
 
     .role-card .title {
-      font-size: 1.2rem;
+      font-size: 1.28rem;
       font-weight: 800;
     }
 
     .role-card .sub {
       color: var(--muted);
-      font-size: 0.94rem;
+      font-size: 0.96rem;
+      line-height: 1.35;
     }
 
     .search-row {
@@ -275,18 +314,19 @@
 
     .group-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 14px;
       max-height: 100%;
       overflow: auto;
       padding-right: 4px;
+      align-content: start;
     }
 
     .group-card {
-      min-height: 104px;
+      min-height: 108px;
       padding: 16px;
       display: grid;
-      align-content: space-between;
+      align-content: center;
       text-align: left;
     }
 
@@ -299,12 +339,27 @@
     .group-name {
       font-size: 1.08rem;
       font-weight: 800;
-      line-height: 1.2;
+      line-height: 1.25;
     }
 
-    .group-meta {
-      color: var(--muted);
-      font-size: 0.88rem;
+    .booking-layout {
+      display: grid;
+      grid-template-columns: 3fr 1.2fr;
+      gap: 18px;
+      min-height: 0;
+    }
+
+    .left-col,
+    .right-col {
+      min-height: 0;
+      display: grid;
+      gap: 16px;
+    }
+
+    .top-summary {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .type-grid,
@@ -487,10 +542,6 @@
       line-height: 1;
     }
 
-    .right-col {
-      grid-template-rows: auto 1fr;
-    }
-
     .cart-panel {
       display: grid;
       grid-template-rows: auto auto auto 1fr auto;
@@ -560,7 +611,6 @@
     }
 
     .toast-wrap {
-      pointer-events: none;
       z-index: 80;
       display: grid;
       justify-items: end;
@@ -595,22 +645,15 @@
     }
 
     @media (max-width: 1280px) {
-      main {
+      .booking-layout {
         grid-template-columns: 1fr;
-      }
-
-      .right-col {
-        grid-template-rows: auto;
       }
     }
 
     @media (max-width: 860px) {
+      .role-grid,
       .type-grid,
       .quick-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .role-grid {
         grid-template-columns: 1fr;
       }
 
@@ -636,21 +679,29 @@
         <span class="dot"></span>
         <span>Demo-Modus ohne Backend</span>
       </div>
-      <button class="btn ghost" id="resetAllBtn" type="button">Alles zurücksetzen</button>
+      <button class="btn ghost small" id="resetAllBtn" type="button">Alles zurücksetzen</button>
     </div>
   </header>
 
   <main>
-    <div class="left-col">
-      <section class="panel">
+    <!-- SCREEN 1 -->
+    <section class="screen single active" id="screenRole">
+      <div class="screen-header">
+        <div>
+          <h2>Arbeitsplatz wählen</h2>
+          <p>Das gilt als Einstieg für dieses Gerät.</p>
+        </div>
+      </div>
+
+      <div class="panel">
         <div class="panel-head">
           <div>
-            <h2>1. Rolle wählen</h2>
-            <p>Damit klar ist, wo die Buchung entstanden ist.</p>
+            <h3>Anmeldung</h3>
+            <p>Wähle, ob dieses Gerät gerade an der Theke oder am Schnapswagen genutzt wird.</p>
           </div>
         </div>
         <div class="panel-body">
-          <div class="role-grid" id="roleGrid">
+          <div class="role-grid">
             <button class="role-card" type="button" data-role="theke">
               <div class="title">Theke</div>
               <div class="sub">Normale Ausgabe an der Haupttheke</div>
@@ -661,213 +712,249 @@
             </button>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="panel" style="min-height: 0;">
+    <!-- SCREEN 2 -->
+    <section class="screen single" id="screenGroup">
+      <div class="screen-header">
+        <div>
+          <h2>Gruppe wählen</h2>
+          <p>Danach springt die Ansicht direkt in die Buchungsmaske.</p>
+        </div>
+        <div class="screen-actions">
+          <button class="btn ghost small" id="backToRoleBtn" type="button">Zurück</button>
+        </div>
+      </div>
+
+      <div class="panel" style="display:grid; grid-template-rows:auto 1fr; min-height:0;">
         <div class="panel-head">
           <div>
-            <h2>2. Gruppe wählen</h2>
-            <p>Gruppe antippen. Suchfeld filtert direkt live.</p>
+            <h3>Aktiver Arbeitsplatz: <span id="groupScreenRoleLabel">–</span></h3>
+            <p>Suchfeld filtert live.</p>
           </div>
         </div>
-        <div class="panel-body" style="display:grid; grid-template-rows:auto 1fr; min-height: 0;">
+        <div class="panel-body" style="display:grid; grid-template-rows:auto 1fr; min-height:0;">
           <div class="search-row">
             <input id="groupSearch" class="search-input" type="search" placeholder="Gruppe suchen…" autocomplete="off" />
             <button class="btn ghost" id="clearSearchBtn" type="button">Alle</button>
           </div>
           <div class="group-grid" id="groupGrid"></div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <h2>3. Buchung zusammenstellen</h2>
-            <p>Links auswählen, dann in den Warenkorb legen.</p>
-          </div>
+    <!-- SCREEN 3 -->
+    <section class="screen" id="screenBooking" style="grid-template-rows:auto 1fr; gap:16px;">
+      <div class="screen-header">
+        <div>
+          <h2>Buchung erfassen</h2>
+          <p>Gruppe und Arbeitsplatz sind gesetzt. Bei Bedarf kannst du zurückspringen.</p>
         </div>
-        <div class="panel-body">
-          <div class="stack">
-            <div class="step">
-              <div class="type-grid" id="typeGrid">
-                <button class="type-card" type="button" data-type="wertmarkenkarte">
-                  <div>
-                    <div class="title">Wertmarkenkarte</div>
-                    <div class="sub">Ganze Karte, halbe Karte oder eigene Anzahl Märkchen</div>
-                  </div>
-                  <div class="badge">Karte</div>
-                </button>
-
-                <button class="type-card" type="button" data-type="pittermaennchen">
-                  <div>
-                    <div class="title">Pittermännchen</div>
-                    <div class="sub">Anzahl auswählen und direkt als feste Punkte buchen</div>
-                  </div>
-                  <div class="badge">Pitter</div>
-                </button>
-
-                <button class="type-card" type="button" data-type="eigene_marken">
-                  <div>
-                    <div class="title">Eigene Anzahl Märkchen</div>
-                    <div class="sub">Freie Eingabe oder Schnellbuttons für einzelne Marken</div>
-                  </div>
-                  <div class="badge">Frei</div>
-                </button>
-              </div>
-            </div>
-
-            <div id="wertmarkenOptions" class="step hidden">
-              <small>Wertmarkenkarte auswählen</small>
-              <div class="quick-grid">
-                <button class="quick-card" type="button" data-card="20">
-                  <div>
-                    <div class="title">Ganze Karte</div>
-                    <div class="sub">Volle Karte buchen</div>
-                  </div>
-                  <div class="badge">20 Marken</div>
-                </button>
-
-                <button class="quick-card" type="button" data-card="10">
-                  <div>
-                    <div class="title">Halbe Karte</div>
-                    <div class="sub">Vorentwertete halbe Karte</div>
-                  </div>
-                  <div class="badge">10 Marken</div>
-                </button>
-
-                <button class="quick-card" type="button" data-card="custom">
-                  <div>
-                    <div class="title">Eigene Anzahl</div>
-                    <div class="sub">Falls schon Marken gestrichen sind oder Restmenge zählt</div>
-                  </div>
-                  <div class="badge">Flexibel</div>
-                </button>
-              </div>
-
-              <div id="wertmarkenCustomWrap" class="custom-marks-wrap hidden">
-                <input id="wertmarkenCustomInput" class="number-input" type="number" min="1" step="1" placeholder="Eigene Anzahl Märkchen eingeben" />
-                <div class="quick-buttons">
-                  <button type="button" data-quick-marks="1">1</button>
-                  <button type="button" data-quick-marks="2">2</button>
-                  <button type="button" data-quick-marks="5">5</button>
-                  <button type="button" data-quick-marks="7">7</button>
-                  <button type="button" data-quick-marks="10">10</button>
-                  <button type="button" data-quick-marks="20">20</button>
-                </div>
-              </div>
-            </div>
-
-            <div id="pitterOptions" class="step hidden">
-              <small>Anzahl Pittermännchen wählen</small>
-              <div class="pitter-wrap">
-                <input id="pitterInput" class="number-input" type="number" min="1" step="1" placeholder="Anzahl Pittermännchen" />
-                <div class="quick-buttons">
-                  <button type="button" data-quick-pitter="1">1</button>
-                  <button type="button" data-quick-pitter="2">2</button>
-                  <button type="button" data-quick-pitter="3">3</button>
-                  <button type="button" data-quick-pitter="4">4</button>
-                  <button type="button" data-quick-pitter="5">5</button>
-                  <button type="button" data-quick-pitter="10">10</button>
-                </div>
-              </div>
-            </div>
-
-            <div id="freieMarkenOptions" class="step hidden">
-              <small>Eigene Anzahl Märkchen eingeben</small>
-              <div class="custom-marks-wrap">
-                <input id="freieMarkenInput" class="number-input" type="number" min="1" step="1" placeholder="Anzahl Märkchen" />
-                <div class="quick-buttons">
-                  <button type="button" data-quick-free="1">1</button>
-                  <button type="button" data-quick-free="2">2</button>
-                  <button type="button" data-quick-free="5">5</button>
-                  <button type="button" data-quick-free="7">7</button>
-                  <button type="button" data-quick-free="10">10</button>
-                  <button type="button" data-quick-free="20">20</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="panel" style="background: rgba(255,255,255,0.03); box-shadow:none;">
-              <div class="panel-body">
-                <div class="summary-box">
-                  <div class="summary-line">
-                    <span class="summary-label">Rolle</span>
-                    <span class="summary-value" id="summaryRole">–</span>
-                  </div>
-                  <div class="summary-line">
-                    <span class="summary-label">Gruppe</span>
-                    <span class="summary-value" id="summaryGroup">–</span>
-                  </div>
-                  <div class="summary-line">
-                    <span class="summary-label">Auswahl</span>
-                    <span class="summary-value" id="summarySelection">–</span>
-                  </div>
-                  <div class="summary-line">
-                    <span class="summary-label">Punkte</span>
-                    <span class="summary-value" id="summaryPoints">0</span>
-                  </div>
-                </div>
-
-                <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;">
-                  <button class="btn primary" id="addToCartBtn" type="button">In Warenkorb legen</button>
-                  <button class="btn ghost" id="clearCurrentBtn" type="button">Auswahl löschen</button>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="screen-actions">
+          <button class="btn ghost small" id="changeRoleBtn" type="button">Rolle wechseln</button>
+          <button class="btn ghost small" id="changeGroupBtn" type="button">Gruppe wechseln</button>
         </div>
-      </section>
-    </div>
+      </div>
 
-    <div class="right-col">
-      <section class="panel cart-panel">
-        <div class="panel-head">
-          <div>
-            <h2>Aktuelle Buchung</h2>
-            <p>Mehrere Positionen sammeln und dann zusammen buchen.</p>
-          </div>
-        </div>
-
-        <div class="panel-body" style="padding-bottom: 12px;">
-          <div class="summary-box">
-            <div class="summary-line">
-              <span class="summary-label">Ausgewählte Gruppe</span>
-              <span class="summary-value" id="cartGroup">–</span>
-            </div>
-            <div class="summary-line">
-              <span class="summary-label">Quelle</span>
-              <span class="summary-value" id="cartRole">–</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel-body" style="padding-top: 0; padding-bottom: 12px;">
-          <div class="totals-box">
-            <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-end;">
+      <div class="booking-layout">
+        <div class="left-col">
+          <section class="panel">
+            <div class="panel-head">
               <div>
-                <div style="color:var(--muted); font-size:0.92rem;">Gesamtpunkte</div>
-                <div class="total-points" id="cartTotalPoints">0</div>
-              </div>
-              <div style="text-align:right;">
-                <div style="color:var(--muted); font-size:0.92rem;">Positionen</div>
-                <div style="font-size:1.35rem; font-weight:900;" id="cartCount">0</div>
+                <h3>Aktive Auswahl</h3>
+                <p>Diese Werte gelten für die aktuelle Buchung.</p>
               </div>
             </div>
-          </div>
+            <div class="panel-body">
+              <div class="top-summary">
+                <div class="pill"><strong>Rolle:</strong>&nbsp;<span id="activeRole">–</span></div>
+                <div class="pill"><strong>Gruppe:</strong>&nbsp;<span id="activeGroup">–</span></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Buchung zusammenstellen</h3>
+                <p>Links auswählen, dann in den Warenkorb legen.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="stack">
+                <div class="type-grid" id="typeGrid">
+                  <button class="type-card" type="button" data-type="wertmarkenkarte">
+                    <div>
+                      <div class="title">Wertmarkenkarte</div>
+                      <div class="sub">Ganze Karte, halbe Karte oder eigene Anzahl Märkchen</div>
+                    </div>
+                    <div class="badge">Karte</div>
+                  </button>
+
+                  <button class="type-card" type="button" data-type="pittermaennchen">
+                    <div>
+                      <div class="title">Pittermännchen</div>
+                      <div class="sub">Anzahl auswählen und direkt als feste Punkte buchen</div>
+                    </div>
+                    <div class="badge">Pitter</div>
+                  </button>
+
+                  <button class="type-card" type="button" data-type="eigene_marken">
+                    <div>
+                      <div class="title">Eigene Anzahl Märkchen</div>
+                      <div class="sub">Freie Eingabe oder Schnellbuttons für einzelne Marken</div>
+                    </div>
+                    <div class="badge">Frei</div>
+                  </button>
+                </div>
+
+                <div id="wertmarkenOptions" class="step hidden">
+                  <small>Wertmarkenkarte auswählen</small>
+                  <div class="quick-grid">
+                    <button class="quick-card" type="button" data-card="20">
+                      <div>
+                        <div class="title">Ganze Karte</div>
+                        <div class="sub">Volle Karte buchen</div>
+                      </div>
+                      <div class="badge">20 Marken</div>
+                    </button>
+
+                    <button class="quick-card" type="button" data-card="10">
+                      <div>
+                        <div class="title">Halbe Karte</div>
+                        <div class="sub">Vorentwertete halbe Karte</div>
+                      </div>
+                      <div class="badge">10 Marken</div>
+                    </button>
+
+                    <button class="quick-card" type="button" data-card="custom">
+                      <div>
+                        <div class="title">Eigene Anzahl</div>
+                        <div class="sub">Für Restmengen oder schon gestrichene Karten</div>
+                      </div>
+                      <div class="badge">Flexibel</div>
+                    </button>
+                  </div>
+
+                  <div id="wertmarkenCustomWrap" class="custom-marks-wrap hidden">
+                    <input id="wertmarkenCustomInput" class="number-input" type="number" min="1" step="1" placeholder="Eigene Anzahl Märkchen eingeben" />
+                    <div class="quick-buttons">
+                      <button type="button" data-quick-marks="1">1</button>
+                      <button type="button" data-quick-marks="2">2</button>
+                      <button type="button" data-quick-marks="5">5</button>
+                      <button type="button" data-quick-marks="7">7</button>
+                      <button type="button" data-quick-marks="10">10</button>
+                      <button type="button" data-quick-marks="20">20</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="pitterOptions" class="step hidden">
+                  <small>Anzahl Pittermännchen wählen</small>
+                  <div class="pitter-wrap">
+                    <input id="pitterInput" class="number-input" type="number" min="1" step="1" placeholder="Anzahl Pittermännchen" />
+                    <div class="quick-buttons">
+                      <button type="button" data-quick-pitter="1">1</button>
+                      <button type="button" data-quick-pitter="2">2</button>
+                      <button type="button" data-quick-pitter="3">3</button>
+                      <button type="button" data-quick-pitter="4">4</button>
+                      <button type="button" data-quick-pitter="5">5</button>
+                      <button type="button" data-quick-pitter="10">10</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="freieMarkenOptions" class="step hidden">
+                  <small>Eigene Anzahl Märkchen eingeben</small>
+                  <div class="custom-marks-wrap">
+                    <input id="freieMarkenInput" class="number-input" type="number" min="1" step="1" placeholder="Anzahl Märkchen" />
+                    <div class="quick-buttons">
+                      <button type="button" data-quick-free="1">1</button>
+                      <button type="button" data-quick-free="2">2</button>
+                      <button type="button" data-quick-free="5">5</button>
+                      <button type="button" data-quick-free="7">7</button>
+                      <button type="button" data-quick-free="10">10</button>
+                      <button type="button" data-quick-free="20">20</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel" style="background: rgba(255,255,255,0.03); box-shadow:none;">
+                  <div class="panel-body">
+                    <div class="summary-box">
+                      <div class="summary-line">
+                        <span class="summary-label">Auswahl</span>
+                        <span class="summary-value" id="summarySelection">–</span>
+                      </div>
+                      <div class="summary-line">
+                        <span class="summary-label">Punkte</span>
+                        <span class="summary-value" id="summaryPoints">0</span>
+                      </div>
+                    </div>
+
+                    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;">
+                      <button class="btn primary" id="addToCartBtn" type="button">In Warenkorb legen</button>
+                      <button class="btn ghost" id="clearCurrentBtn" type="button">Auswahl löschen</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
 
-        <div class="panel-body" style="padding-top: 0; min-height: 0;">
-          <div id="cartList" class="cart-list"></div>
-        </div>
+        <div class="right-col">
+          <section class="panel cart-panel">
+            <div class="panel-head">
+              <div>
+                <h3>Aktuelle Buchung</h3>
+                <p>Mehrere Positionen sammeln und dann zusammen buchen.</p>
+              </div>
+            </div>
 
-        <div class="panel-body" style="padding-top: 0;">
-          <div style="display:grid; gap:12px;">
-            <button class="btn green" id="submitCartBtn" type="button">Buchung abschicken</button>
-            <button class="btn ghost" id="clearCartBtn" type="button">Warenkorb leeren</button>
-          </div>
+            <div class="panel-body" style="padding-bottom: 12px;">
+              <div class="summary-box">
+                <div class="summary-line">
+                  <span class="summary-label">Gruppe</span>
+                  <span class="summary-value" id="cartGroup">–</span>
+                </div>
+                <div class="summary-line">
+                  <span class="summary-label">Quelle</span>
+                  <span class="summary-value" id="cartRole">–</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-body" style="padding-top: 0; padding-bottom: 12px;">
+              <div class="totals-box">
+                <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-end;">
+                  <div>
+                    <div style="color:var(--muted); font-size:0.92rem;">Gesamtpunkte</div>
+                    <div class="total-points" id="cartTotalPoints">0</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="color:var(--muted); font-size:0.92rem;">Positionen</div>
+                    <div style="font-size:1.35rem; font-weight:900;" id="cartCount">0</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-body" style="padding-top: 0; min-height: 0;">
+              <div id="cartList" class="cart-list"></div>
+            </div>
+
+            <div class="panel-body" style="padding-top: 0;">
+              <div style="display:grid; gap:12px;">
+                <button class="btn green" id="submitCartBtn" type="button">Buchung abschicken</button>
+                <button class="btn ghost" id="clearCartBtn" type="button">Warenkorb leeren</button>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </main>
 
   <div class="confirm-backdrop" id="confirmBackdrop">
@@ -930,6 +1017,7 @@
     };
 
     const state = {
+      screen: "role",
       role: null,
       group: null,
       type: null,
@@ -939,10 +1027,22 @@
     };
 
     const els = {
+      screenRole: document.getElementById("screenRole"),
+      screenGroup: document.getElementById("screenGroup"),
+      screenBooking: document.getElementById("screenBooking"),
+
       roleCards: [...document.querySelectorAll(".role-card")],
+      backToRoleBtn: document.getElementById("backToRoleBtn"),
+      changeRoleBtn: document.getElementById("changeRoleBtn"),
+      changeGroupBtn: document.getElementById("changeGroupBtn"),
+      groupScreenRoleLabel: document.getElementById("groupScreenRoleLabel"),
+
       groupSearch: document.getElementById("groupSearch"),
       clearSearchBtn: document.getElementById("clearSearchBtn"),
       groupGrid: document.getElementById("groupGrid"),
+
+      activeRole: document.getElementById("activeRole"),
+      activeGroup: document.getElementById("activeGroup"),
 
       typeCards: [...document.querySelectorAll(".type-card")],
       wertmarkenOptions: document.getElementById("wertmarkenOptions"),
@@ -954,8 +1054,6 @@
       pitterInput: document.getElementById("pitterInput"),
       freieMarkenInput: document.getElementById("freieMarkenInput"),
 
-      summaryRole: document.getElementById("summaryRole"),
-      summaryGroup: document.getElementById("summaryGroup"),
       summarySelection: document.getElementById("summarySelection"),
       summaryPoints: document.getElementById("summaryPoints"),
 
@@ -985,19 +1083,46 @@
     function init() {
       renderGroups();
       bindEvents();
+      updateRoleViews();
+      updateBookingHeader();
       updateCurrentSummary();
       renderCart();
+      showScreen("role");
     }
 
     function bindEvents() {
       els.roleCards.forEach(btn => {
         btn.addEventListener("click", () => {
           state.role = btn.dataset.role;
-          els.roleCards.forEach(x => x.classList.remove("active"));
-          btn.classList.add("active");
-          updateCurrentSummary();
+          state.group = null;
+          state.cart = [];
+          clearCurrentSelection(false);
           renderCart();
+          updateRoleViews();
+          showScreen("group");
         });
+      });
+
+      els.backToRoleBtn.addEventListener("click", () => {
+        state.group = null;
+        state.cart = [];
+        renderCart();
+        showScreen("role");
+      });
+
+      els.changeRoleBtn.addEventListener("click", () => {
+        state.group = null;
+        state.cart = [];
+        clearCurrentSelection(false);
+        renderCart();
+        showScreen("role");
+      });
+
+      els.changeGroupBtn.addEventListener("click", () => {
+        state.cart = [];
+        clearCurrentSelection(false);
+        renderCart();
+        showScreen("group");
       });
 
       els.groupSearch.addEventListener("input", renderGroups);
@@ -1063,7 +1188,7 @@
       els.freieMarkenInput.addEventListener("input", updateFreieMarken);
 
       els.addToCartBtn.addEventListener("click", addCurrentToCart);
-      els.clearCurrentBtn.addEventListener("click", clearCurrentSelection);
+      els.clearCurrentBtn.addEventListener("click", () => clearCurrentSelection(true));
       els.clearCartBtn.addEventListener("click", clearCart);
       els.submitCartBtn.addEventListener("click", openConfirm);
       els.cancelConfirmBtn.addEventListener("click", closeConfirm);
@@ -1073,6 +1198,39 @@
       els.confirmBackdrop.addEventListener("click", (e) => {
         if (e.target === els.confirmBackdrop) closeConfirm();
       });
+    }
+
+    function showScreen(screen) {
+      state.screen = screen;
+
+      els.screenRole.classList.remove("active");
+      els.screenGroup.classList.remove("active");
+      els.screenBooking.classList.remove("active");
+
+      if (screen === "role") {
+        els.screenRole.classList.add("active");
+      } else if (screen === "group") {
+        els.screenGroup.classList.add("active");
+      } else if (screen === "booking") {
+        els.screenBooking.classList.add("active");
+      }
+
+      updateRoleViews();
+      updateBookingHeader();
+    }
+
+    function updateRoleViews() {
+      els.groupScreenRoleLabel.textContent = formatRole(state.role) || "–";
+      els.roleCards.forEach(card => {
+        card.classList.toggle("active", state.role === card.dataset.role);
+      });
+    }
+
+    function updateBookingHeader() {
+      els.activeRole.textContent = formatRole(state.role) || "–";
+      els.activeGroup.textContent = state.group || "–";
+      els.cartGroup.textContent = state.group || "–";
+      els.cartRole.textContent = formatRole(state.role) || "–";
     }
 
     function renderGroups() {
@@ -1100,14 +1258,15 @@
 
         btn.innerHTML = `
           <div class="group-name">${escapeHtml(group)}</div>
-          <div class="group-meta">antippen zum Auswählen</div>
         `;
 
         btn.addEventListener("click", () => {
           state.group = group;
+          state.cart = [];
           renderGroups();
-          updateCurrentSummary();
           renderCart();
+          updateBookingHeader();
+          showScreen("booking");
         });
 
         els.groupGrid.appendChild(btn);
@@ -1173,20 +1332,21 @@
     }
 
     function updateCurrentSummary() {
-      els.summaryRole.textContent = formatRole(state.role) || "–";
-      els.summaryGroup.textContent = state.group || "–";
       els.summarySelection.textContent = state.selectionLabel || "–";
       els.summaryPoints.textContent = String(state.selectionPoints || 0);
+      updateBookingHeader();
     }
 
     function addCurrentToCart() {
       if (!state.role) {
         toast("Erst Rolle auswählen.", "err");
+        showScreen("role");
         return;
       }
 
       if (!state.group) {
         toast("Erst Gruppe auswählen.", "err");
+        showScreen("group");
         return;
       }
 
@@ -1289,11 +1449,13 @@
     function openConfirm() {
       if (!state.role) {
         toast("Erst Rolle auswählen.", "err");
+        showScreen("role");
         return;
       }
 
       if (!state.group) {
         toast("Erst Gruppe auswählen.", "err");
+        showScreen("group");
         return;
       }
 
@@ -1302,21 +1464,21 @@
         return;
       }
 
-      const foreignGroups = [...new Set(state.cart.map(x => x.group))];
-      const foreignRoles = [...new Set(state.cart.map(x => x.role))];
+      const cartGroups = [...new Set(state.cart.map(x => x.group))];
+      const cartRoles = [...new Set(state.cart.map(x => x.role))];
 
-      if (foreignGroups.length > 1) {
-        toast("Im Warenkorb sind mehrere Gruppen. Das solltest du nicht mischen.", "err");
+      if (cartGroups.length > 1) {
+        toast("Im Warenkorb sind mehrere Gruppen. Das ist absichtlich blockiert.", "err");
         return;
       }
 
-      if (foreignRoles.length > 1) {
-        toast("Im Warenkorb sind gemischte Rollen. Das solltest du nicht mischen.", "err");
+      if (cartRoles.length > 1) {
+        toast("Im Warenkorb sind gemischte Rollen. Das ist absichtlich blockiert.", "err");
         return;
       }
 
-      els.confirmGroup.textContent = foreignGroups[0];
-      els.confirmRole.textContent = formatRole(foreignRoles[0]);
+      els.confirmGroup.textContent = cartGroups[0];
+      els.confirmRole.textContent = formatRole(cartRoles[0]);
       els.confirmPoints.textContent = String(getCartTotal());
       els.confirmText.textContent = `${state.cart.length} Position(en) werden jetzt gebucht.`;
       els.confirmBackdrop.classList.add("open");
@@ -1346,6 +1508,7 @@
     }
 
     function resetAll() {
+      state.screen = "role";
       state.role = null;
       state.group = null;
       state.type = null;
@@ -1353,13 +1516,15 @@
       state.selectionPoints = 0;
       state.cart = [];
 
-      els.roleCards.forEach(x => x.classList.remove("active"));
       els.groupSearch.value = "";
 
-      renderGroups();
       clearCurrentSelection(false);
+      renderGroups();
       renderCart();
+      updateRoleViews();
+      updateBookingHeader();
       updateCurrentSummary();
+      showScreen("role");
       toast("Alles zurückgesetzt.", "ok");
     }
 

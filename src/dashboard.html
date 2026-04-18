@@ -7,18 +7,21 @@
   <style>
     :root {
       --bg: #08101d;
-      --panel: rgba(15, 23, 42, 0.92);
+      --panel: rgba(15, 23, 42, 0.94);
       --panel-2: rgba(255, 255, 255, 0.04);
       --border: rgba(255, 255, 255, 0.08);
       --text: #f8fafc;
       --muted: #94a3b8;
       --accent: #ef4444;
       --accent-2: #f97316;
+      --gold: #f59e0b;
+      --gold-2: #fde68a;
       --green: #22c55e;
       --yellow: #f59e0b;
       --blue: #3b82f6;
-      --shadow: 0 22px 50px rgba(0, 0, 0, 0.3);
-      --radius: 24px;
+      --blue-2: #60a5fa;
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+      --radius: 20px;
     }
 
     * {
@@ -39,17 +42,17 @@
 
     body {
       min-height: 100vh;
-      padding: 10px;
+      padding: 8px;
       display: grid;
       grid-template-rows: auto auto 1fr;
-      gap: 10px;
+      gap: 8px;
     }
 
     .topbar,
     .hero,
-    .debug-panel,
     .ranking-card,
-    .overlay {
+    .overlay,
+    .debug-panel {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--panel);
@@ -59,21 +62,21 @@
 
     .topbar {
       display: grid;
-      grid-template-columns: 1.4fr auto;
+      grid-template-columns: 1.2fr auto;
       gap: 10px;
-      padding: 10px 12px;
+      padding: 8px 10px;
       align-items: center;
     }
 
     .brand {
       display: grid;
-      gap: 6px;
+      gap: 2px;
       min-width: 0;
     }
 
     .brand h1 {
       margin: 0;
-      font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+      font-size: clamp(1.2rem, 2.1vw, 1.6rem);
       line-height: 1;
       font-weight: 900;
       letter-spacing: 0.02em;
@@ -82,7 +85,7 @@
     .brand p {
       margin: 0;
       color: var(--muted);
-      font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+      font-size: clamp(0.76rem, 1vw, 0.86rem);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -92,19 +95,19 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: flex-end;
-      gap: 10px;
+      gap: 8px;
     }
 
     .pill,
     .btn {
-      min-height: 40px;
+      min-height: 36px;
       border-radius: 999px;
-      padding: 0 14px;
+      padding: 0 13px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       font-weight: 800;
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       white-space: nowrap;
     }
 
@@ -121,11 +124,6 @@
       background: var(--green);
       box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16);
       flex: 0 0 auto;
-    }
-
-    .pill.warning .dot {
-      background: var(--yellow);
-      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.16);
     }
 
     .pill.closed .dot {
@@ -148,10 +146,10 @@
     }
 
     .hero {
-      padding: 10px 12px;
+      padding: 8px 10px;
       display: grid;
-      grid-template-columns: 1.2fr repeat(3, minmax(0, 1fr));
-      gap: 10px;
+      grid-template-columns: 1.35fr repeat(4, minmax(0, 0.85fr));
+      gap: 8px;
       align-items: stretch;
     }
 
@@ -159,88 +157,94 @@
     .hero-stat {
       background: rgba(255,255,255,0.04);
       border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 12px;
-      min-height: 92px;
+      border-radius: 16px;
+      padding: 10px 12px;
+      min-height: 72px;
     }
 
     .hero-main {
       display: grid;
-      gap: 10px;
+      gap: 6px;
       align-content: space-between;
     }
 
     .hero-main-title {
-      font-size: 1rem;
+      font-size: 0.98rem;
       font-weight: 900;
     }
 
     .hero-main-sub {
       color: var(--muted);
-      font-size: 0.84rem;
-      line-height: 1.35;
+      font-size: 0.8rem;
+      line-height: 1.3;
     }
 
     .hero-main-bottom {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
+    }
+
+    .hero-main-bottom .pill {
+      min-height: 30px;
+      font-size: 0.76rem;
+      padding: 0 10px;
     }
 
     .hero-stat {
       display: grid;
       align-content: space-between;
-      gap: 8px;
+      gap: 5px;
     }
 
     .hero-stat-label {
       color: var(--muted);
-      font-size: 0.82rem;
+      font-size: 0.76rem;
     }
 
     .hero-stat-value {
-      font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+      font-size: clamp(1.1rem, 1.9vw, 1.5rem);
       font-weight: 900;
       line-height: 1;
     }
 
     .hero-stat-sub {
       color: var(--muted);
-      font-size: 0.78rem;
+      font-size: 0.72rem;
     }
 
     .ranking-card {
       min-height: 0;
       overflow: hidden;
       display: grid;
-      grid-template-rows: auto 1fr;
+      grid-template-rows: auto 1fr auto;
     }
 
     .ranking-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 10px 12px;
+      gap: 10px;
+      padding: 8px 10px;
       border-bottom: 1px solid var(--border);
       background: rgba(255,255,255,0.03);
     }
 
     .ranking-head h2 {
       margin: 0;
-      font-size: 1rem;
+      font-size: 0.98rem;
     }
 
     .ranking-head p {
-      margin: 4px 0 0;
+      margin: 2px 0 0;
       color: var(--muted);
-      font-size: 0.82rem;
+      font-size: 0.76rem;
     }
 
     .ranking-grid {
       min-height: 0;
-      overflow: auto;
-      padding: 10px;
+      overflow: hidden;
+      padding: 8px;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
@@ -252,84 +256,116 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       background: rgba(255,255,255,0.04);
-      padding: 10px 12px;
+      padding: 9px 10px;
       overflow: hidden;
-      min-height: 84px;
+      min-height: 74px;
       display: grid;
-      gap: 8px;
+      gap: 7px;
       align-content: space-between;
+      isolation: isolate;
+    }
+
+    .ranking-item::after {
+      content: "";
+      position: absolute;
+      inset: -20% auto -20% -55%;
+      width: 40%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      opacity: 0;
+      transform: skewX(-20deg);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ranking-item > * {
+      position: relative;
+      z-index: 1;
     }
 
     .ranking-item.flash {
-      animation: flashPulse 2.4s ease;
-      border-color: rgba(59,130,246,0.48);
+      animation: flashBurst 3.2s ease;
+      border-color: rgba(250, 204, 21, 0.85);
+      box-shadow:
+        0 0 0 2px rgba(250, 204, 21, 0.22),
+        0 0 26px rgba(59,130,246,0.28),
+        0 0 52px rgba(250,204,21,0.16);
+    }
+
+    .ranking-item.flash::after {
+      opacity: 1;
+      animation: shineSweep 1s ease 0s 3;
     }
 
     .ranking-item.top1 {
-      border-color: rgba(245, 158, 11, 0.32);
+      border-color: rgba(245, 158, 11, 0.34);
       background: linear-gradient(180deg, rgba(245,158,11,0.14), rgba(255,255,255,0.04));
     }
 
     .ranking-item-header {
       display: grid;
       grid-template-columns: auto 1fr auto;
-      gap: 10px;
+      gap: 9px;
       align-items: center;
       min-width: 0;
     }
 
     .rank-badge {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
       display: grid;
       place-items: center;
       background: rgba(255,255,255,0.06);
       font-weight: 900;
-      font-size: 1.1rem;
+      font-size: 1rem;
       flex: 0 0 auto;
     }
 
     .group-block {
       min-width: 0;
       display: grid;
-      gap: 4px;
+      gap: 2px;
     }
 
     .group-name {
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       font-weight: 900;
-      line-height: 1.2;
+      line-height: 1.18;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .group-meta {
-      font-size: 0.76rem;
+      font-size: 0.72rem;
       color: var(--muted);
     }
 
     .points-block {
       text-align: right;
       display: grid;
-      gap: 4px;
+      gap: 2px;
       flex: 0 0 auto;
     }
 
     .points-value {
-      font-size: 1.2rem;
+      font-size: 1.12rem;
       font-weight: 900;
       line-height: 1;
+      transition: transform 0.18s ease;
+    }
+
+    .ranking-item.flash .points-value {
+      animation: pointsBoom 1s ease 0s 2;
     }
 
     .points-label {
       color: var(--muted);
-      font-size: 0.74rem;
+      font-size: 0.7rem;
     }
 
     .bar-wrap {
-      height: 12px;
+      height: 11px;
       border-radius: 999px;
       background: rgba(255,255,255,0.06);
       overflow: hidden;
@@ -340,21 +376,116 @@
       height: 100%;
       width: 0%;
       border-radius: 999px;
-      background: linear-gradient(90deg, var(--blue), #60a5fa);
-      transition: width 0.8s ease;
+      background: linear-gradient(90deg, var(--blue), var(--blue-2));
+      transition: width 0.9s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bar::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      opacity: 0;
+      transform: translateX(-120%);
+    }
+
+    .ranking-item.flash .bar::after {
+      opacity: 1;
+      animation: barShine 0.9s ease 0s 3;
     }
 
     .top1 .bar {
-      background: linear-gradient(90deg, #f59e0b, #fde68a);
+      background: linear-gradient(90deg, var(--gold), var(--gold-2));
+    }
+
+    .delta-badge {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      min-height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #facc15, #fb7185);
+      color: #111827;
+      font-weight: 900;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      box-shadow: 0 0 18px rgba(250,204,21,0.35);
+      animation: deltaPop 1s ease 0s 2;
+      z-index: 2;
+    }
+
+    .remaining-wrap {
+      border-top: 1px solid var(--border);
+      padding: 8px 10px 10px;
+      display: grid;
+      gap: 8px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .remaining-title {
+      font-size: 0.76rem;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .remaining-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .remaining-chip {
+      position: relative;
+      min-height: 52px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      padding: 8px 10px;
+      display: grid;
+      gap: 2px;
+      align-content: center;
+      overflow: hidden;
+    }
+
+    .remaining-chip.flash {
+      animation: chipFlash 3s ease;
+      border-color: rgba(250, 204, 21, 0.8);
+      box-shadow: 0 0 20px rgba(250,204,21,0.18);
+    }
+
+    .remaining-chip-rank {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .remaining-chip-name {
+      font-size: 0.82rem;
+      font-weight: 900;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .remaining-chip-points {
+      font-size: 0.78rem;
+      color: #dbeafe;
+      font-weight: 800;
     }
 
     .overlay {
       position: fixed;
-      inset: 24px;
+      inset: 18px;
       z-index: 50;
       display: none;
       place-items: center;
-      background: rgba(8, 16, 29, 0.86);
+      background: rgba(8, 16, 29, 0.88);
       border: 1px solid rgba(239,68,68,0.24);
       backdrop-filter: blur(10px);
     }
@@ -387,13 +518,13 @@
 
     .debug-panel {
       position: fixed;
-      right: 18px;
-      bottom: 18px;
+      right: 10px;
+      bottom: 10px;
       z-index: 40;
       display: none;
-      gap: 10px;
-      padding: 14px;
-      width: min(420px, calc(100vw - 36px));
+      gap: 8px;
+      padding: 10px;
+      width: min(360px, calc(100vw - 20px));
       background: rgba(15,23,42,0.96);
     }
 
@@ -403,26 +534,55 @@
 
     .debug-row {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
-    @keyframes flashPulse {
-      0% { box-shadow: 0 0 0 rgba(59,130,246,0); transform: scale(1); }
-      12% { box-shadow: 0 0 0 6px rgba(59,130,246,0.14); transform: scale(1.008); }
-      30% { box-shadow: 0 0 0 rgba(59,130,246,0); transform: scale(1); }
-      48% { box-shadow: 0 0 0 8px rgba(59,130,246,0.16); transform: scale(1.01); }
-      70% { box-shadow: 0 0 0 rgba(59,130,246,0); transform: scale(1); }
-      100% { box-shadow: 0 0 0 rgba(59,130,246,0); transform: scale(1); }
+    @keyframes flashBurst {
+      0% { transform: scale(1); box-shadow: 0 0 0 rgba(250,204,21,0); }
+      8% { transform: scale(1.018); box-shadow: 0 0 0 4px rgba(250,204,21,0.18), 0 0 42px rgba(59,130,246,0.35); }
+      18% { transform: scale(1); }
+      30% { transform: scale(1.012); box-shadow: 0 0 0 6px rgba(250,204,21,0.16), 0 0 52px rgba(250,204,21,0.18); }
+      44% { transform: scale(1); }
+      60% { transform: scale(1.01); box-shadow: 0 0 0 3px rgba(59,130,246,0.16), 0 0 32px rgba(59,130,246,0.22); }
+      100% { transform: scale(1); box-shadow: 0 0 0 rgba(250,204,21,0); }
+    }
+
+    @keyframes shineSweep {
+      0% { transform: translateX(-160%) skewX(-20deg); }
+      100% { transform: translateX(360%) skewX(-20deg); }
+    }
+
+    @keyframes barShine {
+      0% { transform: translateX(-120%); }
+      100% { transform: translateX(220%); }
+    }
+
+    @keyframes pointsBoom {
+      0% { transform: scale(1); }
+      24% { transform: scale(1.26); color: #fef08a; text-shadow: 0 0 16px rgba(250,204,21,0.4); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes deltaPop {
+      0% { transform: scale(0.6) translateY(-6px); opacity: 0; }
+      18% { transform: scale(1.18) translateY(0); opacity: 1; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    @keyframes chipFlash {
+      0% { transform: scale(1); }
+      18% { transform: scale(1.03); box-shadow: 0 0 24px rgba(250,204,21,0.26); }
+      100% { transform: scale(1); }
     }
 
     @media (max-width: 1280px) {
-      body {
-        padding: 8px;
+      .hero {
+        grid-template-columns: 1fr 1fr 1fr;
       }
 
-      .hero {
-        grid-template-columns: 1fr 1fr;
+      .remaining-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
 
@@ -436,11 +596,15 @@
       }
 
       .hero {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
       }
 
       .ranking-grid {
         grid-template-columns: 1fr;
+      }
+
+      .remaining-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
   </style>
@@ -470,7 +634,7 @@
     <div class="hero-main">
       <div>
         <div class="hero-main-title">BIB Dance Night · Saufpokal</div>
-        <div class="hero-main-sub" id="heroSubtext">Jede neue Buchung hebt die betroffene Gruppe direkt im Ranking hervor. Das ist aktuell eine Demo ohne Backend.</div>
+        <div class="hero-main-sub" id="heroSubtext">Kompakter TV-Modus. Untere Plätze werden unten gebündelt angezeigt, damit alles auf einen Bildschirm passt.</div>
       </div>
       <div class="hero-main-bottom">
         <div class="pill"><span>Letztes Update:</span><strong id="lastUpdateText">–</strong></div>
@@ -495,18 +659,29 @@
       <div class="hero-stat-value" id="bookingCount">0</div>
       <div class="hero-stat-sub">Demo-Zähler</div>
     </div>
+
+    <div class="hero-stat">
+      <div class="hero-stat-label">Gruppen gesamt</div>
+      <div class="hero-stat-value" id="groupCount">0</div>
+      <div class="hero-stat-sub">komplett sichtbar</div>
+    </div>
   </section>
 
   <section class="ranking-card">
     <div class="ranking-head">
       <div>
         <h2>Aktuelles Ranking</h2>
-        <p>Spaltenlayout passt sich der verfügbaren Bildschirmbreite an.</p>
+        <p>Plätze 1–12 groß. Rest wird unten kompakt zusammengefasst.</p>
       </div>
-      <div class="pill"><span>Gruppen:</span><strong id="groupCount">0</strong></div>
+      <div class="pill"><span>sichtbar:</span><strong id="visibleInfo">12 + Rest</strong></div>
     </div>
 
     <div class="ranking-grid" id="rankingGrid"></div>
+
+    <div class="remaining-wrap" id="remainingWrap">
+      <div class="remaining-title">Weitere Plätze</div>
+      <div class="remaining-grid" id="remainingGrid"></div>
+    </div>
   </section>
 
   <section class="overlay" id="closedOverlay">
@@ -529,6 +704,7 @@
     const CONFIG = {
       EVENT_END_LABEL: "23:30 Uhr",
       DEBUG_ENABLED: new URLSearchParams(window.location.search).get("debug") === "1",
+      PRIMARY_SLOTS: 12,
       INITIAL_GROUPS: [
         { name: "Illastix", points: 182 },
         { name: "Lucky Stars", points: 176 },
@@ -555,6 +731,7 @@
       closed: false,
       bookingCount: 42,
       lastUpdatedGroup: null,
+      lastDelta: 0,
       groups: [],
       audioContext: null
     };
@@ -576,7 +753,10 @@
       leaderPoints: document.getElementById("leaderPoints"),
       bookingCount: document.getElementById("bookingCount"),
       groupCount: document.getElementById("groupCount"),
+      visibleInfo: document.getElementById("visibleInfo"),
       rankingGrid: document.getElementById("rankingGrid"),
+      remainingWrap: document.getElementById("remainingWrap"),
+      remainingGrid: document.getElementById("remainingGrid"),
       closedOverlay: document.getElementById("closedOverlay")
     };
 
@@ -614,30 +794,38 @@
     function render() {
       const sorted = [...state.groups].sort((a, b) => b.points - a.points || a.name.localeCompare(b.name, "de"));
       const maxPoints = Math.max(...sorted.map(group => group.points), 1);
+      const primaryGroups = sorted.slice(0, CONFIG.PRIMARY_SLOTS);
+      const remainingGroups = sorted.slice(CONFIG.PRIMARY_SLOTS);
 
       els.rankingGrid.innerHTML = "";
+      els.remainingGrid.innerHTML = "";
       els.groupCount.textContent = String(sorted.length);
       els.bookingCount.textContent = String(state.bookingCount);
       els.lastUpdateText.textContent = state.lastUpdatedGroup ? formatTime(new Date()) : "–";
+      els.visibleInfo.textContent = remainingGroups.length ? `${primaryGroups.length} + ${remainingGroups.length}` : String(primaryGroups.length);
 
       const leader = sorted[0] || { name: "–", points: 0 };
       els.leaderName.textContent = leader.name;
       els.leaderPoints.textContent = String(leader.points);
 
-      sorted.forEach((group, index) => {
+      primaryGroups.forEach((group, index) => {
         const item = document.createElement("div");
         item.className = "ranking-item";
-        if (index === 0) item.classList.add("top1");
-        if (state.lastUpdatedGroup === group.name) item.classList.add("flash");
+        const absoluteRank = index + 1;
+        const isFlash = state.lastUpdatedGroup === group.name;
+        if (absoluteRank === 1) item.classList.add("top1");
+        if (isFlash) item.classList.add("flash");
 
-        const width = Math.max(10, Math.round((group.points / maxPoints) * 100));
+        const width = Math.max(8, Math.round((group.points / maxPoints) * 100));
+        const deltaBadge = isFlash && state.lastDelta ? `<div class="delta-badge">+${state.lastDelta}</div>` : "";
 
         item.innerHTML = `
+          ${deltaBadge}
           <div class="ranking-item-header">
-            <div class="rank-badge">${index + 1}</div>
+            <div class="rank-badge">${absoluteRank}</div>
             <div class="group-block">
               <div class="group-name">${escapeHtml(group.name)}</div>
-              <div class="group-meta">${index === 0 ? "aktuelle Führung" : `Abstand zu Platz 1: ${leader.points - group.points}`}</div>
+              <div class="group-meta">${absoluteRank === 1 ? "aktuelle Führung" : `Abstand zu Platz 1: ${leader.points - group.points}`}</div>
             </div>
             <div class="points-block">
               <div class="points-value">${group.points}</div>
@@ -652,20 +840,37 @@
         els.rankingGrid.appendChild(item);
       });
 
+      if (remainingGroups.length) {
+        els.remainingWrap.style.display = "grid";
+        remainingGroups.forEach((group, index) => {
+          const absoluteRank = CONFIG.PRIMARY_SLOTS + index + 1;
+          const chip = document.createElement("div");
+          chip.className = "remaining-chip";
+          if (state.lastUpdatedGroup === group.name) chip.classList.add("flash");
+          chip.innerHTML = `
+            <div class="remaining-chip-rank">Platz ${absoluteRank}</div>
+            <div class="remaining-chip-name">${escapeHtml(group.name)}</div>
+            <div class="remaining-chip-points">${group.points} Punkte</div>
+          `;
+          els.remainingGrid.appendChild(chip);
+        });
+      } else {
+        els.remainingWrap.style.display = "none";
+      }
+
       updateStatusUi();
     }
 
     function updateStatusUi() {
       els.closedOverlay.classList.toggle("open", state.closed);
-      els.statusPill.classList.remove("warning", "closed");
+      els.statusPill.classList.toggle("closed", state.closed);
 
       if (state.closed) {
-        els.statusPill.classList.add("closed");
         els.statusText.textContent = "Zählung beendet";
         els.heroSubtext.textContent = "Die Wertung ist abgeschlossen. Das Dashboard bleibt zur Anzeige des Endstands sichtbar.";
       } else {
         els.statusText.textContent = "Zählung läuft";
-        els.heroSubtext.textContent = "Jede neue Buchung hebt die betroffene Gruppe direkt im Ranking hervor. Das ist aktuell eine Demo ohne Backend.";
+        els.heroSubtext.textContent = "Kompakter TV-Modus. Untere Plätze werden unten gebündelt angezeigt, damit alles auf einen Bildschirm passt.";
       }
 
       els.soundStateText.textContent = state.soundEnabled ? "an" : "aus";
@@ -694,21 +899,28 @@
       const ctx = state.audioContext;
       const now = ctx.currentTime;
 
-      const osc = ctx.createOscillator();
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
       const gain = ctx.createGain();
 
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(880, now);
-      osc.frequency.exponentialRampToValueAtTime(1320, now + 0.08);
+      osc1.type = "sine";
+      osc2.type = "triangle";
+      osc1.frequency.setValueAtTime(880, now);
+      osc1.frequency.exponentialRampToValueAtTime(1320, now + 0.08);
+      osc2.frequency.setValueAtTime(1320, now);
+      osc2.frequency.exponentialRampToValueAtTime(1760, now + 0.08);
 
       gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.08, now + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+      gain.gain.exponentialRampToValueAtTime(0.09, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
 
-      osc.connect(gain);
+      osc1.connect(gain);
+      osc2.connect(gain);
       gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.17);
+      osc1.start(now);
+      osc2.start(now + 0.01);
+      osc1.stop(now + 0.22);
+      osc2.stop(now + 0.22);
     }
 
     function applyUpdate(index, delta) {
@@ -717,14 +929,16 @@
 
       state.groups[index].points += delta;
       state.lastUpdatedGroup = state.groups[index].name;
+      state.lastDelta = delta;
       state.bookingCount += 1;
       render();
       pingSound();
 
       setTimeout(() => {
         state.lastUpdatedGroup = null;
+        state.lastDelta = 0;
         render();
-      }, 2400);
+      }, 3200);
     }
 
     function setClosed(value) {
@@ -737,6 +951,7 @@
       state.closed = false;
       state.bookingCount = 42;
       state.lastUpdatedGroup = null;
+      state.lastDelta = 0;
       render();
     }
 
@@ -757,7 +972,6 @@
         .replaceAll("'", "&#39;");
     }
 
-    // Spätere Live-Anbindung: diese Funktionen können direkt von SignalR / API benutzt werden.
     window.dashboardApplyUpdateByName = function(name, delta) {
       const index = state.groups.findIndex(group => group.name === name);
       if (index >= 0) applyUpdate(index, delta);
@@ -768,6 +982,7 @@
       state.groups = groups.map(group => ({ ...group }));
       state.bookingCount = bookingCount;
       state.lastUpdatedGroup = null;
+      state.lastDelta = 0;
       render();
     };
 

@@ -2,12 +2,1394 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tablet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Saufpokal Live – Tablet</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --panel-3: #0f172a;
+      --card: #182233;
+      --card-hover: #22324b;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #dc2626;
+      --accent-2: #ef4444;
+      --green: #16a34a;
+      --blue: #2563eb;
+      --orange: #ea580c;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      --radius: 24px;
+      --radius-sm: 18px;
+      --gap: 16px;
+      --header-h: 86px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top, #16233d 0%, #0b1220 45%),
+        linear-gradient(180deg, #0b1220 0%, #08101d 100%);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+      display: grid;
+      grid-template-rows: var(--header-h) 1fr;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11, 18, 32, 0.88);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.45rem;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.16);
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 18px;
+      min-height: 54px;
+      padding: 0 18px;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text);
+      cursor: pointer;
+      background: var(--panel-2);
+      box-shadow: var(--shadow);
+      transition: transform 0.12s ease, opacity 0.12s ease, background 0.12s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.985);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+
+    .btn.green {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+    }
+
+    .btn.ghost {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 3fr 1.2fr;
+      gap: 18px;
+      padding: 18px 20px 20px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .left-col,
+    .right-col {
+      min-height: 0;
+      display: grid;
+      gap: 16px;
+    }
+
+    .panel {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .panel-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .panel-body {
+      padding: 18px 20px 20px;
+      min-height: 0;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .role-card,
+    .type-card,
+    .quick-card,
+    .group-card {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015)), var(--card);
+      border-radius: 22px;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+    }
+
+    .role-card:hover,
+    .type-card:hover,
+    .quick-card:hover,
+    .group-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(255,255,255,0.16);
+    }
+
+    .role-card:active,
+    .type-card:active,
+    .quick-card:active,
+    .group-card:active {
+      transform: scale(0.985);
+    }
+
+    .role-card.active,
+    .type-card.active,
+    .quick-card.active {
+      outline: 3px solid rgba(239, 68, 68, 0.36);
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .role-card {
+      padding: 18px;
+      min-height: 110px;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .role-card .title {
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .role-card .sub {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .search-input,
+    .number-input {
+      width: 100%;
+      min-height: 56px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      color: var(--text);
+      font-size: 1rem;
+      padding: 0 18px;
+      outline: none;
+    }
+
+    .group-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px;
+      max-height: 100%;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .group-card {
+      min-height: 104px;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      text-align: left;
+    }
+
+    .group-card.selected {
+      outline: 3px solid rgba(37, 99, 235, 0.35);
+      border-color: rgba(37, 99, 235, 0.4);
+      background: linear-gradient(180deg, rgba(37,99,235,0.18), rgba(37,99,235,0.08)), var(--card);
+    }
+
+    .group-name {
+      font-size: 1.08rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .group-meta {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .type-grid,
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .type-card,
+    .quick-card {
+      min-height: 108px;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      text-align: left;
+    }
+
+    .type-card .title,
+    .quick-card .title {
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .type-card .sub,
+    .quick-card .sub {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.25;
+    }
+
+    .type-card .badge,
+    .quick-card .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 64px;
+      min-height: 34px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      font-weight: 800;
+      font-size: 0.92rem;
+    }
+
+    .step {
+      display: grid;
+      gap: 14px;
+    }
+
+    .step small {
+      color: var(--muted);
+    }
+
+    .stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .custom-marks-wrap,
+    .pitter-wrap {
+      display: grid;
+      gap: 12px;
+    }
+
+    .quick-buttons {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+
+    .quick-buttons button {
+      min-height: 58px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .summary-box {
+      display: grid;
+      gap: 12px;
+    }
+
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(255,255,255,0.08);
+    }
+
+    .summary-line:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .summary-label {
+      color: var(--muted);
+    }
+
+    .summary-value {
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .cart-list {
+      display: grid;
+      gap: 12px;
+      max-height: 320px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .cart-item-main {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .cart-item-title {
+      font-weight: 800;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .cart-item-sub {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.25;
+    }
+
+    .cart-item-actions {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .icon-btn {
+      min-width: 52px;
+      min-height: 52px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-size: 1.15rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .totals-box {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+    }
+
+    .total-points {
+      font-size: 2rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .right-col {
+      grid-template-rows: auto 1fr;
+    }
+
+    .cart-panel {
+      display: grid;
+      grid-template-rows: auto auto auto 1fr auto;
+      min-height: 0;
+    }
+
+    .empty-state {
+      display: grid;
+      place-items: center;
+      min-height: 160px;
+      color: var(--muted);
+      text-align: center;
+      border: 1px dashed rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .confirm-backdrop,
+    .toast-wrap {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .confirm-backdrop {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,0.58);
+      backdrop-filter: blur(8px);
+      z-index: 60;
+      pointer-events: auto;
+    }
+
+    .confirm-backdrop.open {
+      display: flex;
+    }
+
+    .confirm-modal {
+      width: min(520px, 100%);
+      background: #111827;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+      padding: 22px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .confirm-modal h3 {
+      margin: 0;
+      font-size: 1.35rem;
+    }
+
+    .confirm-modal p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .confirm-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .toast-wrap {
+      pointer-events: none;
+      z-index: 80;
+      display: grid;
+      justify-items: end;
+      align-content: end;
+      padding: 18px;
+      gap: 10px;
+    }
+
+    .toast {
+      min-width: 280px;
+      max-width: 420px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(15,23,42,0.96);
+      color: var(--text);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      animation: slideIn 0.18s ease;
+    }
+
+    .toast.ok {
+      border-color: rgba(22,163,74,0.4);
+    }
+
+    .toast.err {
+      border-color: rgba(220,38,38,0.4);
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1280px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      .right-col {
+        grid-template-rows: auto;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .type-grid,
+      .quick-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .role-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .group-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+
+      .quick-buttons {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
 </head>
-<body style="font-family: Arial, sans-serif; background:#0f172a; color:#fff; padding:40px;">
-  <h1>Tablet</h1>
-  <p>Die Tablet-Seite funktioniert.</p>
-  <p><a href="/" style="color:#4da3ff;">Zurück zur Startseite</a></p>
+<body>
+  <header>
+    <div class="brand">
+      <h1>Saufpokal Live – Tablet</h1>
+      <p>Touch-Kasse für Theke und Schnapswagen</p>
+    </div>
+
+    <div class="header-actions">
+      <div class="pill">
+        <span class="dot"></span>
+        <span>Demo-Modus ohne Backend</span>
+      </div>
+      <button class="btn ghost" id="resetAllBtn" type="button">Alles zurücksetzen</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="left-col">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>1. Rolle wählen</h2>
+            <p>Damit klar ist, wo die Buchung entstanden ist.</p>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="role-grid" id="roleGrid">
+            <button class="role-card" type="button" data-role="theke">
+              <div class="title">Theke</div>
+              <div class="sub">Normale Ausgabe an der Haupttheke</div>
+            </button>
+            <button class="role-card" type="button" data-role="schnapswagen">
+              <div class="title">Schnapswagen</div>
+              <div class="sub">Mobiler Verkauf in den Pausen</div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" style="min-height: 0;">
+        <div class="panel-head">
+          <div>
+            <h2>2. Gruppe wählen</h2>
+            <p>Gruppe antippen. Suchfeld filtert direkt live.</p>
+          </div>
+        </div>
+        <div class="panel-body" style="display:grid; grid-template-rows:auto 1fr; min-height: 0;">
+          <div class="search-row">
+            <input id="groupSearch" class="search-input" type="search" placeholder="Gruppe suchen…" autocomplete="off" />
+            <button class="btn ghost" id="clearSearchBtn" type="button">Alle</button>
+          </div>
+          <div class="group-grid" id="groupGrid"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>3. Buchung zusammenstellen</h2>
+            <p>Links auswählen, dann in den Warenkorb legen.</p>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="stack">
+            <div class="step">
+              <div class="type-grid" id="typeGrid">
+                <button class="type-card" type="button" data-type="wertmarkenkarte">
+                  <div>
+                    <div class="title">Wertmarkenkarte</div>
+                    <div class="sub">Ganze Karte, halbe Karte oder eigene Anzahl Märkchen</div>
+                  </div>
+                  <div class="badge">Karte</div>
+                </button>
+
+                <button class="type-card" type="button" data-type="pittermaennchen">
+                  <div>
+                    <div class="title">Pittermännchen</div>
+                    <div class="sub">Anzahl auswählen und direkt als feste Punkte buchen</div>
+                  </div>
+                  <div class="badge">Pitter</div>
+                </button>
+
+                <button class="type-card" type="button" data-type="eigene_marken">
+                  <div>
+                    <div class="title">Eigene Anzahl Märkchen</div>
+                    <div class="sub">Freie Eingabe oder Schnellbuttons für einzelne Marken</div>
+                  </div>
+                  <div class="badge">Frei</div>
+                </button>
+              </div>
+            </div>
+
+            <div id="wertmarkenOptions" class="step hidden">
+              <small>Wertmarkenkarte auswählen</small>
+              <div class="quick-grid">
+                <button class="quick-card" type="button" data-card="20">
+                  <div>
+                    <div class="title">Ganze Karte</div>
+                    <div class="sub">Volle Karte buchen</div>
+                  </div>
+                  <div class="badge">20 Marken</div>
+                </button>
+
+                <button class="quick-card" type="button" data-card="10">
+                  <div>
+                    <div class="title">Halbe Karte</div>
+                    <div class="sub">Vorentwertete halbe Karte</div>
+                  </div>
+                  <div class="badge">10 Marken</div>
+                </button>
+
+                <button class="quick-card" type="button" data-card="custom">
+                  <div>
+                    <div class="title">Eigene Anzahl</div>
+                    <div class="sub">Falls schon Marken gestrichen sind oder Restmenge zählt</div>
+                  </div>
+                  <div class="badge">Flexibel</div>
+                </button>
+              </div>
+
+              <div id="wertmarkenCustomWrap" class="custom-marks-wrap hidden">
+                <input id="wertmarkenCustomInput" class="number-input" type="number" min="1" step="1" placeholder="Eigene Anzahl Märkchen eingeben" />
+                <div class="quick-buttons">
+                  <button type="button" data-quick-marks="1">1</button>
+                  <button type="button" data-quick-marks="2">2</button>
+                  <button type="button" data-quick-marks="5">5</button>
+                  <button type="button" data-quick-marks="7">7</button>
+                  <button type="button" data-quick-marks="10">10</button>
+                  <button type="button" data-quick-marks="20">20</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="pitterOptions" class="step hidden">
+              <small>Anzahl Pittermännchen wählen</small>
+              <div class="pitter-wrap">
+                <input id="pitterInput" class="number-input" type="number" min="1" step="1" placeholder="Anzahl Pittermännchen" />
+                <div class="quick-buttons">
+                  <button type="button" data-quick-pitter="1">1</button>
+                  <button type="button" data-quick-pitter="2">2</button>
+                  <button type="button" data-quick-pitter="3">3</button>
+                  <button type="button" data-quick-pitter="4">4</button>
+                  <button type="button" data-quick-pitter="5">5</button>
+                  <button type="button" data-quick-pitter="10">10</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="freieMarkenOptions" class="step hidden">
+              <small>Eigene Anzahl Märkchen eingeben</small>
+              <div class="custom-marks-wrap">
+                <input id="freieMarkenInput" class="number-input" type="number" min="1" step="1" placeholder="Anzahl Märkchen" />
+                <div class="quick-buttons">
+                  <button type="button" data-quick-free="1">1</button>
+                  <button type="button" data-quick-free="2">2</button>
+                  <button type="button" data-quick-free="5">5</button>
+                  <button type="button" data-quick-free="7">7</button>
+                  <button type="button" data-quick-free="10">10</button>
+                  <button type="button" data-quick-free="20">20</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" style="background: rgba(255,255,255,0.03); box-shadow:none;">
+              <div class="panel-body">
+                <div class="summary-box">
+                  <div class="summary-line">
+                    <span class="summary-label">Rolle</span>
+                    <span class="summary-value" id="summaryRole">–</span>
+                  </div>
+                  <div class="summary-line">
+                    <span class="summary-label">Gruppe</span>
+                    <span class="summary-value" id="summaryGroup">–</span>
+                  </div>
+                  <div class="summary-line">
+                    <span class="summary-label">Auswahl</span>
+                    <span class="summary-value" id="summarySelection">–</span>
+                  </div>
+                  <div class="summary-line">
+                    <span class="summary-label">Punkte</span>
+                    <span class="summary-value" id="summaryPoints">0</span>
+                  </div>
+                </div>
+
+                <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;">
+                  <button class="btn primary" id="addToCartBtn" type="button">In Warenkorb legen</button>
+                  <button class="btn ghost" id="clearCurrentBtn" type="button">Auswahl löschen</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="right-col">
+      <section class="panel cart-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Aktuelle Buchung</h2>
+            <p>Mehrere Positionen sammeln und dann zusammen buchen.</p>
+          </div>
+        </div>
+
+        <div class="panel-body" style="padding-bottom: 12px;">
+          <div class="summary-box">
+            <div class="summary-line">
+              <span class="summary-label">Ausgewählte Gruppe</span>
+              <span class="summary-value" id="cartGroup">–</span>
+            </div>
+            <div class="summary-line">
+              <span class="summary-label">Quelle</span>
+              <span class="summary-value" id="cartRole">–</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-body" style="padding-top: 0; padding-bottom: 12px;">
+          <div class="totals-box">
+            <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-end;">
+              <div>
+                <div style="color:var(--muted); font-size:0.92rem;">Gesamtpunkte</div>
+                <div class="total-points" id="cartTotalPoints">0</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="color:var(--muted); font-size:0.92rem;">Positionen</div>
+                <div style="font-size:1.35rem; font-weight:900;" id="cartCount">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-body" style="padding-top: 0; min-height: 0;">
+          <div id="cartList" class="cart-list"></div>
+        </div>
+
+        <div class="panel-body" style="padding-top: 0;">
+          <div style="display:grid; gap:12px;">
+            <button class="btn green" id="submitCartBtn" type="button">Buchung abschicken</button>
+            <button class="btn ghost" id="clearCartBtn" type="button">Warenkorb leeren</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="confirm-backdrop" id="confirmBackdrop">
+    <div class="confirm-modal">
+      <div>
+        <h3>Buchung wirklich senden?</h3>
+        <p id="confirmText">Bitte prüfen und dann bestätigen.</p>
+      </div>
+
+      <div class="summary-box">
+        <div class="summary-line">
+          <span class="summary-label">Gruppe</span>
+          <span class="summary-value" id="confirmGroup">–</span>
+        </div>
+        <div class="summary-line">
+          <span class="summary-label">Rolle</span>
+          <span class="summary-value" id="confirmRole">–</span>
+        </div>
+        <div class="summary-line">
+          <span class="summary-label">Punkte</span>
+          <span class="summary-value" id="confirmPoints">0</span>
+        </div>
+      </div>
+
+      <div class="confirm-actions">
+        <button class="btn ghost" id="cancelConfirmBtn" type="button">Abbrechen</button>
+        <button class="btn primary" id="confirmSubmitBtn" type="button">Ja, buchen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script>
+    const GROUPS = [
+      "Lucky Stars",
+      "Golden Dancers",
+      "Showtanzgruppe Infinity",
+      "Bürvenicher Danzspektakel",
+      "Remix",
+      "Red Steps",
+      "Crew of Dance",
+      "Hotstuff",
+      "Funky Vibes",
+      "Tanzfabrik",
+      "FireFlames",
+      "Funtastics",
+      "Plattföös",
+      "Hotsteppers",
+      "Déjà Vu",
+      "Lightnings",
+      "Illastix"
+    ];
+
+    const SETTINGS = {
+      fullCardPoints: 20,
+      halfCardPoints: 10,
+      perMarkPoint: 1,
+      perPitterPoint: 20
+    };
+
+    const state = {
+      role: null,
+      group: null,
+      type: null,
+      selectionLabel: null,
+      selectionPoints: 0,
+      cart: []
+    };
+
+    const els = {
+      roleCards: [...document.querySelectorAll(".role-card")],
+      groupSearch: document.getElementById("groupSearch"),
+      clearSearchBtn: document.getElementById("clearSearchBtn"),
+      groupGrid: document.getElementById("groupGrid"),
+
+      typeCards: [...document.querySelectorAll(".type-card")],
+      wertmarkenOptions: document.getElementById("wertmarkenOptions"),
+      pitterOptions: document.getElementById("pitterOptions"),
+      freieMarkenOptions: document.getElementById("freieMarkenOptions"),
+
+      wertmarkenCustomWrap: document.getElementById("wertmarkenCustomWrap"),
+      wertmarkenCustomInput: document.getElementById("wertmarkenCustomInput"),
+      pitterInput: document.getElementById("pitterInput"),
+      freieMarkenInput: document.getElementById("freieMarkenInput"),
+
+      summaryRole: document.getElementById("summaryRole"),
+      summaryGroup: document.getElementById("summaryGroup"),
+      summarySelection: document.getElementById("summarySelection"),
+      summaryPoints: document.getElementById("summaryPoints"),
+
+      cartGroup: document.getElementById("cartGroup"),
+      cartRole: document.getElementById("cartRole"),
+      cartTotalPoints: document.getElementById("cartTotalPoints"),
+      cartCount: document.getElementById("cartCount"),
+      cartList: document.getElementById("cartList"),
+
+      addToCartBtn: document.getElementById("addToCartBtn"),
+      clearCurrentBtn: document.getElementById("clearCurrentBtn"),
+      clearCartBtn: document.getElementById("clearCartBtn"),
+      submitCartBtn: document.getElementById("submitCartBtn"),
+      resetAllBtn: document.getElementById("resetAllBtn"),
+
+      confirmBackdrop: document.getElementById("confirmBackdrop"),
+      confirmText: document.getElementById("confirmText"),
+      confirmGroup: document.getElementById("confirmGroup"),
+      confirmRole: document.getElementById("confirmRole"),
+      confirmPoints: document.getElementById("confirmPoints"),
+      cancelConfirmBtn: document.getElementById("cancelConfirmBtn"),
+      confirmSubmitBtn: document.getElementById("confirmSubmitBtn"),
+
+      toastWrap: document.getElementById("toastWrap")
+    };
+
+    function init() {
+      renderGroups();
+      bindEvents();
+      updateCurrentSummary();
+      renderCart();
+    }
+
+    function bindEvents() {
+      els.roleCards.forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.role = btn.dataset.role;
+          els.roleCards.forEach(x => x.classList.remove("active"));
+          btn.classList.add("active");
+          updateCurrentSummary();
+          renderCart();
+        });
+      });
+
+      els.groupSearch.addEventListener("input", renderGroups);
+      els.clearSearchBtn.addEventListener("click", () => {
+        els.groupSearch.value = "";
+        renderGroups();
+      });
+
+      els.typeCards.forEach(btn => {
+        btn.addEventListener("click", () => {
+          selectType(btn.dataset.type);
+        });
+      });
+
+      document.querySelectorAll("[data-card]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("[data-card]").forEach(x => x.classList.remove("active"));
+          btn.classList.add("active");
+
+          const value = btn.dataset.card;
+
+          if (value === "20") {
+            state.selectionLabel = "Wertmarkenkarte – Ganze Karte";
+            state.selectionPoints = SETTINGS.fullCardPoints;
+            els.wertmarkenCustomWrap.classList.add("hidden");
+          } else if (value === "10") {
+            state.selectionLabel = "Wertmarkenkarte – Halbe Karte";
+            state.selectionPoints = SETTINGS.halfCardPoints;
+            els.wertmarkenCustomWrap.classList.add("hidden");
+          } else {
+            state.selectionLabel = "Wertmarkenkarte – Eigene Anzahl";
+            state.selectionPoints = 0;
+            els.wertmarkenCustomWrap.classList.remove("hidden");
+          }
+
+          updateCurrentSummary();
+        });
+      });
+
+      document.querySelectorAll("[data-quick-marks]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          els.wertmarkenCustomInput.value = btn.dataset.quickMarks;
+          updateWertmarkenCustom();
+        });
+      });
+
+      document.querySelectorAll("[data-quick-pitter]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          els.pitterInput.value = btn.dataset.quickPitter;
+          updatePitter();
+        });
+      });
+
+      document.querySelectorAll("[data-quick-free]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          els.freieMarkenInput.value = btn.dataset.quickFree;
+          updateFreieMarken();
+        });
+      });
+
+      els.wertmarkenCustomInput.addEventListener("input", updateWertmarkenCustom);
+      els.pitterInput.addEventListener("input", updatePitter);
+      els.freieMarkenInput.addEventListener("input", updateFreieMarken);
+
+      els.addToCartBtn.addEventListener("click", addCurrentToCart);
+      els.clearCurrentBtn.addEventListener("click", clearCurrentSelection);
+      els.clearCartBtn.addEventListener("click", clearCart);
+      els.submitCartBtn.addEventListener("click", openConfirm);
+      els.cancelConfirmBtn.addEventListener("click", closeConfirm);
+      els.confirmSubmitBtn.addEventListener("click", submitCart);
+      els.resetAllBtn.addEventListener("click", resetAll);
+
+      els.confirmBackdrop.addEventListener("click", (e) => {
+        if (e.target === els.confirmBackdrop) closeConfirm();
+      });
+    }
+
+    function renderGroups() {
+      const search = els.groupSearch.value.trim().toLowerCase();
+      const groups = GROUPS
+        .filter(group => !search || group.toLowerCase().includes(search))
+        .sort((a, b) => a.localeCompare(b, "de"));
+
+      els.groupGrid.innerHTML = "";
+
+      if (!groups.length) {
+        els.groupGrid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            Keine Gruppe gefunden.
+          </div>
+        `;
+        return;
+      }
+
+      groups.forEach(group => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "group-card";
+        if (state.group === group) btn.classList.add("selected");
+
+        btn.innerHTML = `
+          <div class="group-name">${escapeHtml(group)}</div>
+          <div class="group-meta">antippen zum Auswählen</div>
+        `;
+
+        btn.addEventListener("click", () => {
+          state.group = group;
+          renderGroups();
+          updateCurrentSummary();
+          renderCart();
+        });
+
+        els.groupGrid.appendChild(btn);
+      });
+    }
+
+    function selectType(type) {
+      state.type = type;
+      state.selectionLabel = null;
+      state.selectionPoints = 0;
+
+      els.typeCards.forEach(x => x.classList.remove("active"));
+      const active = els.typeCards.find(x => x.dataset.type === type);
+      if (active) active.classList.add("active");
+
+      els.wertmarkenOptions.classList.add("hidden");
+      els.pitterOptions.classList.add("hidden");
+      els.freieMarkenOptions.classList.add("hidden");
+
+      document.querySelectorAll("[data-card]").forEach(x => x.classList.remove("active"));
+
+      els.wertmarkenCustomWrap.classList.add("hidden");
+      els.wertmarkenCustomInput.value = "";
+      els.pitterInput.value = "";
+      els.freieMarkenInput.value = "";
+
+      if (type === "wertmarkenkarte") {
+        els.wertmarkenOptions.classList.remove("hidden");
+      } else if (type === "pittermaennchen") {
+        els.pitterOptions.classList.remove("hidden");
+      } else if (type === "eigene_marken") {
+        els.freieMarkenOptions.classList.remove("hidden");
+      }
+
+      updateCurrentSummary();
+    }
+
+    function updateWertmarkenCustom() {
+      const value = parseInt(els.wertmarkenCustomInput.value, 10);
+      state.selectionLabel = "Wertmarkenkarte – Eigene Anzahl";
+      state.selectionPoints = Number.isFinite(value) && value > 0
+        ? value * SETTINGS.perMarkPoint
+        : 0;
+      updateCurrentSummary();
+    }
+
+    function updatePitter() {
+      const value = parseInt(els.pitterInput.value, 10);
+      state.selectionLabel = "Pittermännchen";
+      state.selectionPoints = Number.isFinite(value) && value > 0
+        ? value * SETTINGS.perPitterPoint
+        : 0;
+      updateCurrentSummary();
+    }
+
+    function updateFreieMarken() {
+      const value = parseInt(els.freieMarkenInput.value, 10);
+      state.selectionLabel = "Eigene Anzahl Märkchen";
+      state.selectionPoints = Number.isFinite(value) && value > 0
+        ? value * SETTINGS.perMarkPoint
+        : 0;
+      updateCurrentSummary();
+    }
+
+    function updateCurrentSummary() {
+      els.summaryRole.textContent = formatRole(state.role) || "–";
+      els.summaryGroup.textContent = state.group || "–";
+      els.summarySelection.textContent = state.selectionLabel || "–";
+      els.summaryPoints.textContent = String(state.selectionPoints || 0);
+    }
+
+    function addCurrentToCart() {
+      if (!state.role) {
+        toast("Erst Rolle auswählen.", "err");
+        return;
+      }
+
+      if (!state.group) {
+        toast("Erst Gruppe auswählen.", "err");
+        return;
+      }
+
+      if (!state.selectionLabel || !state.selectionPoints) {
+        toast("Erst eine gültige Buchung auswählen.", "err");
+        return;
+      }
+
+      state.cart.push({
+        id: crypto.randomUUID(),
+        role: state.role,
+        group: state.group,
+        label: state.selectionLabel,
+        points: state.selectionPoints
+      });
+
+      renderCart();
+      toast("Position in den Warenkorb gelegt.", "ok");
+      clearCurrentSelection(false);
+    }
+
+    function clearCurrentSelection(showToast = true) {
+      state.type = null;
+      state.selectionLabel = null;
+      state.selectionPoints = 0;
+
+      els.typeCards.forEach(x => x.classList.remove("active"));
+      document.querySelectorAll("[data-card]").forEach(x => x.classList.remove("active"));
+
+      els.wertmarkenOptions.classList.add("hidden");
+      els.pitterOptions.classList.add("hidden");
+      els.freieMarkenOptions.classList.add("hidden");
+      els.wertmarkenCustomWrap.classList.add("hidden");
+
+      els.wertmarkenCustomInput.value = "";
+      els.pitterInput.value = "";
+      els.freieMarkenInput.value = "";
+
+      updateCurrentSummary();
+
+      if (showToast) toast("Aktuelle Auswahl zurückgesetzt.", "ok");
+    }
+
+    function renderCart() {
+      els.cartGroup.textContent = state.group || "–";
+      els.cartRole.textContent = formatRole(state.role) || "–";
+      els.cartCount.textContent = String(state.cart.length);
+      els.cartTotalPoints.textContent = String(getCartTotal());
+
+      els.cartList.innerHTML = "";
+
+      if (!state.cart.length) {
+        els.cartList.innerHTML = `
+          <div class="empty-state">
+            Noch keine Positionen im Warenkorb.
+          </div>
+        `;
+        return;
+      }
+
+      state.cart.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "cart-item";
+        row.innerHTML = `
+          <div class="cart-item-main">
+            <div class="cart-item-title">${escapeHtml(item.label)}</div>
+            <div class="cart-item-sub">${escapeHtml(item.group)} · ${escapeHtml(formatRole(item.role))}</div>
+          </div>
+          <div class="cart-item-actions">
+            <div style="font-weight:900; text-align:right;">${item.points} P</div>
+            <button class="icon-btn" type="button" aria-label="Position löschen">🗑️</button>
+          </div>
+        `;
+
+        row.querySelector(".icon-btn").addEventListener("click", () => {
+          state.cart = state.cart.filter(x => x.id !== item.id);
+          renderCart();
+          toast("Position gelöscht.", "ok");
+        });
+
+        els.cartList.appendChild(row);
+      });
+    }
+
+    function getCartTotal() {
+      return state.cart.reduce((sum, item) => sum + item.points, 0);
+    }
+
+    function clearCart() {
+      if (!state.cart.length) {
+        toast("Warenkorb ist schon leer.", "err");
+        return;
+      }
+
+      state.cart = [];
+      renderCart();
+      toast("Warenkorb geleert.", "ok");
+    }
+
+    function openConfirm() {
+      if (!state.role) {
+        toast("Erst Rolle auswählen.", "err");
+        return;
+      }
+
+      if (!state.group) {
+        toast("Erst Gruppe auswählen.", "err");
+        return;
+      }
+
+      if (!state.cart.length) {
+        toast("Warenkorb ist leer.", "err");
+        return;
+      }
+
+      const foreignGroups = [...new Set(state.cart.map(x => x.group))];
+      const foreignRoles = [...new Set(state.cart.map(x => x.role))];
+
+      if (foreignGroups.length > 1) {
+        toast("Im Warenkorb sind mehrere Gruppen. Das solltest du nicht mischen.", "err");
+        return;
+      }
+
+      if (foreignRoles.length > 1) {
+        toast("Im Warenkorb sind gemischte Rollen. Das solltest du nicht mischen.", "err");
+        return;
+      }
+
+      els.confirmGroup.textContent = foreignGroups[0];
+      els.confirmRole.textContent = formatRole(foreignRoles[0]);
+      els.confirmPoints.textContent = String(getCartTotal());
+      els.confirmText.textContent = `${state.cart.length} Position(en) werden jetzt gebucht.`;
+      els.confirmBackdrop.classList.add("open");
+    }
+
+    function closeConfirm() {
+      els.confirmBackdrop.classList.remove("open");
+    }
+
+    function submitCart() {
+      const payload = {
+        role: state.role,
+        group: state.group,
+        items: [...state.cart],
+        totalPoints: getCartTotal(),
+        createdAt: new Date().toISOString()
+      };
+
+      console.log("DEMO Payload:", payload);
+
+      closeConfirm();
+      toast(`Demo-Buchung gesendet: ${payload.group} · ${payload.totalPoints} Punkte`, "ok");
+
+      state.cart = [];
+      renderCart();
+      clearCurrentSelection(false);
+    }
+
+    function resetAll() {
+      state.role = null;
+      state.group = null;
+      state.type = null;
+      state.selectionLabel = null;
+      state.selectionPoints = 0;
+      state.cart = [];
+
+      els.roleCards.forEach(x => x.classList.remove("active"));
+      els.groupSearch.value = "";
+
+      renderGroups();
+      clearCurrentSelection(false);
+      renderCart();
+      updateCurrentSummary();
+      toast("Alles zurückgesetzt.", "ok");
+    }
+
+    function formatRole(role) {
+      if (role === "theke") return "Theke";
+      if (role === "schnapswagen") return "Schnapswagen";
+      return "";
+    }
+
+    function toast(message, type = "ok") {
+      const el = document.createElement("div");
+      el.className = `toast ${type}`;
+      el.textContent = message;
+      els.toastWrap.appendChild(el);
+
+      setTimeout(() => {
+        el.remove();
+      }, 2600);
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    init();
+  </script>
 </body>
 </html>

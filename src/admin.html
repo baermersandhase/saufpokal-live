@@ -828,7 +828,7 @@
 
       try {
         setLoading(true, "Setze Buchungen zurück…");
-        const result = await apiPost("/admin/reset", {});
+        const result = await apiPost("/ops/reset", {});
         state.bookings = [];
         closeBookingModal();
         renderBookings();

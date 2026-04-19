@@ -6,7 +6,6 @@
   <title>Saufpokal Live – Admin</title>
   <style>
     :root {
-      --bg: #08101d;
       --panel: rgba(15, 23, 42, 0.94);
       --panel-2: rgba(255, 255, 255, 0.04);
       --border: rgba(255, 255, 255, 0.08);
@@ -16,6 +15,7 @@
       --accent-2: #f97316;
       --green: #22c55e;
       --yellow: #f59e0b;
+      --red: #ef4444;
       --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
       --radius: 20px;
     }
@@ -42,7 +42,8 @@
 
     .topbar,
     .stats,
-    .panel {
+    .panel,
+    .modal {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--panel);
@@ -66,7 +67,6 @@
       font-weight: 900;
       letter-spacing: 0.02em;
     }
-
     .brand p {
       margin: 0;
       color: var(--muted);
@@ -112,7 +112,7 @@
     }
 
     .pill.closed .dot {
-      background: var(--accent);
+      background: var(--red);
       box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.16);
     }
 
@@ -129,26 +129,16 @@
       border: 1px solid var(--border);
       box-shadow: none;
     }
-
     .btn.green { background: linear-gradient(135deg, #15803d, #22c55e); }
     .btn.yellow { background: linear-gradient(135deg, #d97706, #f59e0b); }
     .btn.red { background: linear-gradient(135deg, #b91c1c, #ef4444); }
-
-    .btn.small {
-      min-height: 34px;
-      padding: 0 11px;
-      font-size: 0.8rem;
-    }
-
-    .btn:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
+    .btn.small { min-height: 34px; padding: 0 11px; font-size: 0.8rem; }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
     .stats {
       padding: 10px;
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 8px;
     }
 
@@ -165,7 +155,7 @@
 
     .stat-label { color: var(--muted); font-size: 0.76rem; }
     .stat-value {
-      font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+      font-size: clamp(1rem, 1.6vw, 1.4rem);
       font-weight: 900;
       line-height: 1;
     }
@@ -173,7 +163,7 @@
     .layout {
       min-height: 0;
       display: grid;
-      grid-template-columns: minmax(320px, 1.1fr) minmax(420px, 1.6fr);
+      grid-template-columns: minmax(320px, 1fr) minmax(480px, 1.45fr);
       gap: 10px;
     }
 
@@ -182,6 +172,7 @@
       min-height: 0;
       display: grid;
       gap: 10px;
+      align-content: start;
     }
 
     .panel {
@@ -200,7 +191,6 @@
       border-bottom: 1px solid var(--border);
       background: rgba(255,255,255,0.03);
     }
-
     .panel-head h2 { margin: 0; font-size: 0.98rem; }
     .panel-head p { margin: 2px 0 0; color: var(--muted); font-size: 0.76rem; }
 
@@ -215,7 +205,6 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
     }
-
     .grid-4 {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -252,31 +241,46 @@
     .stack { display: grid; gap: 12px; }
     .actions-row { display: flex; flex-wrap: wrap; gap: 8px; }
 
-    .group-toolbar {
+    .group-toolbar,
+    .booking-toolbar {
       display: grid;
       grid-template-columns: 1fr auto auto;
       gap: 8px;
       margin-bottom: 10px;
     }
 
-    .group-list {
+    .booking-toolbar {
+      grid-template-columns: 1fr 180px auto;
+    }
+
+    .group-list,
+    .booking-list {
       display: grid;
       gap: 8px;
       min-height: 0;
     }
 
-    .group-item {
+    .group-item,
+    .booking-item {
       border: 1px solid var(--border);
       border-radius: 16px;
       background: rgba(255,255,255,0.04);
       padding: 10px 12px;
       display: grid;
-      grid-template-columns: auto 1fr auto;
       gap: 10px;
       align-items: center;
     }
 
-    .group-rank {
+    .group-item {
+      grid-template-columns: auto 1fr auto;
+    }
+
+    .booking-item {
+      grid-template-columns: auto 1fr auto auto;
+    }
+
+    .group-rank,
+    .booking-rank {
       width: 36px;
       height: 36px;
       border-radius: 12px;
@@ -287,13 +291,15 @@
       font-size: 0.9rem;
     }
 
-    .group-main {
+    .group-main,
+    .booking-main {
       min-width: 0;
       display: grid;
       gap: 4px;
     }
 
-    .group-name {
+    .group-name,
+    .booking-title {
       font-size: 0.95rem;
       font-weight: 900;
       white-space: nowrap;
@@ -301,7 +307,8 @@
       text-overflow: ellipsis;
     }
 
-    .group-meta {
+    .group-meta,
+    .booking-meta {
       color: var(--muted);
       font-size: 0.75rem;
       display: flex;
@@ -309,23 +316,44 @@
       flex-wrap: wrap;
     }
 
-    .group-actions {
+    .group-actions,
+    .booking-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       justify-content: flex-end;
     }
 
-    .group-item.inactive {
+    .group-item.inactive,
+    .booking-item.cancelled {
       opacity: 0.58;
       border-style: dashed;
+    }
+
+    .booking-points {
+      text-align: right;
+      display: grid;
+      gap: 3px;
+      min-width: 82px;
+    }
+
+    .booking-points-value {
+      font-weight: 900;
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .booking-points-label {
+      color: var(--muted);
+      font-size: 0.72rem;
     }
 
     .mono {
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
 
-    .note-box {
+    .note-box,
+    .empty-box {
       border: 1px dashed rgba(255,255,255,0.16);
       border-radius: 14px;
       padding: 10px 12px;
@@ -336,19 +364,83 @@
     }
 
     .empty-box {
-      border: 1px dashed rgba(255,255,255,0.14);
-      border-radius: 16px;
-      padding: 14px;
       text-align: center;
-      color: var(--muted);
+      padding: 14px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.58);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 60;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      width: min(980px, 100%);
+      max-height: calc(100vh - 40px);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+    }
+
+    .modal-head,
+    .modal-foot {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
       background: rgba(255,255,255,0.03);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .modal-foot {
+      border-bottom: 0;
+      border-top: 1px solid var(--border);
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .modal-head h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .modal-body {
+      padding: 14px;
+      overflow: auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .item-editor-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .item-editor-row {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 120px auto;
+      gap: 8px;
+      align-items: end;
     }
 
     .toast-wrap {
       position: fixed;
       right: 10px;
       bottom: 10px;
-      z-index: 50;
+      z-index: 70;
       display: grid;
       gap: 8px;
       width: min(360px, calc(100vw - 20px));
@@ -364,7 +456,6 @@
       box-shadow: var(--shadow);
       animation: slideIn 0.18s ease;
     }
-
     .toast.ok { border-color: rgba(34,197,94,0.35); }
     .toast.err { border-color: rgba(239,68,68,0.35); }
 
@@ -373,20 +464,20 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 1280px) {
-      .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 1420px) {
+      .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
       .layout { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 860px) {
-      body { padding: 8px; }
+    @media (max-width: 980px) {
       .topbar { grid-template-columns: 1fr; }
       .top-actions { justify-content: flex-start; }
       .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .grid-2, .grid-4 { grid-template-columns: 1fr; }
-      .group-toolbar { grid-template-columns: 1fr; }
-      .group-item { grid-template-columns: 1fr; }
-      .group-actions { justify-content: flex-start; }
+      .group-toolbar, .booking-toolbar { grid-template-columns: 1fr; }
+      .group-item, .booking-item, .item-editor-row { grid-template-columns: 1fr; }
+      .group-actions, .booking-actions { justify-content: flex-start; }
+      .booking-points { text-align: left; }
     }
   </style>
 </head>
@@ -394,7 +485,7 @@
   <section class="topbar">
     <div class="brand">
       <h1>Saufpokal Live – Admin</h1>
-      <p>V1 mit echter API für Event-Einstellungen und Gruppen.</p>
+      <p>V1 mit echter API für Event-Einstellungen, Gruppen und Buchungen.</p>
     </div>
 
     <div class="top-actions">
@@ -407,26 +498,13 @@
   </section>
 
   <section class="stats">
-    <div class="stat-card">
-      <div class="stat-label">Gruppen gesamt</div>
-      <div class="stat-value" id="statGroupsTotal">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Gruppen aktiv</div>
-      <div class="stat-value" id="statGroupsActive">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Endzeit</div>
-      <div class="stat-value" id="statEndTime">–</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Pitter-Wert</div>
-      <div class="stat-value" id="statPitter">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Event-Status</div>
-      <div class="stat-value" id="statEventStatus">–</div>
-    </div>
+    <div class="stat-card"><div class="stat-label">Gruppen gesamt</div><div class="stat-value" id="statGroupsTotal">0</div></div>
+    <div class="stat-card"><div class="stat-label">Gruppen aktiv</div><div class="stat-value" id="statGroupsActive">0</div></div>
+    <div class="stat-card"><div class="stat-label">Buchungen gesamt</div><div class="stat-value" id="statBookingsTotal">0</div></div>
+    <div class="stat-card"><div class="stat-label">Buchungen aktiv</div><div class="stat-value" id="statBookingsActive">0</div></div>
+    <div class="stat-card"><div class="stat-label">Buchungen storniert</div><div class="stat-value" id="statBookingsCancelled">0</div></div>
+    <div class="stat-card"><div class="stat-label">Endzeit</div><div class="stat-value" id="statEndTime">–</div></div>
+    <div class="stat-card"><div class="stat-label">Event-Status</div><div class="stat-value" id="statEventStatus">–</div></div>
   </section>
 
   <section class="layout">
@@ -441,35 +519,14 @@
         <div class="panel-body">
           <div class="stack">
             <div class="grid-2">
-              <div class="field">
-                <label for="eventNameInput">Event-Name</label>
-                <input id="eventNameInput" class="input" type="text" />
-              </div>
-              <div class="field">
-                <label for="eventDateInput">Event-Datum</label>
-                <input id="eventDateInput" class="input" type="date" />
-              </div>
+              <div class="field"><label for="eventNameInput">Event-Name</label><input id="eventNameInput" class="input" type="text" /></div>
+              <div class="field"><label for="eventDateInput">Event-Datum</label><input id="eventDateInput" class="input" type="date" /></div>
             </div>
-
             <div class="grid-2">
-              <div class="field">
-                <label for="eventEndInput">Endzeit der Zählung</label>
-                <input id="eventEndInput" class="input" type="time" />
-              </div>
-              <div class="field">
-                <label for="eventStatusSelect">Status</label>
-                <select id="eventStatusSelect" class="select">
-                  <option value="open">offen</option>
-                  <option value="closed">geschlossen</option>
-                </select>
-              </div>
+              <div class="field"><label for="eventEndInput">Endzeit der Zählung</label><input id="eventEndInput" class="input" type="time" /></div>
+              <div class="field"><label for="eventStatusSelect">Status</label><select id="eventStatusSelect" class="select"><option value="open">offen</option><option value="closed">geschlossen</option></select></div>
             </div>
-
-            <div class="field">
-              <label for="eventNoteInput">Hinweis</label>
-              <textarea id="eventNoteInput" class="textarea" placeholder="Optionaler Hinweis für Dashboard / Orga"></textarea>
-            </div>
-
+            <div class="field"><label for="eventNoteInput">Hinweis</label><textarea id="eventNoteInput" class="textarea" placeholder="Optionaler Hinweis für Dashboard / Orga"></textarea></div>
             <div class="actions-row">
               <button class="btn green" id="saveEventBtn" type="button">Event speichern</button>
               <button class="btn yellow" id="closeNowBtn" type="button">Zählung sofort beenden</button>
@@ -483,37 +540,21 @@
         <div class="panel-head">
           <div>
             <h2>Punktewerte</h2>
-            <p>Wird ebenfalls über <span class="mono">/api/settings</span> gespeichert.</p>
+            <p>Wird über <span class="mono">/api/settings</span> gespeichert.</p>
           </div>
         </div>
         <div class="panel-body">
           <div class="stack">
             <div class="grid-4">
-              <div class="field">
-                <label for="fullCardInput">Ganze Karte</label>
-                <input id="fullCardInput" class="input" type="number" min="0" step="1" />
-              </div>
-              <div class="field">
-                <label for="halfCardInput">Halbe Karte</label>
-                <input id="halfCardInput" class="input" type="number" min="0" step="1" />
-              </div>
-              <div class="field">
-                <label for="perMarkInput">Einzelne Marke</label>
-                <input id="perMarkInput" class="input" type="number" min="0" step="1" />
-              </div>
-              <div class="field">
-                <label for="perPitterInput">Pittermännchen</label>
-                <input id="perPitterInput" class="input" type="number" min="0" step="1" />
-              </div>
+              <div class="field"><label for="fullCardInput">Ganze Karte</label><input id="fullCardInput" class="input" type="number" min="0" step="1" /></div>
+              <div class="field"><label for="halfCardInput">Halbe Karte</label><input id="halfCardInput" class="input" type="number" min="0" step="1" /></div>
+              <div class="field"><label for="perMarkInput">Einzelne Marke</label><input id="perMarkInput" class="input" type="number" min="0" step="1" /></div>
+              <div class="field"><label for="perPitterInput">Pittermännchen</label><input id="perPitterInput" class="input" type="number" min="0" step="1" /></div>
             </div>
-
             <div class="actions-row">
               <button class="btn green" id="savePointsBtn" type="button">Punktewerte speichern</button>
             </div>
-
-            <div class="note-box">
-              Buchungen und Buchungskorrekturen kommen im nächsten Schritt. Diese Admin-Seite arbeitet jetzt schon mit echten Online-Daten für Settings und Gruppen.
-            </div>
+            <div class="note-box">Daten zurücksetzen kommt im nächsten Schritt mit eigenem Reset-Endpoint. Erst müssen die Buchungen sauber bearbeitbar sein.</div>
           </div>
         </div>
       </section>
@@ -535,6 +576,27 @@
       <section class="panel">
         <div class="panel-head">
           <div>
+            <h2>Buchungen</h2>
+            <p>Buchungen laden, bearbeiten, stornieren und löschen.</p>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="booking-toolbar">
+            <input id="bookingSearchInput" class="input" type="search" placeholder="Buchung suchen: Gruppe, Quelle, ID…" />
+            <select id="bookingStatusFilter" class="select">
+              <option value="all">Alle Status</option>
+              <option value="active">Nur aktiv</option>
+              <option value="cancelled">Nur storniert</option>
+            </select>
+            <button class="btn ghost" id="reloadBookingsBtn" type="button">Neu laden</button>
+          </div>
+          <div class="booking-list" id="bookingList"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
             <h2>Gruppen verwalten</h2>
             <p>Immer alphabetisch. Keine manuelle Sortierung.</p>
           </div>
@@ -545,12 +607,69 @@
             <button class="btn ghost" id="showAllGroupsBtn" type="button">Alle</button>
             <button class="btn green" id="addGroupBtn" type="button">Neue Gruppe</button>
           </div>
-
           <div class="group-list" id="groupList"></div>
         </div>
       </section>
     </div>
   </section>
+
+  <div class="modal-backdrop" id="bookingModalBackdrop">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <h3>Buchung bearbeiten</h3>
+          <div class="mono" id="bookingModalId">–</div>
+        </div>
+        <button class="btn ghost small" id="closeBookingModalBtn" type="button">Schließen</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div class="field">
+            <label for="bookingGroupSelect">Gruppe</label>
+            <select id="bookingGroupSelect" class="select"></select>
+          </div>
+          <div class="field">
+            <label for="bookingSourceSelect">Quelle</label>
+            <select id="bookingSourceSelect" class="select">
+              <option value="theke">Theke</option>
+              <option value="schnapswagen">Schnapswagen</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="bookingStatusSelect">Status</label>
+            <select id="bookingStatusSelect" class="select">
+              <option value="active">active</option>
+              <option value="cancelled">cancelled</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="bookingChangeReasonInput">Änderungsgrund</label>
+            <input id="bookingChangeReasonInput" class="input" type="text" placeholder="z. B. falsche Anzahl korrigiert" />
+          </div>
+        </div>
+        <div class="stack">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+            <div>
+              <div style="font-weight:900;">Buchungspositionen</div>
+              <div style="color:var(--muted); font-size:0.78rem;">Punkte je Position anpassen oder neue Position hinzufügen.</div>
+            </div>
+            <button class="btn green small" id="addBookingItemBtn" type="button">Position hinzufügen</button>
+          </div>
+          <div class="item-editor-list" id="bookingItemsEditor"></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <div class="mono" id="bookingModalTotal">0 Punkte</div>
+        <div class="actions-row">
+          <button class="btn red" id="deleteBookingBtn" type="button">Buchung löschen</button>
+          <button class="btn yellow" id="cancelBookingBtn" type="button">Stornieren</button>
+          <button class="btn green" id="saveBookingBtn" type="button">Buchung speichern</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="toast-wrap" id="toastWrap"></div>
 
@@ -565,14 +684,15 @@
         endTime: "",
         status: "open",
         note: "",
-        points: {
-          fullCard: 20,
-          halfCard: 10,
-          perMark: 1,
-          perPitter: 20
-        }
+        points: { fullCard: 20, halfCard: 10, perMark: 1, perPitter: 20 }
       },
-      groups: []
+      groups: [],
+      bookings: [],
+      bookingModal: {
+        open: false,
+        booking: null,
+        items: []
+      }
     };
 
     const els = {
@@ -582,8 +702,10 @@
 
       statGroupsTotal: document.getElementById("statGroupsTotal"),
       statGroupsActive: document.getElementById("statGroupsActive"),
+      statBookingsTotal: document.getElementById("statBookingsTotal"),
+      statBookingsActive: document.getElementById("statBookingsActive"),
+      statBookingsCancelled: document.getElementById("statBookingsCancelled"),
       statEndTime: document.getElementById("statEndTime"),
-      statPitter: document.getElementById("statPitter"),
       statEventStatus: document.getElementById("statEventStatus"),
 
       eventNameInput: document.getElementById("eventNameInput"),
@@ -601,13 +723,32 @@
       perPitterInput: document.getElementById("perPitterInput"),
       savePointsBtn: document.getElementById("savePointsBtn"),
 
+      bookingSearchInput: document.getElementById("bookingSearchInput"),
+      bookingStatusFilter: document.getElementById("bookingStatusFilter"),
+      reloadBookingsBtn: document.getElementById("reloadBookingsBtn"),
+      bookingList: document.getElementById("bookingList"),
+
       groupSearchInput: document.getElementById("groupSearchInput"),
       showAllGroupsBtn: document.getElementById("showAllGroupsBtn"),
       addGroupBtn: document.getElementById("addGroupBtn"),
       groupList: document.getElementById("groupList"),
 
       jsonPreviewBox: document.getElementById("jsonPreviewBox"),
-      toastWrap: document.getElementById("toastWrap")
+      toastWrap: document.getElementById("toastWrap"),
+
+      bookingModalBackdrop: document.getElementById("bookingModalBackdrop"),
+      closeBookingModalBtn: document.getElementById("closeBookingModalBtn"),
+      bookingModalId: document.getElementById("bookingModalId"),
+      bookingGroupSelect: document.getElementById("bookingGroupSelect"),
+      bookingSourceSelect: document.getElementById("bookingSourceSelect"),
+      bookingStatusSelect: document.getElementById("bookingStatusSelect"),
+      bookingChangeReasonInput: document.getElementById("bookingChangeReasonInput"),
+      addBookingItemBtn: document.getElementById("addBookingItemBtn"),
+      bookingItemsEditor: document.getElementById("bookingItemsEditor"),
+      bookingModalTotal: document.getElementById("bookingModalTotal"),
+      deleteBookingBtn: document.getElementById("deleteBookingBtn"),
+      cancelBookingBtn: document.getElementById("cancelBookingBtn"),
+      saveBookingBtn: document.getElementById("saveBookingBtn")
     };
 
     async function init() {
@@ -617,6 +758,7 @@
 
     function bindEvents() {
       els.reloadBtn.addEventListener("click", loadAll);
+      els.reloadBookingsBtn.addEventListener("click", loadBookings);
       els.saveEventBtn.addEventListener("click", saveEventSettings);
       els.savePointsBtn.addEventListener("click", savePointSettings);
       els.closeNowBtn.addEventListener("click", async () => {
@@ -634,21 +776,39 @@
         renderGroups();
       });
       els.addGroupBtn.addEventListener("click", addGroup);
+
+      els.bookingSearchInput.addEventListener("input", renderBookings);
+      els.bookingStatusFilter.addEventListener("change", renderBookings);
+
+      els.closeBookingModalBtn.addEventListener("click", closeBookingModal);
+      els.bookingModalBackdrop.addEventListener("click", (e) => {
+        if (e.target === els.bookingModalBackdrop) closeBookingModal();
+      });
+      els.addBookingItemBtn.addEventListener("click", () => {
+        state.bookingModal.items.push({ type: "custom", label: "", points: 1 });
+        renderBookingItemsEditor();
+      });
+      els.saveBookingBtn.addEventListener("click", saveBookingChanges);
+      els.cancelBookingBtn.addEventListener("click", quickCancelBookingFromModal);
+      els.deleteBookingBtn.addEventListener("click", deleteBookingFromModal);
     }
 
     async function loadAll() {
       try {
         setLoading(true, "Lade Daten…");
-        const [settingsRes, groupsRes] = await Promise.all([
+        const [settingsRes, groupsRes, bookingsRes] = await Promise.all([
           apiGet("/settings"),
-          apiGet("/groups")
+          apiGet("/groups"),
+          apiGet("/bookings")
         ]);
 
         state.event = settingsRes;
         state.groups = Array.isArray(groupsRes.items) ? groupsRes.items : [];
+        state.bookings = Array.isArray(bookingsRes.items) ? bookingsRes.items : [];
 
         fillInputs();
         renderGroups();
+        renderBookings();
         renderStats();
         renderJsonPreview();
         setLoading(false, "Daten geladen");
@@ -656,6 +816,22 @@
         console.error(error);
         setLoading(false, "Fehler beim Laden", true);
         toast("Laden der API-Daten fehlgeschlagen.", "err");
+      }
+    }
+
+    async function loadBookings() {
+      try {
+        setLoading(true, "Lade Buchungen…");
+        const bookingsRes = await apiGet("/bookings");
+        state.bookings = Array.isArray(bookingsRes.items) ? bookingsRes.items : [];
+        renderBookings();
+        renderStats();
+        renderJsonPreview();
+        setLoading(false, "Buchungen geladen");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Laden", true);
+        toast("Buchungen konnten nicht geladen werden.", "err");
       }
     }
 
@@ -673,15 +849,19 @@
     }
 
     function renderStats() {
-      const activeCount = state.groups.filter(group => group.active).length;
+      const activeGroups = state.groups.filter(group => group.active).length;
+      const activeBookings = state.bookings.filter(booking => booking.status !== "cancelled").length;
+      const cancelledBookings = state.bookings.filter(booking => booking.status === "cancelled").length;
+
       els.statGroupsTotal.textContent = String(state.groups.length);
-      els.statGroupsActive.textContent = String(activeCount);
+      els.statGroupsActive.textContent = String(activeGroups);
+      els.statBookingsTotal.textContent = String(state.bookings.length);
+      els.statBookingsActive.textContent = String(activeBookings);
+      els.statBookingsCancelled.textContent = String(cancelledBookings);
       els.statEndTime.textContent = state.event.endTime || "–";
-      els.statPitter.textContent = String(state.event.points?.perPitter ?? 0);
       els.statEventStatus.textContent = state.event.status === "closed" ? "geschlossen" : "offen";
 
-      const pillText = state.event.status === "closed" ? "Zählung beendet" : "Zählung offen";
-      els.statusText.textContent = pillText;
+      els.statusText.textContent = state.event.status === "closed" ? "Zählung beendet" : "Zählung offen";
       els.statusPill.classList.toggle("closed", state.event.status === "closed");
     }
 
@@ -692,7 +872,6 @@
         .filter(group => !term || group.name.toLowerCase().includes(term));
 
       els.groupList.innerHTML = "";
-
       if (!filtered.length) {
         els.groupList.innerHTML = `<div class="empty-box">Keine Gruppe gefunden.</div>`;
         return;
@@ -720,23 +899,67 @@
         row.querySelector('[data-action="toggle"]').addEventListener("click", () => toggleGroup(group));
         row.querySelector('[data-action="rename"]').addEventListener("click", () => renameGroup(group));
         row.querySelector('[data-action="delete"]').addEventListener("click", () => deleteGroup(group));
-
         els.groupList.appendChild(row);
+      });
+    }
+
+    function renderBookings() {
+      const term = els.bookingSearchInput.value.trim().toLowerCase();
+      const statusFilter = els.bookingStatusFilter.value;
+
+      const filtered = [...state.bookings]
+        .filter(booking => {
+          const hit = [booking.groupName, booking.source, booking.id, booking.changeReason]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase()
+            .includes(term);
+
+          const statusOk = statusFilter === "all" || booking.status === statusFilter;
+          return hit && statusOk;
+        })
+        .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+
+      els.bookingList.innerHTML = "";
+      if (!filtered.length) {
+        els.bookingList.innerHTML = `<div class="empty-box">Keine Buchung gefunden.</div>`;
+        return;
+      }
+
+      filtered.forEach((booking, index) => {
+        const row = document.createElement("div");
+        row.className = `booking-item ${booking.status === "cancelled" ? "cancelled" : ""}`;
+        row.innerHTML = `
+          <div class="booking-rank">${index + 1}</div>
+          <div class="booking-main">
+            <div class="booking-title">${escapeHtml(booking.groupName)} · ${escapeHtml(formatSource(booking.source))}</div>
+            <div class="booking-meta">
+              <span>Status: ${escapeHtml(booking.status)}</span>
+              <span>${escapeHtml(formatDateTime(booking.createdAt))}</span>
+              <span>ID: ${escapeHtml(booking.id)}</span>
+              ${booking.changeReason ? `<span>Grund: ${escapeHtml(booking.changeReason)}</span>` : ""}
+            </div>
+          </div>
+          <div class="booking-points">
+            <div class="booking-points-value">${booking.totalPoints}</div>
+            <div class="booking-points-label">Punkte</div>
+          </div>
+          <div class="booking-actions">
+            <button class="btn ghost small" data-action="edit">Bearbeiten</button>
+            <button class="btn yellow small" data-action="cancel">Stornieren</button>
+          </div>
+        `;
+
+        row.querySelector('[data-action="edit"]').addEventListener("click", () => openBookingModal(booking.id));
+        row.querySelector('[data-action="cancel"]').addEventListener("click", () => quickCancelBooking(booking));
+        els.bookingList.appendChild(row);
       });
     }
 
     async function saveEventSettings() {
       const payload = buildSettingsPayloadFromInputs();
-
-      if (!payload.eventName.trim()) {
-        toast("Event-Name fehlt.", "err");
-        return;
-      }
-
-      if (!payload.endTime) {
-        toast("Endzeit fehlt.", "err");
-        return;
-      }
+      if (!payload.eventName.trim()) return toast("Event-Name fehlt.", "err");
+      if (!payload.endTime) return toast("Endzeit fehlt.", "err");
 
       try {
         setLoading(true, "Speichere Event…");
@@ -755,10 +978,8 @@
 
     async function savePointSettings() {
       const payload = buildSettingsPayloadFromInputs();
-
       if ([payload.points.fullCard, payload.points.halfCard, payload.points.perMark, payload.points.perPitter].some(v => !Number.isFinite(v) || v < 0)) {
-        toast("Punktewerte sind ungültig.", "err");
-        return;
+        return toast("Punktewerte sind ungültig.", "err");
       }
 
       try {
@@ -779,13 +1000,10 @@
     async function addGroup() {
       const name = window.prompt("Name der neuen Gruppe:");
       if (!name) return;
-
       const trimmed = name.trim();
       if (!trimmed) return;
-
       if (state.groups.some(group => group.name.toLowerCase() === trimmed.toLowerCase())) {
-        toast("Gruppe existiert bereits.", "err");
-        return;
+        return toast("Gruppe existiert bereits.", "err");
       }
 
       try {
@@ -807,21 +1025,17 @@
     async function renameGroup(group) {
       const next = window.prompt("Neuer Gruppenname:", group.name);
       if (!next) return;
-
       const trimmed = next.trim();
       if (!trimmed) return;
 
       try {
         setLoading(true, "Benenne Gruppe um…");
-        const updated = await apiPatch(`/groups/${group.id}`, {
-          name: trimmed,
-          active: group.active
-        });
-
-        const index = state.groups.findIndex(item => item.id === group.id);
-        if (index >= 0) state.groups[index] = updated;
+        const updated = await apiPatch(`/groups/${group.id}`, { name: trimmed, active: group.active });
+        replaceGroupInState(updated);
         renderGroups();
         renderJsonPreview();
+        syncBookingGroupNames(updated);
+        renderBookings();
         setLoading(false, "Gruppe gespeichert");
         toast("Gruppe umbenannt.", "ok");
       } catch (error) {
@@ -834,13 +1048,8 @@
     async function toggleGroup(group) {
       try {
         setLoading(true, group.active ? "Deaktiviere Gruppe…" : "Aktiviere Gruppe…");
-        const updated = await apiPatch(`/groups/${group.id}`, {
-          active: !group.active,
-          name: group.name
-        });
-
-        const index = state.groups.findIndex(item => item.id === group.id);
-        if (index >= 0) state.groups[index] = updated;
+        const updated = await apiPatch(`/groups/${group.id}`, { active: !group.active, name: group.name });
+        replaceGroupInState(updated);
         renderGroups();
         renderStats();
         renderJsonPreview();
@@ -873,6 +1082,211 @@
       }
     }
 
+    async function openBookingModal(bookingId) {
+      const booking = state.bookings.find(item => item.id === bookingId);
+      if (!booking) return toast("Buchung nicht gefunden.", "err");
+
+      state.bookingModal.booking = structuredClone(booking);
+      state.bookingModal.items = structuredClone(booking.items || []);
+
+      els.bookingModalId.textContent = booking.id;
+      fillBookingGroupSelect(booking.groupId);
+      els.bookingSourceSelect.value = booking.source || "theke";
+      els.bookingStatusSelect.value = booking.status || "active";
+      els.bookingChangeReasonInput.value = booking.changeReason || "";
+      renderBookingItemsEditor();
+      els.bookingModalBackdrop.classList.add("open");
+    }
+
+    function closeBookingModal() {
+      els.bookingModalBackdrop.classList.remove("open");
+      state.bookingModal.booking = null;
+      state.bookingModal.items = [];
+    }
+
+    function fillBookingGroupSelect(selectedId) {
+      const sortedGroups = [...state.groups].sort((a, b) => a.name.localeCompare(b.name, "de"));
+      els.bookingGroupSelect.innerHTML = "";
+      sortedGroups.forEach(group => {
+        const option = document.createElement("option");
+        option.value = group.id;
+        option.textContent = `${group.name}${group.active ? "" : " (inaktiv)"}`;
+        if (group.id === selectedId) option.selected = true;
+        els.bookingGroupSelect.appendChild(option);
+      });
+    }
+
+    function renderBookingItemsEditor() {
+      els.bookingItemsEditor.innerHTML = "";
+
+      if (!state.bookingModal.items.length) {
+        els.bookingItemsEditor.innerHTML = `<div class="empty-box">Keine Positionen vorhanden.</div>`;
+        updateBookingModalTotal();
+        return;
+      }
+
+      state.bookingModal.items.forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = "item-editor-row";
+        row.innerHTML = `
+          <div class="field">
+            <label>Label</label>
+            <input class="input" data-field="label" data-index="${index}" type="text" value="${escapeHtmlAttr(item.label || "")}" />
+          </div>
+          <div class="field">
+            <label>Typ</label>
+            <input class="input" data-field="type" data-index="${index}" type="text" value="${escapeHtmlAttr(item.type || "custom")}" />
+          </div>
+          <div class="field">
+            <label>Punkte</label>
+            <input class="input" data-field="points" data-index="${index}" type="number" min="1" step="1" value="${Number(item.points || 1)}" />
+          </div>
+          <button class="btn red small" type="button" data-remove="${index}">Entfernen</button>
+        `;
+        els.bookingItemsEditor.appendChild(row);
+      });
+
+      els.bookingItemsEditor.querySelectorAll("input[data-field]").forEach(input => {
+        input.addEventListener("input", handleBookingItemInput);
+      });
+      els.bookingItemsEditor.querySelectorAll("button[data-remove]").forEach(button => {
+        button.addEventListener("click", () => {
+          const index = Number(button.dataset.remove);
+          state.bookingModal.items.splice(index, 1);
+          renderBookingItemsEditor();
+        });
+      });
+
+      updateBookingModalTotal();
+    }
+
+    function handleBookingItemInput(event) {
+      const index = Number(event.target.dataset.index);
+      const field = event.target.dataset.field;
+      if (!state.bookingModal.items[index]) return;
+
+      if (field === "points") {
+        state.bookingModal.items[index][field] = Number(event.target.value || 0);
+      } else {
+        state.bookingModal.items[index][field] = event.target.value;
+      }
+      updateBookingModalTotal();
+    }
+
+    function updateBookingModalTotal() {
+      const total = state.bookingModal.items.reduce((sum, item) => sum + Number(item.points || 0), 0);
+      els.bookingModalTotal.textContent = `${total} Punkte`;
+    }
+
+    async function saveBookingChanges() {
+      const booking = state.bookingModal.booking;
+      if (!booking) return;
+
+      const payload = {
+        groupId: els.bookingGroupSelect.value,
+        source: els.bookingSourceSelect.value,
+        status: els.bookingStatusSelect.value,
+        changeReason: els.bookingChangeReasonInput.value.trim(),
+        items: state.bookingModal.items.map(item => ({
+          type: String(item.type || "custom").trim(),
+          label: String(item.label || "").trim(),
+          points: Number(item.points)
+        }))
+      };
+
+      if (!payload.groupId) return toast("Gruppe fehlt.", "err");
+      if (!payload.items.length) return toast("Mindestens eine Position ist erforderlich.", "err");
+      if (payload.items.some(item => !item.label || !Number.isFinite(item.points) || item.points <= 0)) {
+        return toast("Alle Positionen brauchen Label und Punkte > 0.", "err");
+      }
+
+      try {
+        setLoading(true, "Speichere Buchung…");
+        const updated = await apiPatch(`/bookings/${booking.id}`, payload);
+        replaceBookingInState(updated);
+        renderBookings();
+        renderStats();
+        renderJsonPreview();
+        closeBookingModal();
+        setLoading(false, "Buchung gespeichert");
+        toast("Buchung gespeichert.", "ok");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Speichern", true);
+        toast("Buchung konnte nicht gespeichert werden.", "err");
+      }
+    }
+
+    async function quickCancelBooking(booking) {
+      const reason = window.prompt("Grund für Storno:", booking.changeReason || "Test-Storno");
+      if (reason === null) return;
+
+      try {
+        setLoading(true, "Storniere Buchung…");
+        const updated = await apiPatch(`/bookings/${booking.id}`, {
+          status: "cancelled",
+          changeReason: reason.trim()
+        });
+        replaceBookingInState(updated);
+        renderBookings();
+        renderStats();
+        renderJsonPreview();
+        setLoading(false, "Buchung storniert");
+        toast("Buchung storniert.", "ok");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Stornieren", true);
+        toast("Buchung konnte nicht storniert werden.", "err");
+      }
+    }
+
+    async function quickCancelBookingFromModal() {
+      const booking = state.bookingModal.booking;
+      if (!booking) return;
+      const reason = els.bookingChangeReasonInput.value.trim() || "Im Admin storniert";
+      try {
+        setLoading(true, "Storniere Buchung…");
+        const updated = await apiPatch(`/bookings/${booking.id}`, {
+          status: "cancelled",
+          changeReason: reason
+        });
+        replaceBookingInState(updated);
+        renderBookings();
+        renderStats();
+        renderJsonPreview();
+        closeBookingModal();
+        setLoading(false, "Buchung storniert");
+        toast("Buchung storniert.", "ok");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Stornieren", true);
+        toast("Buchung konnte nicht storniert werden.", "err");
+      }
+    }
+
+    async function deleteBookingFromModal() {
+      const booking = state.bookingModal.booking;
+      if (!booking) return;
+      const ok = window.confirm(`Buchung wirklich löschen?\n\n${booking.id}`);
+      if (!ok) return;
+
+      try {
+        setLoading(true, "Lösche Buchung…");
+        await apiDelete(`/bookings/${booking.id}`);
+        state.bookings = state.bookings.filter(item => item.id !== booking.id);
+        renderBookings();
+        renderStats();
+        renderJsonPreview();
+        closeBookingModal();
+        setLoading(false, "Buchung gelöscht");
+        toast("Buchung gelöscht.", "ok");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Löschen", true);
+        toast("Buchung konnte nicht gelöscht werden.", "err");
+      }
+    }
+
     function buildSettingsPayloadFromInputs() {
       return {
         eventName: els.eventNameInput.value.trim(),
@@ -889,25 +1303,51 @@
       };
     }
 
+    function replaceGroupInState(updated) {
+      const index = state.groups.findIndex(item => item.id === updated.id);
+      if (index >= 0) state.groups[index] = updated;
+    }
+
+    function replaceBookingInState(updated) {
+      const index = state.bookings.findIndex(item => item.id === updated.id);
+      if (index >= 0) state.bookings[index] = updated;
+    }
+
+    function syncBookingGroupNames(updatedGroup) {
+      state.bookings = state.bookings.map(booking => (
+        booking.groupId === updatedGroup.id
+          ? { ...booking, groupName: updatedGroup.name }
+          : booking
+      ));
+    }
+
     function renderJsonPreview() {
       const preview = {
         event: state.event,
-        groups: [...state.groups].sort((a, b) => a.name.localeCompare(b.name, "de"))
+        groups: [...state.groups].sort((a, b) => a.name.localeCompare(b.name, "de")),
+        bookingsPreview: state.bookings.slice(0, 5)
       };
       els.jsonPreviewBox.textContent = JSON.stringify(preview, null, 2);
     }
 
     function setLoading(message, keepErrorStyle = false, forceError = false) {
-      state.loading = !message ? false : true;
+      state.loading = !!message;
       els.statusText.textContent = message || (state.event.status === "closed" ? "Zählung beendet" : "Zählung offen");
       els.statusPill.classList.toggle("closed", forceError || state.event.status === "closed");
-      els.reloadBtn.disabled = !!message;
-      els.saveEventBtn.disabled = !!message;
-      els.savePointsBtn.disabled = !!message;
-      els.addGroupBtn.disabled = !!message;
-      if (!message && !keepErrorStyle) {
-        renderStats();
-      }
+      [
+        els.reloadBtn,
+        els.reloadBookingsBtn,
+        els.saveEventBtn,
+        els.savePointsBtn,
+        els.addGroupBtn,
+        els.saveBookingBtn,
+        els.cancelBookingBtn,
+        els.deleteBookingBtn
+      ].forEach(btn => {
+        if (btn) btn.disabled = !!message;
+      });
+
+      if (!message && !keepErrorStyle) renderStats();
     }
 
     async function apiGet(path) {
@@ -947,11 +1387,26 @@
     }
 
     async function apiDelete(path) {
-      const res = await fetch(`${API_BASE}${path}`, {
-        method: "DELETE"
-      });
+      const res = await fetch(`${API_BASE}${path}`, { method: "DELETE" });
       if (!res.ok) throw new Error(`DELETE ${path} fehlgeschlagen: ${res.status}`);
       return res.json();
+    }
+
+    function formatSource(source) {
+      return source === "schnapswagen" ? "Schnapswagen" : "Theke";
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "–";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return date.toLocaleString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
     }
 
     function toast(message, type = "ok") {
@@ -969,6 +1424,10 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#39;");
+    }
+
+    function escapeHtmlAttr(value) {
+      return escapeHtml(value).replaceAll("`", "&#96;");
     }
 
     init();

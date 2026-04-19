@@ -16,15 +16,11 @@
       --accent-2: #f97316;
       --green: #22c55e;
       --yellow: #f59e0b;
-      --blue: #3b82f6;
       --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
       --radius: 20px;
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     html, body {
       margin: 0;
@@ -62,12 +58,7 @@
       align-items: center;
     }
 
-    .brand {
-      display: grid;
-      gap: 2px;
-      min-width: 0;
-    }
-
+    .brand { display: grid; gap: 2px; min-width: 0; }
     .brand h1 {
       margin: 0;
       font-size: clamp(1.2rem, 2.1vw, 1.6rem);
@@ -139,22 +130,19 @@
       box-shadow: none;
     }
 
-    .btn.green {
-      background: linear-gradient(135deg, #15803d, #22c55e);
-    }
-
-    .btn.yellow {
-      background: linear-gradient(135deg, #d97706, #f59e0b);
-    }
-
-    .btn.red {
-      background: linear-gradient(135deg, #b91c1c, #ef4444);
-    }
+    .btn.green { background: linear-gradient(135deg, #15803d, #22c55e); }
+    .btn.yellow { background: linear-gradient(135deg, #d97706, #f59e0b); }
+    .btn.red { background: linear-gradient(135deg, #b91c1c, #ef4444); }
 
     .btn.small {
       min-height: 34px;
       padding: 0 11px;
       font-size: 0.8rem;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
     }
 
     .stats {
@@ -175,11 +163,7 @@
       align-content: space-between;
     }
 
-    .stat-label {
-      color: var(--muted);
-      font-size: 0.76rem;
-    }
-
+    .stat-label { color: var(--muted); font-size: 0.76rem; }
     .stat-value {
       font-size: clamp(1.1rem, 1.8vw, 1.5rem);
       font-weight: 900;
@@ -217,16 +201,8 @@
       background: rgba(255,255,255,0.03);
     }
 
-    .panel-head h2 {
-      margin: 0;
-      font-size: 0.98rem;
-    }
-
-    .panel-head p {
-      margin: 2px 0 0;
-      color: var(--muted);
-      font-size: 0.76rem;
-    }
+    .panel-head h2 { margin: 0; font-size: 0.98rem; }
+    .panel-head p { margin: 2px 0 0; color: var(--muted); font-size: 0.76rem; }
 
     .panel-body {
       padding: 12px;
@@ -246,11 +222,7 @@
       gap: 10px;
     }
 
-    .field {
-      display: grid;
-      gap: 6px;
-    }
-
+    .field { display: grid; gap: 6px; }
     .field label {
       color: var(--muted);
       font-size: 0.78rem;
@@ -277,16 +249,8 @@
       resize: vertical;
     }
 
-    .stack {
-      display: grid;
-      gap: 12px;
-    }
-
-    .actions-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+    .stack { display: grid; gap: 12px; }
+    .actions-row { display: flex; flex-wrap: wrap; gap: 8px; }
 
     .group-toolbar {
       display: grid;
@@ -371,6 +335,15 @@
       background: rgba(255,255,255,0.03);
     }
 
+    .empty-box {
+      border: 1px dashed rgba(255,255,255,0.14);
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+    }
+
     .toast-wrap {
       position: fixed;
       right: 10px;
@@ -392,13 +365,8 @@
       animation: slideIn 0.18s ease;
     }
 
-    .toast.ok {
-      border-color: rgba(34,197,94,0.35);
-    }
-
-    .toast.err {
-      border-color: rgba(239,68,68,0.35);
-    }
+    .toast.ok { border-color: rgba(34,197,94,0.35); }
+    .toast.err { border-color: rgba(239,68,68,0.35); }
 
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(8px); }
@@ -406,48 +374,19 @@
     }
 
     @media (max-width: 1280px) {
-      .stats {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .layout {
-        grid-template-columns: 1fr;
-      }
+      .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .layout { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 860px) {
-      body {
-        padding: 8px;
-      }
-
-      .topbar {
-        grid-template-columns: 1fr;
-      }
-
-      .top-actions {
-        justify-content: flex-start;
-      }
-
-      .stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .grid-2,
-      .grid-4 {
-        grid-template-columns: 1fr;
-      }
-
-      .group-toolbar {
-        grid-template-columns: 1fr;
-      }
-
-      .group-item {
-        grid-template-columns: 1fr;
-      }
-
-      .group-actions {
-        justify-content: flex-start;
-      }
+      body { padding: 8px; }
+      .topbar { grid-template-columns: 1fr; }
+      .top-actions { justify-content: flex-start; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid-2, .grid-4 { grid-template-columns: 1fr; }
+      .group-toolbar { grid-template-columns: 1fr; }
+      .group-item { grid-template-columns: 1fr; }
+      .group-actions { justify-content: flex-start; }
     }
   </style>
 </head>
@@ -455,18 +394,15 @@
   <section class="topbar">
     <div class="brand">
       <h1>Saufpokal Live – Admin</h1>
-      <p>V1 ohne Backend. Änderungen werden lokal im Browser gespeichert.</p>
+      <p>V1 mit echter API für Event-Einstellungen und Gruppen.</p>
     </div>
 
     <div class="top-actions">
       <div class="pill" id="statusPill">
         <span class="dot"></span>
-        <span id="statusText">Zählung offen</span>
+        <span id="statusText">Lade Daten…</span>
       </div>
-      <button class="btn ghost" id="exportBtn" type="button">JSON exportieren</button>
-      <button class="btn ghost" id="importBtn" type="button">JSON importieren</button>
-      <button class="btn red" id="resetBtn" type="button">Demo reset</button>
-      <input id="importFileInput" type="file" accept="application/json" hidden />
+      <button class="btn ghost" id="reloadBtn" type="button">Neu laden</button>
     </div>
   </section>
 
@@ -489,7 +425,7 @@
     </div>
     <div class="stat-card">
       <div class="stat-label">Event-Status</div>
-      <div class="stat-value" id="statEventStatus">offen</div>
+      <div class="stat-value" id="statEventStatus">–</div>
     </div>
   </section>
 
@@ -499,7 +435,7 @@
         <div class="panel-head">
           <div>
             <h2>Event-Einstellungen</h2>
-            <p>Grunddaten, Endzeit und Status des Saufpokals.</p>
+            <p>Wird direkt gegen <span class="mono">/api/settings</span> gespeichert.</p>
           </div>
         </div>
         <div class="panel-body">
@@ -530,7 +466,7 @@
             </div>
 
             <div class="field">
-              <label for="eventNoteInput">Hinweis für Dashboard</label>
+              <label for="eventNoteInput">Hinweis</label>
               <textarea id="eventNoteInput" class="textarea" placeholder="Optionaler Hinweis für Dashboard / Orga"></textarea>
             </div>
 
@@ -547,7 +483,7 @@
         <div class="panel-head">
           <div>
             <h2>Punktewerte</h2>
-            <p>Hier legst du fest, was Tablet und Dashboard später rechnen sollen.</p>
+            <p>Wird ebenfalls über <span class="mono">/api/settings</span> gespeichert.</p>
           </div>
         </div>
         <div class="panel-body">
@@ -576,7 +512,7 @@
             </div>
 
             <div class="note-box">
-              Aktuell ist das nur V1 im Browser. Später gehen genau diese Werte ins Backend, damit Tablet und Dashboard live dieselbe Logik verwenden.
+              Buchungen und Buchungskorrekturen kommen im nächsten Schritt. Diese Admin-Seite arbeitet jetzt schon mit echten Online-Daten für Settings und Gruppen.
             </div>
           </div>
         </div>
@@ -586,13 +522,11 @@
         <div class="panel-head">
           <div>
             <h2>Technischer Zustand</h2>
-            <p>Nur Übersicht für den Moment.</p>
+            <p>Nur Übersicht, was aktuell aus der API geladen wurde.</p>
           </div>
         </div>
         <div class="panel-body">
-          <div class="stack">
-            <div class="note-box mono" id="jsonPreviewBox"></div>
-          </div>
+          <div class="note-box mono" id="jsonPreviewBox"></div>
         </div>
       </section>
     </div>
@@ -602,7 +536,7 @@
         <div class="panel-head">
           <div>
             <h2>Gruppen verwalten</h2>
-            <p>Anlegen, sortieren, deaktivieren und löschen.</p>
+            <p>Immer alphabetisch. Keine manuelle Sortierung.</p>
           </div>
         </div>
         <div class="panel-body">
@@ -621,52 +555,30 @@
   <div class="toast-wrap" id="toastWrap"></div>
 
   <script>
-    const STORAGE_KEY = "saufpokal_admin_v1";
+    const API_BASE = "/api";
 
-    const DEFAULT_STATE = {
+    const state = {
+      loading: false,
       event: {
-        name: "BIB Dance Night – Saufpokal",
-        date: "2026-11-21",
-        endTime: "23:30",
+        eventName: "",
+        eventDate: "",
+        endTime: "",
         status: "open",
-        note: ""
+        note: "",
+        points: {
+          fullCard: 20,
+          halfCard: 10,
+          perMark: 1,
+          perPitter: 20
+        }
       },
-      points: {
-        fullCard: 20,
-        halfCard: 10,
-        perMark: 1,
-        perPitter: 20
-      },
-      groups: [
-        { id: crypto.randomUUID(), name: "Illastix", active: true },
-        { id: crypto.randomUUID(), name: "Lucky Stars", active: true },
-        { id: crypto.randomUUID(), name: "Golden Dancers", active: true },
-        { id: crypto.randomUUID(), name: "Showtanzgruppe Infinity", active: true },
-        { id: crypto.randomUUID(), name: "Bürvenicher Danzspektakel", active: true },
-        { id: crypto.randomUUID(), name: "Remix", active: true },
-        { id: crypto.randomUUID(), name: "Red Steps", active: true },
-        { id: crypto.randomUUID(), name: "Crew of Dance", active: true },
-        { id: crypto.randomUUID(), name: "Hotstuff", active: true },
-        { id: crypto.randomUUID(), name: "Funky Vibes", active: true },
-        { id: crypto.randomUUID(), name: "Tanzfabrik", active: true },
-        { id: crypto.randomUUID(), name: "FireFlames", active: true },
-        { id: crypto.randomUUID(), name: "Funtastics", active: true },
-        { id: crypto.randomUUID(), name: "Plattföös", active: true },
-        { id: crypto.randomUUID(), name: "Hotsteppers", active: true },
-        { id: crypto.randomUUID(), name: "Déjà Vu", active: true },
-        { id: crypto.randomUUID(), name: "Lightnings", active: true }
-      ]
+      groups: []
     };
-
-    const state = loadState();
 
     const els = {
       statusPill: document.getElementById("statusPill"),
       statusText: document.getElementById("statusText"),
-      exportBtn: document.getElementById("exportBtn"),
-      importBtn: document.getElementById("importBtn"),
-      importFileInput: document.getElementById("importFileInput"),
-      resetBtn: document.getElementById("resetBtn"),
+      reloadBtn: document.getElementById("reloadBtn"),
 
       statGroupsTotal: document.getElementById("statGroupsTotal"),
       statGroupsActive: document.getElementById("statGroupsActive"),
@@ -698,34 +610,23 @@
       toastWrap: document.getElementById("toastWrap")
     };
 
-    function init() {
+    async function init() {
       bindEvents();
-      fillInputs();
-      renderGroups();
-      renderStats();
-      renderJsonPreview();
+      await loadAll();
     }
 
     function bindEvents() {
+      els.reloadBtn.addEventListener("click", loadAll);
       els.saveEventBtn.addEventListener("click", saveEventSettings);
-      els.closeNowBtn.addEventListener("click", () => {
-        state.event.status = "closed";
-        saveState();
-        fillInputs();
-        renderStats();
-        renderJsonPreview();
-        toast("Zählung sofort beendet.", "ok");
-      });
-      els.openNowBtn.addEventListener("click", () => {
-        state.event.status = "open";
-        saveState();
-        fillInputs();
-        renderStats();
-        renderJsonPreview();
-        toast("Zählung wieder geöffnet.", "ok");
-      });
-
       els.savePointsBtn.addEventListener("click", savePointSettings);
+      els.closeNowBtn.addEventListener("click", async () => {
+        els.eventStatusSelect.value = "closed";
+        await saveEventSettings();
+      });
+      els.openNowBtn.addEventListener("click", async () => {
+        els.eventStatusSelect.value = "open";
+        await saveEventSettings();
+      });
 
       els.groupSearchInput.addEventListener("input", renderGroups);
       els.showAllGroupsBtn.addEventListener("click", () => {
@@ -733,24 +634,42 @@
         renderGroups();
       });
       els.addGroupBtn.addEventListener("click", addGroup);
+    }
 
-      els.exportBtn.addEventListener("click", exportJson);
-      els.importBtn.addEventListener("click", () => els.importFileInput.click());
-      els.importFileInput.addEventListener("change", importJson);
-      els.resetBtn.addEventListener("click", resetDemo);
+    async function loadAll() {
+      try {
+        setLoading(true, "Lade Daten…");
+        const [settingsRes, groupsRes] = await Promise.all([
+          apiGet("/settings"),
+          apiGet("/groups")
+        ]);
+
+        state.event = settingsRes;
+        state.groups = Array.isArray(groupsRes.items) ? groupsRes.items : [];
+
+        fillInputs();
+        renderGroups();
+        renderStats();
+        renderJsonPreview();
+        setLoading(false, "Daten geladen");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Laden", true);
+        toast("Laden der API-Daten fehlgeschlagen.", "err");
+      }
     }
 
     function fillInputs() {
-      els.eventNameInput.value = state.event.name;
-      els.eventDateInput.value = state.event.date;
-      els.eventEndInput.value = state.event.endTime;
-      els.eventStatusSelect.value = state.event.status;
-      els.eventNoteInput.value = state.event.note;
+      els.eventNameInput.value = state.event.eventName || "";
+      els.eventDateInput.value = state.event.eventDate || "";
+      els.eventEndInput.value = state.event.endTime || "";
+      els.eventStatusSelect.value = state.event.status || "open";
+      els.eventNoteInput.value = state.event.note || "";
 
-      els.fullCardInput.value = state.points.fullCard;
-      els.halfCardInput.value = state.points.halfCard;
-      els.perMarkInput.value = state.points.perMark;
-      els.perPitterInput.value = state.points.perPitter;
+      els.fullCardInput.value = state.event.points?.fullCard ?? 20;
+      els.halfCardInput.value = state.event.points?.halfCard ?? 10;
+      els.perMarkInput.value = state.event.points?.perMark ?? 1;
+      els.perPitterInput.value = state.event.points?.perPitter ?? 20;
     }
 
     function renderStats() {
@@ -758,99 +677,106 @@
       els.statGroupsTotal.textContent = String(state.groups.length);
       els.statGroupsActive.textContent = String(activeCount);
       els.statEndTime.textContent = state.event.endTime || "–";
-      els.statPitter.textContent = String(state.points.perPitter);
+      els.statPitter.textContent = String(state.event.points?.perPitter ?? 0);
       els.statEventStatus.textContent = state.event.status === "closed" ? "geschlossen" : "offen";
 
-      els.statusText.textContent = state.event.status === "closed" ? "Zählung beendet" : "Zählung offen";
+      const pillText = state.event.status === "closed" ? "Zählung beendet" : "Zählung offen";
+      els.statusText.textContent = pillText;
       els.statusPill.classList.toggle("closed", state.event.status === "closed");
     }
 
     function renderGroups() {
       const term = els.groupSearchInput.value.trim().toLowerCase();
-      const filtered = state.groups.filter(group => !term || group.name.toLowerCase().includes(term));
+      const filtered = [...state.groups]
+        .sort((a, b) => a.name.localeCompare(b.name, "de"))
+        .filter(group => !term || group.name.toLowerCase().includes(term));
 
       els.groupList.innerHTML = "";
 
       if (!filtered.length) {
-        els.groupList.innerHTML = `<div class="note-box">Keine Gruppe gefunden.</div>`;
+        els.groupList.innerHTML = `<div class="empty-box">Keine Gruppe gefunden.</div>`;
         return;
       }
 
-      filtered.forEach((group) => {
-        const absoluteIndex = state.groups.findIndex(item => item.id === group.id);
+      filtered.forEach((group, index) => {
         const row = document.createElement("div");
         row.className = `group-item ${group.active ? "" : "inactive"}`;
         row.innerHTML = `
-          <div class="group-rank">${absoluteIndex + 1}</div>
+          <div class="group-rank">${index + 1}</div>
           <div class="group-main">
             <div class="group-name">${escapeHtml(group.name)}</div>
             <div class="group-meta">
               <span>Status: ${group.active ? "aktiv" : "inaktiv"}</span>
-              <span>ID: ${group.id.slice(0, 8)}</span>
+              <span>ID: ${group.id}</span>
             </div>
           </div>
           <div class="group-actions">
-            <button class="btn ghost small" data-action="up">↑</button>
-            <button class="btn ghost small" data-action="down">↓</button>
             <button class="btn ghost small" data-action="toggle">${group.active ? "Deaktivieren" : "Aktivieren"}</button>
             <button class="btn ghost small" data-action="rename">Umbenennen</button>
             <button class="btn red small" data-action="delete">Löschen</button>
           </div>
         `;
 
-        row.querySelector('[data-action="up"]').addEventListener("click", () => moveGroup(absoluteIndex, -1));
-        row.querySelector('[data-action="down"]').addEventListener("click", () => moveGroup(absoluteIndex, 1));
-        row.querySelector('[data-action="toggle"]').addEventListener("click", () => toggleGroup(group.id));
-        row.querySelector('[data-action="rename"]').addEventListener("click", () => renameGroup(group.id));
-        row.querySelector('[data-action="delete"]').addEventListener("click", () => deleteGroup(group.id));
+        row.querySelector('[data-action="toggle"]').addEventListener("click", () => toggleGroup(group));
+        row.querySelector('[data-action="rename"]').addEventListener("click", () => renameGroup(group));
+        row.querySelector('[data-action="delete"]').addEventListener("click", () => deleteGroup(group));
 
         els.groupList.appendChild(row);
       });
     }
 
-    function saveEventSettings() {
-      const name = els.eventNameInput.value.trim();
-      const date = els.eventDateInput.value;
-      const endTime = els.eventEndInput.value;
-      const status = els.eventStatusSelect.value;
-      const note = els.eventNoteInput.value.trim();
+    async function saveEventSettings() {
+      const payload = buildSettingsPayloadFromInputs();
 
-      if (!name) {
+      if (!payload.eventName.trim()) {
         toast("Event-Name fehlt.", "err");
         return;
       }
 
-      if (!endTime) {
+      if (!payload.endTime) {
         toast("Endzeit fehlt.", "err");
         return;
       }
 
-      state.event = { name, date, endTime, status, note };
-      saveState();
-      renderStats();
-      renderJsonPreview();
-      toast("Event-Einstellungen gespeichert.", "ok");
+      try {
+        setLoading(true, "Speichere Event…");
+        await apiPut("/settings", payload);
+        state.event = payload;
+        renderStats();
+        renderJsonPreview();
+        setLoading(false, payload.status === "closed" ? "Zählung beendet" : "Event gespeichert");
+        toast("Event-Einstellungen gespeichert.", "ok");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Speichern", true);
+        toast("Event-Einstellungen konnten nicht gespeichert werden.", "err");
+      }
     }
 
-    function savePointSettings() {
-      const fullCard = parseInt(els.fullCardInput.value, 10);
-      const halfCard = parseInt(els.halfCardInput.value, 10);
-      const perMark = parseInt(els.perMarkInput.value, 10);
-      const perPitter = parseInt(els.perPitterInput.value, 10);
+    async function savePointSettings() {
+      const payload = buildSettingsPayloadFromInputs();
 
-      if ([fullCard, halfCard, perMark, perPitter].some(value => !Number.isFinite(value) || value < 0)) {
+      if ([payload.points.fullCard, payload.points.halfCard, payload.points.perMark, payload.points.perPitter].some(v => !Number.isFinite(v) || v < 0)) {
         toast("Punktewerte sind ungültig.", "err");
         return;
       }
 
-      state.points = { fullCard, halfCard, perMark, perPitter };
-      saveState();
-      renderStats();
-      renderJsonPreview();
-      toast("Punktewerte gespeichert.", "ok");
+      try {
+        setLoading(true, "Speichere Punktewerte…");
+        await apiPut("/settings", payload);
+        state.event = payload;
+        renderStats();
+        renderJsonPreview();
+        setLoading(false, "Punktewerte gespeichert");
+        toast("Punktewerte gespeichert.", "ok");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Speichern", true);
+        toast("Punktewerte konnten nicht gespeichert werden.", "err");
+      }
     }
 
-    function addGroup() {
+    async function addGroup() {
       const name = window.prompt("Name der neuen Gruppe:");
       if (!name) return;
 
@@ -862,146 +788,170 @@
         return;
       }
 
-      state.groups.push({ id: crypto.randomUUID(), name: trimmed, active: true });
-      saveState();
-      renderGroups();
-      renderStats();
-      renderJsonPreview();
-      toast("Gruppe hinzugefügt.", "ok");
+      try {
+        setLoading(true, "Lege Gruppe an…");
+        const created = await apiPost("/groups", { name: trimmed, active: true });
+        state.groups.push(created);
+        renderGroups();
+        renderStats();
+        renderJsonPreview();
+        setLoading(false, "Gruppe angelegt");
+        toast("Gruppe hinzugefügt.", "ok");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Anlegen", true);
+        toast("Gruppe konnte nicht angelegt werden.", "err");
+      }
     }
 
-    function renameGroup(id) {
-      const group = state.groups.find(item => item.id === id);
-      if (!group) return;
-
+    async function renameGroup(group) {
       const next = window.prompt("Neuer Gruppenname:", group.name);
       if (!next) return;
 
       const trimmed = next.trim();
       if (!trimmed) return;
 
-      group.name = trimmed;
-      saveState();
-      renderGroups();
-      renderJsonPreview();
-      toast("Gruppe umbenannt.", "ok");
-    }
-
-    function toggleGroup(id) {
-      const group = state.groups.find(item => item.id === id);
-      if (!group) return;
-
-      group.active = !group.active;
-      saveState();
-      renderGroups();
-      renderStats();
-      renderJsonPreview();
-      toast(group.active ? "Gruppe aktiviert." : "Gruppe deaktiviert.", "ok");
-    }
-
-    function deleteGroup(id) {
-      const group = state.groups.find(item => item.id === id);
-      if (!group) return;
-
-      const ok = window.confirm(`Gruppe wirklich löschen?\n\n${group.name}`);
-      if (!ok) return;
-
-      state.groups = state.groups.filter(item => item.id !== id);
-      saveState();
-      renderGroups();
-      renderStats();
-      renderJsonPreview();
-      toast("Gruppe gelöscht.", "ok");
-    }
-
-    function moveGroup(index, direction) {
-      const nextIndex = index + direction;
-      if (nextIndex < 0 || nextIndex >= state.groups.length) return;
-
-      [state.groups[index], state.groups[nextIndex]] = [state.groups[nextIndex], state.groups[index]];
-      saveState();
-      renderGroups();
-      renderJsonPreview();
-    }
-
-    function exportJson() {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "saufpokal-admin-export.json";
-      a.click();
-      URL.revokeObjectURL(url);
-      toast("JSON exportiert.", "ok");
-    }
-
-    async function importJson(event) {
-      const file = event.target.files?.[0];
-      if (!file) return;
-
       try {
-        const text = await file.text();
-        const imported = JSON.parse(text);
+        setLoading(true, "Benenne Gruppe um…");
+        const updated = await apiPatch(`/groups/${group.id}`, {
+          name: trimmed,
+          active: group.active
+        });
 
-        if (!imported.event || !imported.points || !Array.isArray(imported.groups)) {
-          throw new Error("Ungültige Struktur");
-        }
-
-        state.event = imported.event;
-        state.points = imported.points;
-        state.groups = imported.groups;
-        saveState();
-        fillInputs();
+        const index = state.groups.findIndex(item => item.id === group.id);
+        if (index >= 0) state.groups[index] = updated;
         renderGroups();
-        renderStats();
         renderJsonPreview();
-        toast("JSON importiert.", "ok");
+        setLoading(false, "Gruppe gespeichert");
+        toast("Gruppe umbenannt.", "ok");
       } catch (error) {
         console.error(error);
-        toast("Import fehlgeschlagen.", "err");
-      } finally {
-        event.target.value = "";
+        setLoading(false, "Fehler beim Speichern", true);
+        toast("Umbenennen fehlgeschlagen.", "err");
       }
     }
 
-    function resetDemo() {
-      const ok = window.confirm("Demo wirklich komplett zurücksetzen?");
+    async function toggleGroup(group) {
+      try {
+        setLoading(true, group.active ? "Deaktiviere Gruppe…" : "Aktiviere Gruppe…");
+        const updated = await apiPatch(`/groups/${group.id}`, {
+          active: !group.active,
+          name: group.name
+        });
+
+        const index = state.groups.findIndex(item => item.id === group.id);
+        if (index >= 0) state.groups[index] = updated;
+        renderGroups();
+        renderStats();
+        renderJsonPreview();
+        setLoading(false, updated.active ? "Gruppe aktiv" : "Gruppe inaktiv");
+        toast(updated.active ? "Gruppe aktiviert." : "Gruppe deaktiviert.", "ok");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Umschalten", true);
+        toast("Aktiv/Inaktiv konnte nicht geändert werden.", "err");
+      }
+    }
+
+    async function deleteGroup(group) {
+      const ok = window.confirm(`Gruppe wirklich löschen?\n\n${group.name}`);
       if (!ok) return;
 
-      localStorage.removeItem(STORAGE_KEY);
-      window.location.reload();
+      try {
+        setLoading(true, "Lösche Gruppe…");
+        await apiDelete(`/groups/${group.id}`);
+        state.groups = state.groups.filter(item => item.id !== group.id);
+        renderGroups();
+        renderStats();
+        renderJsonPreview();
+        setLoading(false, "Gruppe gelöscht");
+        toast("Gruppe gelöscht.", "ok");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Löschen", true);
+        toast("Gruppe konnte nicht gelöscht werden.", "err");
+      }
+    }
+
+    function buildSettingsPayloadFromInputs() {
+      return {
+        eventName: els.eventNameInput.value.trim(),
+        eventDate: els.eventDateInput.value,
+        endTime: els.eventEndInput.value,
+        status: els.eventStatusSelect.value,
+        note: els.eventNoteInput.value.trim(),
+        points: {
+          fullCard: parseInt(els.fullCardInput.value, 10),
+          halfCard: parseInt(els.halfCardInput.value, 10),
+          perMark: parseInt(els.perMarkInput.value, 10),
+          perPitter: parseInt(els.perPitterInput.value, 10)
+        }
+      };
     }
 
     function renderJsonPreview() {
       const preview = {
         event: state.event,
-        points: state.points,
-        groupsPreview: state.groups.map((group, index) => ({
-          sort: index + 1,
-          name: group.name,
-          active: group.active
-        }))
+        groups: [...state.groups].sort((a, b) => a.name.localeCompare(b.name, "de"))
       };
-
       els.jsonPreviewBox.textContent = JSON.stringify(preview, null, 2);
     }
 
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    function setLoading(message, keepErrorStyle = false, forceError = false) {
+      state.loading = !message ? false : true;
+      els.statusText.textContent = message || (state.event.status === "closed" ? "Zählung beendet" : "Zählung offen");
+      els.statusPill.classList.toggle("closed", forceError || state.event.status === "closed");
+      els.reloadBtn.disabled = !!message;
+      els.saveEventBtn.disabled = !!message;
+      els.savePointsBtn.disabled = !!message;
+      els.addGroupBtn.disabled = !!message;
+      if (!message && !keepErrorStyle) {
+        renderStats();
+      }
     }
 
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return structuredClone(DEFAULT_STATE);
-        const parsed = JSON.parse(raw);
-        if (!parsed?.event || !parsed?.points || !Array.isArray(parsed?.groups)) {
-          return structuredClone(DEFAULT_STATE);
-        }
-        return parsed;
-      } catch {
-        return structuredClone(DEFAULT_STATE);
-      }
+    async function apiGet(path) {
+      const res = await fetch(`${API_BASE}${path}`);
+      if (!res.ok) throw new Error(`GET ${path} fehlgeschlagen: ${res.status}`);
+      return res.json();
+    }
+
+    async function apiPost(path, body) {
+      const res = await fetch(`${API_BASE}${path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) throw new Error(`POST ${path} fehlgeschlagen: ${res.status}`);
+      return res.json();
+    }
+
+    async function apiPut(path, body) {
+      const res = await fetch(`${API_BASE}${path}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) throw new Error(`PUT ${path} fehlgeschlagen: ${res.status}`);
+      return res.json();
+    }
+
+    async function apiPatch(path, body) {
+      const res = await fetch(`${API_BASE}${path}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) throw new Error(`PATCH ${path} fehlgeschlagen: ${res.status}`);
+      return res.json();
+    }
+
+    async function apiDelete(path) {
+      const res = await fetch(`${API_BASE}${path}`, {
+        method: "DELETE"
+      });
+      if (!res.ok) throw new Error(`DELETE ${path} fehlgeschlagen: ${res.status}`);
+      return res.json();
     }
 
     function toast(message, type = "ok") {

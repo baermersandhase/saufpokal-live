@@ -17,7 +17,6 @@
       --accent: #dc2626;
       --accent-2: #ef4444;
       --green: #16a34a;
-      --blue: #2563eb;
       --orange: #ea580c;
       --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
       --radius: 24px;
@@ -153,6 +152,11 @@
       padding: 0 14px;
       border-radius: 14px;
       font-size: 0.92rem;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
     }
 
     main {
@@ -338,6 +342,12 @@
       outline: 3px solid rgba(37, 99, 235, 0.35);
       border-color: rgba(37, 99, 235, 0.4);
       background: linear-gradient(180deg, rgba(37,99,235,0.18), rgba(37,99,235,0.08)), var(--card);
+    }
+
+    .group-card.inactive {
+      opacity: 0.5;
+      border-style: dashed;
+      cursor: not-allowed;
     }
 
     .group-name {
@@ -692,12 +702,12 @@
     </div>
 
     <div class="header-actions">
-      <div class="pill">
+      <div class="pill" id="statusPill">
         <span class="dot"></span>
-        <span>Demo-Modus ohne Backend</span>
+        <span id="statusText">Lade Daten…</span>
       </div>
       <div class="pill hidden" id="activeRolePill"><strong>Arbeitsplatz:</strong>&nbsp;<span id="activeRoleHeader">–</span></div>
-      <button class="btn ghost small" id="resetAllBtn" type="button">Arbeitsplatz zurücksetzen</button>
+      <button class="btn ghost small" id="resetWorkplaceBtn" type="button">Arbeitsplatz zurücksetzen</button>
     </div>
   </header>
 
@@ -744,7 +754,7 @@
         <div class="panel-head">
           <div>
             <h3>Aktiver Arbeitsplatz: <span id="groupScreenRoleLabel">–</span></h3>
-            <p>Suchfeld filtert live.</p>
+            <p id="groupScreenMeta">Suchfeld filtert live.</p>
           </div>
         </div>
         <div class="panel-body" style="display:grid; grid-template-rows:auto 1fr; min-height:0;">
@@ -827,7 +837,7 @@
                         <div class="title">Ganze Karte</div>
                         <div class="sub">Volle Karte buchen</div>
                       </div>
-                      <div class="badge">20 Marken</div>
+                      <div class="badge" id="fullCardBadge">20 Marken</div>
                     </button>
 
                     <button class="quick-card" type="button" data-card="10">
@@ -835,7 +845,7 @@
                         <div class="title">Halbe Karte</div>
                         <div class="sub">Vorentwertete halbe Karte</div>
                       </div>
-                      <div class="badge">10 Marken</div>
+                      <div class="badge" id="halfCardBadge">10 Marken</div>
                     </button>
 
                     <button class="quick-card" type="button" data-card="custom">
@@ -995,41 +1005,26 @@
   <div class="toast-wrap" id="toastWrap"></div>
 
   <script>
-    const GROUPS = [
-      "Lucky Stars",
-      "Golden Dancers",
-      "Showtanzgruppe Infinity",
-      "Bürvenicher Danzspektakel",
-      "Remix",
-      "Red Steps",
-      "Crew of Dance",
-      "Hotstuff",
-      "Funky Vibes",
-      "Tanzfabrik",
-      "FireFlames",
-      "Funtastics",
-      "Plattföös",
-      "Hotsteppers",
-      "Déjà Vu",
-      "Lightnings",
-      "Illastix"
-    ];
-
-    const SETTINGS = {
-      fullCardPoints: 20,
-      halfCardPoints: 10,
-      perMarkPoint: 1,
-      perPitterPoint: 20
-    };
+    const API_BASE = "/api";
+    const WORKPLACE_STORAGE_KEY = "saufpokal_tablet_workplace";
 
     const state = {
       screen: "role",
       role: null,
       group: null,
+      groups: [],
+      settings: {
+        fullCard: 20,
+        halfCard: 10,
+        perMark: 1,
+        perPitter: 20
+      },
       type: null,
       selectionLabel: null,
       selectionPoints: 0,
-      cart: []
+      selectionTypeValue: null,
+      cart: [],
+      loading: false
     };
 
     const els = {
@@ -1037,17 +1032,24 @@
       screenGroup: document.getElementById("screenGroup"),
       screenBooking: document.getElementById("screenBooking"),
 
+      statusPill: document.getElementById("statusPill"),
+      statusText: document.getElementById("statusText"),
+      activeRolePill: document.getElementById("activeRolePill"),
+      activeRoleHeader: document.getElementById("activeRoleHeader"),
+      resetWorkplaceBtn: document.getElementById("resetWorkplaceBtn"),
+
       roleCards: [...document.querySelectorAll(".role-card")],
       changeGroupBtn: document.getElementById("changeGroupBtn"),
       groupScreenRoleLabel: document.getElementById("groupScreenRoleLabel"),
-      activeRolePill: document.getElementById("activeRolePill"),
-      activeRoleHeader: document.getElementById("activeRoleHeader"),
+      groupScreenMeta: document.getElementById("groupScreenMeta"),
 
       groupSearch: document.getElementById("groupSearch"),
       clearSearchBtn: document.getElementById("clearSearchBtn"),
       groupGrid: document.getElementById("groupGrid"),
 
       activeGroup: document.getElementById("activeGroup"),
+      fullCardBadge: document.getElementById("fullCardBadge"),
+      halfCardBadge: document.getElementById("halfCardBadge"),
 
       typeCards: [...document.querySelectorAll(".type-card")],
       wertmarkenOptions: document.getElementById("wertmarkenOptions"),
@@ -1071,7 +1073,6 @@
       clearCurrentBtn: document.getElementById("clearCurrentBtn"),
       clearCartBtn: document.getElementById("clearCartBtn"),
       submitCartBtn: document.getElementById("submitCartBtn"),
-      resetAllBtn: document.getElementById("resetAllBtn"),
 
       confirmBackdrop: document.getElementById("confirmBackdrop"),
       confirmText: document.getElementById("confirmText"),
@@ -1084,20 +1085,17 @@
       toastWrap: document.getElementById("toastWrap")
     };
 
-    function init() {
-      renderGroups();
+    async function init() {
       bindEvents();
-      updateRoleViews();
-      updateBookingHeader();
-      updateCurrentSummary();
-      renderCart();
-      showScreen("role");
+      restoreWorkplace();
+      await loadInitialData();
     }
 
     function bindEvents() {
       els.roleCards.forEach(btn => {
         btn.addEventListener("click", () => {
           state.role = btn.dataset.role;
+          localStorage.setItem(WORKPLACE_STORAGE_KEY, state.role);
           state.group = null;
           state.cart = [];
           clearCurrentSelection(false);
@@ -1105,6 +1103,20 @@
           updateRoleViews();
           showScreen("group");
         });
+      });
+
+      els.resetWorkplaceBtn.addEventListener("click", () => {
+        localStorage.removeItem(WORKPLACE_STORAGE_KEY);
+        state.role = null;
+        state.group = null;
+        state.cart = [];
+        clearCurrentSelection(false);
+        renderCart();
+        renderGroups();
+        updateRoleViews();
+        updateBookingHeader();
+        showScreen("role");
+        toast("Arbeitsplatz zurückgesetzt.", "ok");
       });
 
       els.changeGroupBtn.addEventListener("click", () => {
@@ -1133,20 +1145,22 @@
         btn.addEventListener("click", () => {
           document.querySelectorAll("[data-card]").forEach(x => x.classList.remove("active"));
           btn.classList.add("active");
-
           const value = btn.dataset.card;
 
           if (value === "20") {
             state.selectionLabel = "Wertmarkenkarte – Ganze Karte";
-            state.selectionPoints = SETTINGS.fullCardPoints;
+            state.selectionPoints = state.settings.fullCard;
+            state.selectionTypeValue = "full_card";
             els.wertmarkenCustomWrap.classList.add("hidden");
           } else if (value === "10") {
             state.selectionLabel = "Wertmarkenkarte – Halbe Karte";
-            state.selectionPoints = SETTINGS.halfCardPoints;
+            state.selectionPoints = state.settings.halfCard;
+            state.selectionTypeValue = "half_card";
             els.wertmarkenCustomWrap.classList.add("hidden");
           } else {
             state.selectionLabel = "Wertmarkenkarte – Eigene Anzahl";
             state.selectionPoints = 0;
+            state.selectionTypeValue = "custom_marks";
             els.wertmarkenCustomWrap.classList.remove("hidden");
           }
 
@@ -1185,27 +1199,73 @@
       els.submitCartBtn.addEventListener("click", openConfirm);
       els.cancelConfirmBtn.addEventListener("click", closeConfirm);
       els.confirmSubmitBtn.addEventListener("click", submitCart);
-      els.resetAllBtn.addEventListener("click", resetAll);
 
       els.confirmBackdrop.addEventListener("click", (e) => {
         if (e.target === els.confirmBackdrop) closeConfirm();
       });
     }
 
+    function restoreWorkplace() {
+      const stored = localStorage.getItem(WORKPLACE_STORAGE_KEY);
+      if (stored === "theke" || stored === "schnapswagen") {
+        state.role = stored;
+      }
+      updateRoleViews();
+    }
+
+    async function loadInitialData() {
+      try {
+        setLoading(true, "Lade Gruppen und Punktewerte…");
+        const [groupsRes, settingsRes] = await Promise.all([
+          apiGet("/groups"),
+          apiGet("/settings")
+        ]);
+
+        state.groups = Array.isArray(groupsRes.items) ? groupsRes.items : [];
+        state.settings = {
+          fullCard: Number(settingsRes?.points?.fullCard ?? 20),
+          halfCard: Number(settingsRes?.points?.halfCard ?? 10),
+          perMark: Number(settingsRes?.points?.perMark ?? 1),
+          perPitter: Number(settingsRes?.points?.perPitter ?? 20)
+        };
+
+        applySettingsToUi();
+        renderGroups();
+        renderCart();
+        updateCurrentSummary();
+        updateBookingHeader();
+
+        if (state.role) {
+          showScreen("group");
+        } else {
+          showScreen("role");
+        }
+
+        setLoading(false, "Bereit");
+      } catch (error) {
+        console.error(error);
+        renderGroupsError();
+        showScreen(state.role ? "group" : "role");
+        setLoading(false, "Fehler beim Laden", true);
+        toast("Gruppen oder Punktewerte konnten nicht geladen werden.", "err");
+      }
+    }
+
+    function applySettingsToUi() {
+      els.fullCardBadge.textContent = `${state.settings.fullCard} Punkte`;
+      els.halfCardBadge.textContent = `${state.settings.halfCard} Punkte`;
+      els.groupScreenMeta.textContent = `${state.groups.filter(g => g.active).length} aktive Gruppen · Suchfeld filtert live.`;
+    }
+
     function showScreen(screen) {
       state.screen = screen;
-
       els.screenRole.classList.remove("active");
       els.screenGroup.classList.remove("active");
       els.screenBooking.classList.remove("active");
 
-      if (screen === "role") {
-        els.screenRole.classList.add("active");
-      } else if (screen === "group") {
-        els.screenGroup.classList.add("active");
-      } else if (screen === "booking") {
-        els.screenBooking.classList.add("active");
-      }
+      if (screen === "role") els.screenRole.classList.add("active");
+      if (screen === "group") els.screenGroup.classList.add("active");
+      if (screen === "booking") els.screenBooking.classList.add("active");
 
       updateRoleViews();
       updateBookingHeader();
@@ -1222,24 +1282,21 @@
     }
 
     function updateBookingHeader() {
-      els.activeGroup.textContent = state.group || "–";
-      els.cartGroup.textContent = state.group || "–";
+      els.activeGroup.textContent = state.group?.name || "–";
+      els.cartGroup.textContent = state.group?.name || "–";
     }
 
     function renderGroups() {
       const search = els.groupSearch.value.trim().toLowerCase();
-      const groups = GROUPS
-        .filter(group => !search || group.toLowerCase().includes(search))
-        .sort((a, b) => a.localeCompare(b, "de"));
+      const groups = [...state.groups]
+        .filter(group => group.active)
+        .filter(group => !search || group.name.toLowerCase().includes(search))
+        .sort((a, b) => a.name.localeCompare(b.name, "de"));
 
       els.groupGrid.innerHTML = "";
 
       if (!groups.length) {
-        els.groupGrid.innerHTML = `
-          <div class="empty-state" style="grid-column: 1 / -1;">
-            Keine Gruppe gefunden.
-          </div>
-        `;
+        els.groupGrid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">Keine aktive Gruppe gefunden.</div>`;
         return;
       }
 
@@ -1247,11 +1304,9 @@
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "group-card";
-        if (state.group === group) btn.classList.add("selected");
+        if (state.group?.id === group.id) btn.classList.add("selected");
 
-        btn.innerHTML = `
-          <div class="group-name">${escapeHtml(group)}</div>
-        `;
+        btn.innerHTML = `<div class="group-name">${escapeHtml(group.name)}</div>`;
 
         btn.addEventListener("click", () => {
           state.group = group;
@@ -1267,10 +1322,15 @@
       });
     }
 
+    function renderGroupsError() {
+      els.groupGrid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">Gruppen konnten nicht geladen werden.</div>`;
+    }
+
     function selectType(type) {
       state.type = type;
       state.selectionLabel = null;
       state.selectionPoints = 0;
+      state.selectionTypeValue = null;
 
       els.typeCards.forEach(x => x.classList.remove("active"));
       const active = els.typeCards.find(x => x.dataset.type === type);
@@ -1281,7 +1341,6 @@
       els.freieMarkenOptions.classList.add("hidden");
 
       document.querySelectorAll("[data-card]").forEach(x => x.classList.remove("active"));
-
       els.wertmarkenCustomWrap.classList.add("hidden");
       els.wertmarkenCustomInput.value = "";
       els.pitterInput.value = "";
@@ -1301,27 +1360,24 @@
     function updateWertmarkenCustom() {
       const value = parseInt(els.wertmarkenCustomInput.value, 10);
       state.selectionLabel = "Wertmarkenkarte – Eigene Anzahl";
-      state.selectionPoints = Number.isFinite(value) && value > 0
-        ? value * SETTINGS.perMarkPoint
-        : 0;
+      state.selectionTypeValue = "custom_marks";
+      state.selectionPoints = Number.isFinite(value) && value > 0 ? value * state.settings.perMark : 0;
       updateCurrentSummary();
     }
 
     function updatePitter() {
       const value = parseInt(els.pitterInput.value, 10);
       state.selectionLabel = "Pittermännchen";
-      state.selectionPoints = Number.isFinite(value) && value > 0
-        ? value * SETTINGS.perPitterPoint
-        : 0;
+      state.selectionTypeValue = "pittermaennchen";
+      state.selectionPoints = Number.isFinite(value) && value > 0 ? value * state.settings.perPitter : 0;
       updateCurrentSummary();
     }
 
     function updateFreieMarken() {
       const value = parseInt(els.freieMarkenInput.value, 10);
       state.selectionLabel = "Eigene Anzahl Märkchen";
-      state.selectionPoints = Number.isFinite(value) && value > 0
-        ? value * SETTINGS.perMarkPoint
-        : 0;
+      state.selectionTypeValue = "custom_marks";
+      state.selectionPoints = Number.isFinite(value) && value > 0 ? value * state.settings.perMark : 0;
       updateCurrentSummary();
     }
 
@@ -1338,23 +1394,25 @@
         return;
       }
 
-      if (!state.group) {
+      if (!state.group?.id) {
         toast("Erst Gruppe auswählen.", "err");
         showScreen("group");
         return;
       }
 
-      if (!state.selectionLabel || !state.selectionPoints) {
+      if (!state.selectionLabel || !state.selectionPoints || !state.selectionTypeValue) {
         toast("Erst eine gültige Buchung auswählen.", "err");
         return;
       }
 
       state.cart.push({
         id: crypto.randomUUID(),
-        role: state.role,
-        group: state.group,
+        type: state.selectionTypeValue,
         label: state.selectionLabel,
-        points: state.selectionPoints
+        points: state.selectionPoints,
+        groupId: state.group.id,
+        groupName: state.group.name,
+        role: state.role
       });
 
       renderCart();
@@ -1366,37 +1424,30 @@
       state.type = null;
       state.selectionLabel = null;
       state.selectionPoints = 0;
+      state.selectionTypeValue = null;
 
       els.typeCards.forEach(x => x.classList.remove("active"));
       document.querySelectorAll("[data-card]").forEach(x => x.classList.remove("active"));
-
       els.wertmarkenOptions.classList.add("hidden");
       els.pitterOptions.classList.add("hidden");
       els.freieMarkenOptions.classList.add("hidden");
       els.wertmarkenCustomWrap.classList.add("hidden");
-
       els.wertmarkenCustomInput.value = "";
       els.pitterInput.value = "";
       els.freieMarkenInput.value = "";
 
       updateCurrentSummary();
-
       if (showToast) toast("Aktuelle Auswahl zurückgesetzt.", "ok");
     }
 
     function renderCart() {
-      els.cartGroup.textContent = state.group || "–";
+      els.cartGroup.textContent = state.group?.name || "–";
       els.cartCount.textContent = String(state.cart.length);
       els.cartTotalPoints.textContent = String(getCartTotal());
-
       els.cartList.innerHTML = "";
 
       if (!state.cart.length) {
-        els.cartList.innerHTML = `
-          <div class="empty-state">
-            Noch keine Positionen im Warenkorb.
-          </div>
-        `;
+        els.cartList.innerHTML = `<div class="empty-state">Noch keine Positionen im Warenkorb.</div>`;
         return;
       }
 
@@ -1406,7 +1457,7 @@
         row.innerHTML = `
           <div class="cart-item-main">
             <div class="cart-item-title">${escapeHtml(item.label)}</div>
-            <div class="cart-item-sub">${escapeHtml(item.group)}</div>
+            <div class="cart-item-sub">${escapeHtml(item.groupName)} · ${escapeHtml(formatRole(item.role))}</div>
           </div>
           <div class="cart-item-actions">
             <div style="font-weight:900; text-align:right;">${item.points} P</div>
@@ -1433,7 +1484,6 @@
         toast("Warenkorb ist schon leer.", "err");
         return;
       }
-
       state.cart = [];
       renderCart();
       toast("Warenkorb geleert.", "ok");
@@ -1446,7 +1496,7 @@
         return;
       }
 
-      if (!state.group) {
+      if (!state.group?.id) {
         toast("Erst Gruppe auswählen.", "err");
         showScreen("group");
         return;
@@ -1457,21 +1507,21 @@
         return;
       }
 
-      const cartGroups = [...new Set(state.cart.map(x => x.group))];
+      const cartGroups = [...new Set(state.cart.map(x => x.groupId))];
       const cartRoles = [...new Set(state.cart.map(x => x.role))];
 
       if (cartGroups.length > 1) {
-        toast("Im Warenkorb sind mehrere Gruppen. Das ist absichtlich blockiert.", "err");
+        toast("Im Warenkorb sind mehrere Gruppen. Das ist blockiert.", "err");
         return;
       }
 
       if (cartRoles.length > 1) {
-        toast("Im Warenkorb sind gemischte Rollen. Das ist absichtlich blockiert.", "err");
+        toast("Im Warenkorb sind gemischte Rollen. Das ist blockiert.", "err");
         return;
       }
 
-      els.confirmGroup.textContent = cartGroups[0];
-      els.confirmRole.textContent = formatRole(cartRoles[0]);
+      els.confirmGroup.textContent = state.group.name;
+      els.confirmRole.textContent = formatRole(state.role);
       els.confirmPoints.textContent = String(getCartTotal());
       els.confirmText.textContent = `${state.cart.length} Position(en) werden jetzt gebucht.`;
       els.confirmBackdrop.classList.add("open");
@@ -1481,48 +1531,76 @@
       els.confirmBackdrop.classList.remove("open");
     }
 
-    function submitCart() {
+    async function submitCart() {
+      if (!state.group?.id || !state.role || !state.cart.length) return;
+
       const payload = {
-        role: state.role,
-        group: state.group,
-        items: [...state.cart],
-        totalPoints: getCartTotal(),
-        createdAt: new Date().toISOString()
+        source: state.role,
+        groupId: state.group.id,
+        items: state.cart.map(item => ({
+          type: item.type,
+          label: item.label,
+          points: item.points
+        }))
       };
 
-      console.log("DEMO Payload:", payload);
+      try {
+        setLoading(true, "Sende Buchung…");
+        await apiPost("/bookings", payload);
+        closeConfirm();
+        toast(`Buchung gespeichert: ${state.group.name} · ${getCartTotal()} Punkte`, "ok");
 
-      closeConfirm();
-      toast(`Demo-Buchung gesendet: ${payload.group} · ${payload.totalPoints} Punkte`, "ok");
-
-      state.cart = [];
-      state.group = null;
-      renderCart();
-      renderGroups();
-      clearCurrentSelection(false);
-      updateBookingHeader();
-      showScreen("group");
+        state.cart = [];
+        state.group = null;
+        renderCart();
+        renderGroups();
+        clearCurrentSelection(false);
+        updateBookingHeader();
+        showScreen("group");
+        setLoading(false, "Bereit");
+      } catch (error) {
+        console.error(error);
+        closeConfirm();
+        setLoading(false, "Fehler beim Speichern", true);
+        toast("Buchung konnte nicht gespeichert werden.", "err");
+      }
     }
 
-    function resetAll() {
-      state.screen = "role";
-      state.role = null;
-      state.group = null;
-      state.type = null;
-      state.selectionLabel = null;
-      state.selectionPoints = 0;
-      state.cart = [];
+    function setLoading(message, isError = false) {
+      state.loading = Boolean(message) && message !== "Bereit";
+      els.statusText.textContent = message || "Bereit";
+      els.statusPill.classList.toggle("closed", isError);
+      [
+        els.resetWorkplaceBtn,
+        els.changeGroupBtn,
+        els.addToCartBtn,
+        els.clearCurrentBtn,
+        els.clearCartBtn,
+        els.submitCartBtn,
+        els.confirmSubmitBtn,
+        els.cancelConfirmBtn
+      ].forEach(btn => {
+        if (btn) btn.disabled = state.loading;
+      });
+    }
 
-      els.groupSearch.value = "";
+    async function apiGet(path) {
+      const res = await fetch(`${API_BASE}${path}`);
+      if (!res.ok) throw new Error(`GET ${path} fehlgeschlagen: ${res.status}`);
+      return res.json();
+    }
 
-      clearCurrentSelection(false);
-      renderGroups();
-      renderCart();
-      updateRoleViews();
-      updateBookingHeader();
-      updateCurrentSummary();
-      showScreen("role");
-      toast("Arbeitsplatz zurückgesetzt.", "ok");
+    async function apiPost(path, body) {
+      const res = await fetch(`${API_BASE}${path}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`POST ${path} fehlgeschlagen: ${res.status} ${text}`);
+      }
+      return res.json();
     }
 
     function formatRole(role) {
@@ -1536,10 +1614,7 @@
       el.className = `toast ${type}`;
       el.textContent = message;
       els.toastWrap.appendChild(el);
-
-      setTimeout(() => {
-        el.remove();
-      }, 2600);
+      setTimeout(() => el.remove(), 2600);
     }
 
     function escapeHtml(value) {

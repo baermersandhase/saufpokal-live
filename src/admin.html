@@ -485,7 +485,7 @@
   <section class="topbar">
     <div class="brand">
       <h1>Saufpokal Live – Admin</h1>
-      <p>V1 mit echter API für Event-Einstellungen, Gruppen und Buchungen.</p>
+      <p>V1 mit echter API für Event-Einstellungen, Gruppen, Buchungen und Reset.</p>
     </div>
 
     <div class="top-actions">
@@ -493,6 +493,7 @@
         <span class="dot"></span>
         <span id="statusText">Lade Daten…</span>
       </div>
+      <button class="btn red" id="resetDataBtn" type="button">Daten zurücksetzen</button>
       <button class="btn ghost" id="reloadBtn" type="button">Neu laden</button>
     </div>
   </section>
@@ -554,7 +555,7 @@
             <div class="actions-row">
               <button class="btn green" id="savePointsBtn" type="button">Punktewerte speichern</button>
             </div>
-            <div class="note-box">Daten zurücksetzen kommt im nächsten Schritt mit eigenem Reset-Endpoint. Erst müssen die Buchungen sauber bearbeitbar sein.</div>
+            <div class="note-box">Reset löscht nur Buchungen. Gruppen und Einstellungen bleiben erhalten.</div>
           </div>
         </div>
       </section>
@@ -699,6 +700,7 @@
       statusPill: document.getElementById("statusPill"),
       statusText: document.getElementById("statusText"),
       reloadBtn: document.getElementById("reloadBtn"),
+      resetDataBtn: document.getElementById("resetDataBtn"),
 
       statGroupsTotal: document.getElementById("statGroupsTotal"),
       statGroupsActive: document.getElementById("statGroupsActive"),
@@ -758,6 +760,7 @@
 
     function bindEvents() {
       els.reloadBtn.addEventListener("click", loadAll);
+      els.resetDataBtn.addEventListener("click", resetAllBookings);
       els.reloadBookingsBtn.addEventListener("click", loadBookings);
       els.saveEventBtn.addEventListener("click", saveEventSettings);
       els.savePointsBtn.addEventListener("click", savePointSettings);
@@ -819,6 +822,27 @@
       }
     }
 
+    async function resetAllBookings() {
+      const ok = window.confirm("Wirklich alle Buchungen zurücksetzen?\n\nGruppen und Einstellungen bleiben erhalten.\nAlle Buchungen werden gelöscht.");
+      if (!ok) return;
+
+      try {
+        setLoading(true, "Setze Buchungen zurück…");
+        const result = await apiPost("/admin/reset", {});
+        state.bookings = [];
+        closeBookingModal();
+        renderBookings();
+        renderStats();
+        renderJsonPreview();
+        setLoading(false, "Buchungen zurückgesetzt");
+        toast(`Buchungen zurückgesetzt (${result.deletedCount || 0} gelöscht).`, "ok");
+      } catch (error) {
+        console.error(error);
+        setLoading(false, "Fehler beim Reset", true);
+        toast("Buchungen konnten nicht zurückgesetzt werden.", "err");
+      }
+    }
+
     async function loadBookings() {
       try {
         setLoading(true, "Lade Buchungen…");
@@ -841,7 +865,6 @@
       els.eventEndInput.value = state.event.endTime || "";
       els.eventStatusSelect.value = state.event.status || "open";
       els.eventNoteInput.value = state.event.note || "";
-
       els.fullCardInput.value = state.event.points?.fullCard ?? 20;
       els.halfCardInput.value = state.event.points?.halfCard ?? 10;
       els.perMarkInput.value = state.event.points?.perMark ?? 1;
@@ -861,7 +884,8 @@
       els.statEndTime.textContent = state.event.endTime || "–";
       els.statEventStatus.textContent = state.event.status === "closed" ? "geschlossen" : "offen";
 
-      els.statusText.textContent = state.event.status === "closed" ? "Zählung beendet" : "Zählung offen";
+      const pillText = state.event.status === "closed" ? "Zählung beendet" : "Zählung offen";
+      els.statusText.textContent = pillText;
       els.statusPill.classList.toggle("closed", state.event.status === "closed");
     }
 
@@ -1336,6 +1360,7 @@
       els.statusPill.classList.toggle("closed", forceError || state.event.status === "closed");
       [
         els.reloadBtn,
+        els.resetDataBtn,
         els.reloadBookingsBtn,
         els.saveEventBtn,
         els.savePointsBtn,
@@ -1346,7 +1371,6 @@
       ].forEach(btn => {
         if (btn) btn.disabled = !!message;
       });
-
       if (!message && !keepErrorStyle) renderStats();
     }
 

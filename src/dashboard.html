@@ -7,7 +7,6 @@
   <style>
     :root {
       --panel: rgba(15, 23, 42, 0.94);
-      --panel-2: rgba(255, 255, 255, 0.04);
       --border: rgba(255, 255, 255, 0.08);
       --text: #f8fafc;
       --muted: #94a3b8;
@@ -16,6 +15,7 @@
       --gold: #f59e0b;
       --gold-2: #fde68a;
       --green: #22c55e;
+      --red: #ef4444;
       --blue: #3b82f6;
       --blue-2: #60a5fa;
       --shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
@@ -42,12 +42,11 @@
       min-height: 100vh;
       padding: 8px;
       display: grid;
-      grid-template-rows: auto auto 1fr;
+      grid-template-rows: auto 1fr;
       gap: 8px;
     }
 
     .topbar,
-    .hero,
     .ranking-card,
     .overlay {
       border: 1px solid var(--border);
@@ -59,7 +58,7 @@
 
     .topbar {
       display: grid;
-      grid-template-columns: 1.2fr auto;
+      grid-template-columns: 1fr auto;
       gap: 10px;
       padding: 8px 10px;
       align-items: center;
@@ -73,7 +72,7 @@
 
     .brand h1 {
       margin: 0;
-      font-size: clamp(1.2rem, 2.1vw, 1.6rem);
+      font-size: clamp(1.25rem, 2.2vw, 1.75rem);
       line-height: 1;
       font-weight: 900;
       letter-spacing: 0.02em;
@@ -124,13 +123,13 @@
     }
 
     .pill.closed .dot {
-      background: var(--accent);
+      background: var(--red);
       box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.16);
     }
 
-    .pill.loading .dot {
-      background: var(--gold);
-      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.16);
+    .pill.error .dot {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.16);
     }
 
     .btn {
@@ -147,79 +146,11 @@
       box-shadow: none;
     }
 
-    .hero {
-      padding: 8px 10px;
-      display: grid;
-      grid-template-columns: 1.35fr repeat(5, minmax(0, 0.8fr));
-      gap: 8px;
-      align-items: stretch;
-    }
-
-    .hero-main,
-    .hero-stat {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 10px 12px;
-      min-height: 72px;
-    }
-
-    .hero-main {
-      display: grid;
-      gap: 6px;
-      align-content: space-between;
-    }
-
-    .hero-main-title {
-      font-size: 0.98rem;
-      font-weight: 900;
-    }
-
-    .hero-main-sub {
-      color: var(--muted);
-      font-size: 0.8rem;
-      line-height: 1.3;
-    }
-
-    .hero-main-bottom {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .hero-main-bottom .pill {
-      min-height: 30px;
-      font-size: 0.76rem;
-      padding: 0 10px;
-    }
-
-    .hero-stat {
-      display: grid;
-      align-content: space-between;
-      gap: 5px;
-    }
-
-    .hero-stat-label {
-      color: var(--muted);
-      font-size: 0.76rem;
-    }
-
-    .hero-stat-value {
-      font-size: clamp(1.05rem, 1.8vw, 1.45rem);
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .hero-stat-sub {
-      color: var(--muted);
-      font-size: 0.72rem;
-    }
-
     .ranking-card {
       min-height: 0;
       overflow: hidden;
       display: grid;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto 1fr;
     }
 
     .ranking-head {
@@ -227,192 +158,194 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-bottom: 1px solid var(--border);
       background: rgba(255,255,255,0.03);
     }
 
     .ranking-head h2 {
       margin: 0;
-      font-size: 0.98rem;
+      font-size: 1rem;
     }
 
-    .ranking-head p {
-      margin: 2px 0 0;
-      color: var(--muted);
-      font-size: 0.76rem;
-    }
-
-    .ranking-grid {
+    .ranking-body {
       min-height: 0;
       overflow: hidden;
-      padding: 8px;
+      padding: 10px;
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      align-content: start;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
     }
 
-    .ranking-item {
+    .podium {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .podium-card,
+    .rank-row {
       position: relative;
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 18px;
       background: rgba(255,255,255,0.04);
-      padding: 9px 10px;
       overflow: hidden;
-      min-height: 74px;
-      display: grid;
-      gap: 7px;
-      align-content: space-between;
       isolation: isolate;
     }
 
-    .ranking-item::after {
+    .podium-card {
+      min-height: 150px;
+      padding: 14px;
+      display: grid;
+      align-content: space-between;
+      gap: 10px;
+    }
+
+    .podium-card::before,
+    .rank-row::before {
       content: "";
       position: absolute;
-      inset: -20% auto -20% -55%;
-      width: 40%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      inset: -30% auto -30% -60%;
+      width: 42%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
       opacity: 0;
       transform: skewX(-20deg);
       pointer-events: none;
       z-index: 0;
     }
 
-    .ranking-item > * {
+    .podium-card > *,
+    .rank-row > * {
       position: relative;
       z-index: 1;
     }
 
-    .ranking-item.flash {
-      animation: flashBurst 3.2s ease;
-      border-color: rgba(250, 204, 21, 0.85);
+    .podium-card.rank-1 {
+      background: linear-gradient(180deg, rgba(245,158,11,0.18), rgba(255,255,255,0.04));
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .podium-card.rank-2 {
+      background: linear-gradient(180deg, rgba(148,163,184,0.14), rgba(255,255,255,0.04));
+    }
+
+    .podium-card.rank-3 {
+      background: linear-gradient(180deg, rgba(251,146,60,0.15), rgba(255,255,255,0.04));
+    }
+
+    .podium-card.impact,
+    .rank-row.impact {
+      animation: impactGlow 3s ease;
+      border-color: rgba(250, 204, 21, 0.82);
       box-shadow:
-        0 0 0 2px rgba(250, 204, 21, 0.22),
-        0 0 26px rgba(59,130,246,0.28),
-        0 0 52px rgba(250,204,21,0.16);
+        0 0 0 2px rgba(250, 204, 21, 0.24),
+        0 0 30px rgba(59,130,246,0.24),
+        0 0 60px rgba(250,204,21,0.16);
     }
 
-    .ranking-item.flash::after {
+    .podium-card.impact::before,
+    .rank-row.impact::before {
       opacity: 1;
-      animation: shineSweep 1s ease 0s 3;
+      animation: shineSweep 0.95s ease 0s 3;
     }
 
-    .ranking-item.top1 {
-      border-color: rgba(245, 158, 11, 0.34);
-      background: linear-gradient(180deg, rgba(245,158,11,0.14), rgba(255,255,255,0.04));
+    .podium-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
     }
 
-    .ranking-item-header {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 9px;
-      align-items: center;
-      min-width: 0;
-    }
-
-    .rank-badge {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
+    .podium-rank {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
       display: grid;
       place-items: center;
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.08);
       font-weight: 900;
       font-size: 1rem;
       flex: 0 0 auto;
     }
 
-    .group-block {
-      min-width: 0;
-      display: grid;
-      gap: 2px;
-    }
-
-    .group-name {
-      font-size: 0.95rem;
+    .podium-name {
+      font-size: 1.2rem;
       font-weight: 900;
-      line-height: 1.18;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      line-height: 1.15;
+      word-break: break-word;
     }
 
-    .group-meta {
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    .points-block {
-      text-align: right;
+    .podium-points {
       display: grid;
-      gap: 2px;
-      flex: 0 0 auto;
+      gap: 4px;
+      align-content: end;
     }
 
-    .points-value {
-      font-size: 1.12rem;
+    .points-big {
+      font-size: clamp(2rem, 5vw, 3rem);
       font-weight: 900;
-      line-height: 1;
+      line-height: 0.95;
+      text-shadow: 0 0 0 rgba(0,0,0,0);
       transition: transform 0.18s ease;
     }
 
-    .ranking-item.flash .points-value {
-      animation: pointsBoom 1s ease 0s 2;
+    .impact .points-big,
+    .impact .points-small {
+      animation: pointsPulse 0.7s ease 0s 3;
     }
 
-    .points-label {
+    .points-caption {
       color: var(--muted);
-      font-size: 0.7rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
-    .bar-wrap {
-      height: 11px;
+    .podium-bar-wrap,
+    .rank-bar-wrap {
+      height: 14px;
       border-radius: 999px;
       background: rgba(255,255,255,0.06);
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.04);
     }
 
-    .bar {
+    .podium-bar,
+    .rank-bar {
       height: 100%;
       width: 0%;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--blue), var(--blue-2));
-      transition: width 0.9s ease;
+      transition: width 1s ease;
       position: relative;
       overflow: hidden;
     }
 
-    .bar::after {
+    .rank-1 .podium-bar {
+      background: linear-gradient(90deg, var(--gold), var(--gold-2));
+    }
+
+    .impact .podium-bar::after,
+    .impact .rank-bar::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-      opacity: 0;
-      transform: translateX(-120%);
-    }
-
-    .ranking-item.flash .bar::after {
-      opacity: 1;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.65), transparent);
       animation: barShine 0.9s ease 0s 3;
-    }
-
-    .top1 .bar {
-      background: linear-gradient(90deg, var(--gold), var(--gold-2));
     }
 
     .delta-badge {
       position: absolute;
-      right: 8px;
-      top: 8px;
-      min-height: 26px;
-      padding: 0 10px;
+      right: 10px;
+      top: 10px;
+      min-height: 28px;
+      padding: 0 11px;
       border-radius: 999px;
       background: linear-gradient(135deg, #facc15, #fb7185);
       color: #111827;
       font-weight: 900;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       display: inline-flex;
       align-items: center;
       box-shadow: 0 0 18px rgba(250,204,21,0.35);
@@ -420,65 +353,74 @@
       z-index: 2;
     }
 
-    .remaining-wrap {
-      border-top: 1px solid var(--border);
-      padding: 8px 10px 10px;
+    .rest-list {
+      min-height: 0;
       display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
-      background: rgba(255,255,255,0.02);
-    }
-
-    .remaining-title {
-      font-size: 0.76rem;
-      color: var(--muted);
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
-    }
-
-    .remaining-grid {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .remaining-chip {
-      position: relative;
-      min-height: 52px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      padding: 8px 10px;
-      display: grid;
-      gap: 2px;
-      align-content: center;
+      align-content: start;
       overflow: hidden;
     }
 
-    .remaining-chip.flash {
-      animation: chipFlash 3s ease;
-      border-color: rgba(250, 204, 21, 0.8);
-      box-shadow: 0 0 20px rgba(250,204,21,0.18);
+    .rank-row {
+      min-height: 66px;
+      padding: 10px 12px;
+      display: grid;
+      gap: 7px;
+      align-content: space-between;
     }
 
-    .remaining-chip-rank {
-      font-size: 0.72rem;
-      color: var(--muted);
-      font-weight: 800;
+    .rank-row-head {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: center;
+      min-width: 0;
     }
 
-    .remaining-chip-name {
-      font-size: 0.82rem;
+    .row-rank {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.06);
       font-weight: 900;
+      font-size: 0.9rem;
+      flex: 0 0 auto;
+    }
+
+    .row-name {
+      font-size: 0.95rem;
+      font-weight: 900;
+      line-height: 1.15;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .remaining-chip-points {
-      font-size: 0.78rem;
-      color: #dbeafe;
-      font-weight: 800;
+    .row-points {
+      text-align: right;
+      display: grid;
+      gap: 2px;
+      min-width: 72px;
+    }
+
+    .points-small {
+      font-size: 1.15rem;
+      font-weight: 900;
+      line-height: 1;
+      text-shadow: 0 0 0 rgba(0,0,0,0);
+      transition: transform 0.18s ease;
+    }
+
+    .empty-box {
+      border: 1px dashed rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
     }
 
     .overlay {
@@ -518,13 +460,11 @@
       line-height: 1.4;
     }
 
-    @keyframes flashBurst {
+    @keyframes impactGlow {
       0% { transform: scale(1); box-shadow: 0 0 0 rgba(250,204,21,0); }
-      8% { transform: scale(1.018); box-shadow: 0 0 0 4px rgba(250,204,21,0.18), 0 0 42px rgba(59,130,246,0.35); }
-      18% { transform: scale(1); }
-      30% { transform: scale(1.012); box-shadow: 0 0 0 6px rgba(250,204,21,0.16), 0 0 52px rgba(250,204,21,0.18); }
-      44% { transform: scale(1); }
-      60% { transform: scale(1.01); box-shadow: 0 0 0 3px rgba(59,130,246,0.16), 0 0 32px rgba(59,130,246,0.22); }
+      10% { transform: scale(1.018); box-shadow: 0 0 0 4px rgba(250,204,21,0.18), 0 0 42px rgba(59,130,246,0.35); }
+      24% { transform: scale(1); }
+      40% { transform: scale(1.01); box-shadow: 0 0 0 6px rgba(250,204,21,0.16), 0 0 52px rgba(250,204,21,0.18); }
       100% { transform: scale(1); box-shadow: 0 0 0 rgba(250,204,21,0); }
     }
 
@@ -538,10 +478,10 @@
       100% { transform: translateX(220%); }
     }
 
-    @keyframes pointsBoom {
-      0% { transform: scale(1); }
-      24% { transform: scale(1.26); color: #fef08a; text-shadow: 0 0 16px rgba(250,204,21,0.4); }
-      100% { transform: scale(1); }
+    @keyframes pointsPulse {
+      0% { transform: scale(1); text-shadow: 0 0 0 rgba(250,204,21,0); }
+      25% { transform: scale(1.22); text-shadow: 0 0 18px rgba(250,204,21,0.48); color: #fef08a; }
+      100% { transform: scale(1); text-shadow: 0 0 0 rgba(250,204,21,0); }
     }
 
     @keyframes deltaPop {
@@ -550,19 +490,13 @@
       100% { transform: scale(1) translateY(0); opacity: 1; }
     }
 
-    @keyframes chipFlash {
-      0% { transform: scale(1); }
-      18% { transform: scale(1.03); box-shadow: 0 0 24px rgba(250,204,21,0.26); }
-      100% { transform: scale(1); }
-    }
-
     @media (max-width: 1280px) {
-      .hero {
-        grid-template-columns: 1fr 1fr 1fr;
+      .podium {
+        grid-template-columns: 1fr;
       }
 
-      .remaining-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+      .rest-list {
+        grid-template-columns: 1fr 1fr;
       }
     }
 
@@ -575,16 +509,8 @@
         justify-content: flex-start;
       }
 
-      .hero {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .ranking-grid {
+      .rest-list {
         grid-template-columns: 1fr;
-      }
-
-      .remaining-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
   </style>
@@ -593,80 +519,29 @@
   <section class="topbar">
     <div class="brand">
       <h1>Saufpokal Live</h1>
-      <p>Live-Ranking aus echten Buchungen · automatischer Refresh</p>
+      <p id="eventNameText">Aktuelles Ranking</p>
     </div>
 
     <div class="top-actions">
       <div class="pill" id="statusPill">
         <span class="dot"></span>
-        <span id="statusText">Lade Daten…</span>
+        <span id="statusText">Live aktiv</span>
       </div>
-      <div class="pill">
-        <span>Ende:</span>
-        <strong id="eventEndText">–</strong>
-      </div>
+      <div class="pill"><span>Letztes Update:</span><strong id="lastUpdateText">–</strong></div>
+      <div class="pill"><span>Ende:</span><strong id="eventEndText">–</strong></div>
       <button class="btn ghost" id="soundBtn" type="button">Ton aktivieren</button>
       <button class="btn ghost" id="refreshBtn" type="button">Jetzt aktualisieren</button>
     </div>
   </section>
 
-  <section class="hero">
-    <div class="hero-main">
-      <div>
-        <div class="hero-main-title" id="eventNameText">Saufpokal Live</div>
-        <div class="hero-main-sub" id="heroSubtext">Echte Live-Daten werden geladen.</div>
-      </div>
-      <div class="hero-main-bottom">
-        <div class="pill"><span>Letztes Update:</span><strong id="lastUpdateText">–</strong></div>
-        <div class="pill"><span>Ton:</span><strong id="soundStateText">aus</strong></div>
-      </div>
-    </div>
-
-    <div class="hero-stat">
-      <div class="hero-stat-label">Führende Gruppe</div>
-      <div class="hero-stat-value" id="leaderName">–</div>
-      <div class="hero-stat-sub">aktuelle Spitze</div>
-    </div>
-
-    <div class="hero-stat">
-      <div class="hero-stat-label">Punktestand Platz 1</div>
-      <div class="hero-stat-value" id="leaderPoints">0</div>
-      <div class="hero-stat-sub">live berechnet</div>
-    </div>
-
-    <div class="hero-stat">
-      <div class="hero-stat-label">Buchungen aktiv</div>
-      <div class="hero-stat-value" id="bookingCount">0</div>
-      <div class="hero-stat-sub">stornierte zählen nicht</div>
-    </div>
-
-    <div class="hero-stat">
-      <div class="hero-stat-label">Gesamtpunkte</div>
-      <div class="hero-stat-value" id="totalPoints">0</div>
-      <div class="hero-stat-sub">über alle aktiven Buchungen</div>
-    </div>
-
-    <div class="hero-stat">
-      <div class="hero-stat-label">Gruppen gesamt</div>
-      <div class="hero-stat-value" id="groupCount">0</div>
-      <div class="hero-stat-sub">aktive Gruppen im Ranking</div>
-    </div>
-  </section>
-
   <section class="ranking-card">
     <div class="ranking-head">
-      <div>
-        <h2>Aktuelles Ranking</h2>
-        <p>Plätze 1–12 groß. Rest wird unten kompakt zusammengefasst.</p>
-      </div>
-      <div class="pill"><span>sichtbar:</span><strong id="visibleInfo">12 + Rest</strong></div>
+      <h2>Aktuelles Ranking</h2>
     </div>
 
-    <div class="ranking-grid" id="rankingGrid"></div>
-
-    <div class="remaining-wrap" id="remainingWrap">
-      <div class="remaining-title">Weitere Plätze</div>
-      <div class="remaining-grid" id="remainingGrid"></div>
+    <div class="ranking-body">
+      <div class="podium" id="podium"></div>
+      <div class="rest-list" id="restList"></div>
     </div>
   </section>
 
@@ -680,42 +555,32 @@
   <script>
     const API_BASE = "/api";
     const REFRESH_MS = 3000;
-    const PRIMARY_SLOTS = 12;
 
     const state = {
       soundEnabled: false,
-      loading: false,
       audioContext: null,
-      refreshTimer: null,
       settings: null,
       groups: [],
       bookings: [],
       ranking: [],
-      lastUpdatedNames: new Set(),
-      lastDeltas: new Map(),
       lastSnapshot: new Map(),
-      lastRefreshTime: null
+      changeMap: new Map(),
+      lastRefreshTime: null,
+      refreshTimer: null,
+      clearImpactTimer: null,
+      hasError: false
     };
 
     const els = {
+      eventNameText: document.getElementById("eventNameText"),
       statusPill: document.getElementById("statusPill"),
       statusText: document.getElementById("statusText"),
+      lastUpdateText: document.getElementById("lastUpdateText"),
       eventEndText: document.getElementById("eventEndText"),
       soundBtn: document.getElementById("soundBtn"),
-      soundStateText: document.getElementById("soundStateText"),
       refreshBtn: document.getElementById("refreshBtn"),
-      eventNameText: document.getElementById("eventNameText"),
-      heroSubtext: document.getElementById("heroSubtext"),
-      lastUpdateText: document.getElementById("lastUpdateText"),
-      leaderName: document.getElementById("leaderName"),
-      leaderPoints: document.getElementById("leaderPoints"),
-      bookingCount: document.getElementById("bookingCount"),
-      totalPoints: document.getElementById("totalPoints"),
-      groupCount: document.getElementById("groupCount"),
-      visibleInfo: document.getElementById("visibleInfo"),
-      rankingGrid: document.getElementById("rankingGrid"),
-      remainingWrap: document.getElementById("remainingWrap"),
-      remainingGrid: document.getElementById("remainingGrid"),
+      podium: document.getElementById("podium"),
+      restList: document.getElementById("restList"),
       closedOverlay: document.getElementById("closedOverlay")
     };
 
@@ -732,14 +597,11 @@
 
     function startAutoRefresh() {
       if (state.refreshTimer) clearInterval(state.refreshTimer);
-      state.refreshTimer = setInterval(() => {
-        refreshData(false);
-      }, REFRESH_MS);
+      state.refreshTimer = setInterval(() => refreshData(false), REFRESH_MS);
     }
 
     async function refreshData(manual) {
       try {
-        setStatus(manual ? "Aktualisiere…" : "Live-Aktualisierung…", false, true);
         const [settingsRes, groupsRes, bookingsRes] = await Promise.all([
           apiGet("/settings"),
           apiGet("/groups"),
@@ -754,22 +616,24 @@
         detectChanges(nextRanking);
         state.ranking = nextRanking;
         state.lastRefreshTime = new Date();
+        state.hasError = false;
 
         render();
 
-        if (state.lastUpdatedNames.size > 0) {
+        if (state.changeMap.size > 0) {
           pingSound();
-          setTimeout(() => {
-            state.lastUpdatedNames.clear();
-            state.lastDeltas.clear();
+          if (state.clearImpactTimer) clearTimeout(state.clearImpactTimer);
+          state.clearImpactTimer = setTimeout(() => {
+            state.changeMap.clear();
             render();
-          }, 3200);
+          }, 3100);
         }
 
-        setStatus(state.settings?.status === "closed" ? "Zählung beendet" : "Live aktiv");
+        updateStatus();
       } catch (error) {
         console.error(error);
-        setStatus("Fehler beim Laden", true, false);
+        state.hasError = true;
+        updateStatus();
       }
     }
 
@@ -779,26 +643,20 @@
         .sort((a, b) => a.name.localeCompare(b.name, "de"));
 
       const totals = new Map(activeGroups.map(group => [group.id, 0]));
-      let activeBookingCount = 0;
-      let totalPoints = 0;
 
       bookings
         .filter(booking => booking.status !== "cancelled")
         .forEach(booking => {
-          activeBookingCount += 1;
-          const bookingPoints = Number(booking.totalPoints || 0);
-          totalPoints += bookingPoints;
+          const points = Number(booking.totalPoints || 0);
           if (totals.has(booking.groupId)) {
-            totals.set(booking.groupId, totals.get(booking.groupId) + bookingPoints);
+            totals.set(booking.groupId, totals.get(booking.groupId) + points);
           }
         });
 
       const ranking = activeGroups.map(group => ({
         id: group.id,
         name: group.name,
-        points: totals.get(group.id) || 0,
-        activeBookingCount,
-        totalPointsAll: totalPoints
+        points: totals.get(group.id) || 0
       }));
 
       ranking.sort((a, b) => b.points - a.points || a.name.localeCompare(b.name, "de"));
@@ -806,114 +664,148 @@
     }
 
     function detectChanges(nextRanking) {
-      const nextMap = new Map(nextRanking.map(item => [item.id, item.points]));
-      const updatedNames = new Set();
-      const deltas = new Map();
+      const nextSnapshot = new Map();
+      const changes = new Map();
 
-      for (const item of nextRanking) {
+      nextRanking.forEach(item => {
+        nextSnapshot.set(item.id, item.points);
         const previous = state.lastSnapshot.get(item.id);
         if (previous !== undefined && previous !== item.points) {
-          updatedNames.add(item.name);
-          deltas.set(item.name, item.points - previous);
+          changes.set(item.id, {
+            name: item.name,
+            from: previous,
+            to: item.points,
+            delta: item.points - previous
+          });
         }
-      }
+      });
 
-      state.lastSnapshot = nextMap;
-      state.lastUpdatedNames = updatedNames;
-      state.lastDeltas = deltas;
+      state.lastSnapshot = nextSnapshot;
+      state.changeMap = changes;
     }
 
     function render() {
-      const ranking = state.ranking;
-      const maxPoints = Math.max(...ranking.map(group => group.points), 1);
-      const primaryGroups = ranking.slice(0, PRIMARY_SLOTS);
-      const remainingGroups = ranking.slice(PRIMARY_SLOTS);
-
-      const activeBookings = state.bookings.filter(booking => booking.status !== "cancelled");
-      const totalPoints = activeBookings.reduce((sum, booking) => sum + Number(booking.totalPoints || 0), 0);
-      const leader = ranking[0] || { name: "–", points: 0 };
-
-      els.eventNameText.textContent = state.settings?.eventName || "Saufpokal Live";
+      els.eventNameText.textContent = state.settings?.eventName || "Aktuelles Ranking";
       els.eventEndText.textContent = state.settings?.endTime || "–";
-      els.heroSubtext.textContent = state.settings?.note
-        ? state.settings.note
-        : "Live-Ranking aus echten Buchungen. Stornierte Buchungen werden automatisch nicht mitgezählt.";
       els.lastUpdateText.textContent = state.lastRefreshTime ? formatTime(state.lastRefreshTime) : "–";
-      els.soundStateText.textContent = state.soundEnabled ? "an" : "aus";
       els.soundBtn.textContent = state.soundEnabled ? "Ton aktiv" : "Ton aktivieren";
-      els.leaderName.textContent = leader.name || "–";
-      els.leaderPoints.textContent = String(leader.points || 0);
-      els.bookingCount.textContent = String(activeBookings.length);
-      els.totalPoints.textContent = String(totalPoints);
-      els.groupCount.textContent = String(ranking.length);
-      els.visibleInfo.textContent = remainingGroups.length ? `${primaryGroups.length} + ${remainingGroups.length}` : String(primaryGroups.length);
       els.closedOverlay.classList.toggle("open", state.settings?.status === "closed");
 
-      els.rankingGrid.innerHTML = "";
-      els.remainingGrid.innerHTML = "";
+      const ranking = state.ranking;
+      els.podium.innerHTML = "";
+      els.restList.innerHTML = "";
 
       if (!ranking.length) {
-        els.rankingGrid.innerHTML = `<div class="ranking-item"><div class="group-name">Keine aktiven Gruppen vorhanden.</div></div>`;
-        els.remainingWrap.style.display = "none";
+        els.podium.innerHTML = `<div class="empty-box">Keine aktiven Gruppen vorhanden.</div>`;
         return;
       }
 
-      primaryGroups.forEach((group, index) => {
-        const absoluteRank = index + 1;
-        const isFlash = state.lastUpdatedNames.has(group.name);
-        const delta = state.lastDeltas.get(group.name) || 0;
-        const item = document.createElement("div");
-        item.className = "ranking-item";
-        if (absoluteRank === 1) item.classList.add("top1");
-        if (isFlash) item.classList.add("flash");
+      const maxPoints = Math.max(...ranking.map(item => item.points), 1);
+      const top3 = ranking.slice(0, 3);
+      const rest = ranking.slice(3);
 
+      top3.forEach((group, index) => {
+        const rank = index + 1;
+        const change = state.changeMap.get(group.id);
+        const impact = Boolean(change);
         const width = Math.max(8, Math.round((group.points / maxPoints) * 100));
-        const deltaBadge = isFlash && delta !== 0 ? `<div class="delta-badge">${delta > 0 ? `+${delta}` : delta}</div>` : "";
 
-        item.innerHTML = `
-          ${deltaBadge}
-          <div class="ranking-item-header">
-            <div class="rank-badge">${absoluteRank}</div>
-            <div class="group-block">
-              <div class="group-name">${escapeHtml(group.name)}</div>
-              <div class="group-meta">${absoluteRank === 1 ? "aktuelle Führung" : `Abstand zu Platz 1: ${leader.points - group.points}`}</div>
-            </div>
-            <div class="points-block">
-              <div class="points-value">${group.points}</div>
-              <div class="points-label">Punkte</div>
-            </div>
+        const card = document.createElement("div");
+        card.className = `podium-card rank-${rank}${impact ? " impact" : ""}`;
+        card.innerHTML = `
+          ${impact && change.delta !== 0 ? `<div class="delta-badge">${change.delta > 0 ? `+${change.delta}` : change.delta}</div>` : ""}
+          <div class="podium-top">
+            <div class="podium-rank">${rank}</div>
           </div>
-          <div class="bar-wrap">
-            <div class="bar" style="width:${width}%"></div>
+          <div class="podium-name">${escapeHtml(group.name)}</div>
+          <div class="podium-points">
+            <div class="points-big js-points" data-from="${impact ? change.from : group.points}" data-to="${group.points}" data-delta="${impact ? Math.abs(change.delta) : 0}">${impact ? change.from : group.points}</div>
+            <div class="points-caption">Punkte</div>
           </div>
+          <div class="podium-bar-wrap"><div class="podium-bar" style="width:${width}%"></div></div>
         `;
-
-        els.rankingGrid.appendChild(item);
+        els.podium.appendChild(card);
       });
 
-      if (remainingGroups.length) {
-        els.remainingWrap.style.display = "grid";
-        remainingGroups.forEach((group, index) => {
-          const absoluteRank = PRIMARY_SLOTS + index + 1;
-          const chip = document.createElement("div");
-          chip.className = "remaining-chip";
-          if (state.lastUpdatedNames.has(group.name)) chip.classList.add("flash");
-          chip.innerHTML = `
-            <div class="remaining-chip-rank">Platz ${absoluteRank}</div>
-            <div class="remaining-chip-name">${escapeHtml(group.name)}</div>
-            <div class="remaining-chip-points">${group.points} Punkte</div>
-          `;
-          els.remainingGrid.appendChild(chip);
-        });
-      } else {
-        els.remainingWrap.style.display = "none";
-      }
+      rest.forEach((group, index) => {
+        const rank = index + 4;
+        const change = state.changeMap.get(group.id);
+        const impact = Boolean(change);
+        const width = Math.max(8, Math.round((group.points / maxPoints) * 100));
+
+        const row = document.createElement("div");
+        row.className = `rank-row${impact ? " impact" : ""}`;
+        row.innerHTML = `
+          ${impact && change.delta !== 0 ? `<div class="delta-badge">${change.delta > 0 ? `+${change.delta}` : change.delta}</div>` : ""}
+          <div class="rank-row-head">
+            <div class="row-rank">${rank}</div>
+            <div class="row-name">${escapeHtml(group.name)}</div>
+            <div class="row-points">
+              <div class="points-small js-points" data-from="${impact ? change.from : group.points}" data-to="${group.points}" data-delta="${impact ? Math.abs(change.delta) : 0}">${impact ? change.from : group.points}</div>
+              <div class="points-caption">Punkte</div>
+            </div>
+          </div>
+          <div class="rank-bar-wrap"><div class="rank-bar" style="width:${width}%"></div></div>
+        `;
+        els.restList.appendChild(row);
+      });
+
+      runPointAnimations();
     }
 
-    function setStatus(text, isError = false, isLoading = false) {
-      els.statusText.textContent = text;
-      els.statusPill.classList.toggle("closed", isError || state.settings?.status === "closed");
-      els.statusPill.classList.toggle("loading", isLoading && !isError && state.settings?.status !== "closed");
+    function runPointAnimations() {
+      document.querySelectorAll(".js-points").forEach(el => {
+        const from = Number(el.dataset.from || 0);
+        const to = Number(el.dataset.to || 0);
+        const delta = Number(el.dataset.delta || 0);
+        if (from === to) {
+          el.textContent = String(to);
+          return;
+        }
+        animateCounter(el, from, to, delta);
+      });
+    }
+
+    function animateCounter(el, from, to, delta) {
+      const range = Math.abs(to - from);
+      const duration = Math.min(2600, Math.max(900, range * 18));
+      const start = performance.now();
+
+      function frame(now) {
+        const progress = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(from + (to - from) * eased);
+        el.textContent = String(current);
+        if (progress < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          el.textContent = String(to);
+          if (delta >= 50) {
+            el.style.transform = "scale(1.18)";
+            setTimeout(() => { el.style.transform = "scale(1)"; }, 180);
+          }
+        }
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    function updateStatus() {
+      els.statusPill.classList.remove("closed", "error");
+
+      if (state.hasError) {
+        els.statusText.textContent = "Verbindung gestört";
+        els.statusPill.classList.add("error");
+        return;
+      }
+
+      if (state.settings?.status === "closed") {
+        els.statusText.textContent = "Zählung beendet";
+        els.statusPill.classList.add("closed");
+        return;
+      }
+
+      els.statusText.textContent = "Live aktiv";
     }
 
     async function enableSound() {
@@ -933,8 +825,9 @@
     }
 
     function pingSound() {
-      if (!state.soundEnabled || !state.audioContext || state.lastUpdatedNames.size === 0) return;
+      if (!state.soundEnabled || !state.audioContext || state.changeMap.size === 0) return;
 
+      const maxDelta = Math.max(...[...state.changeMap.values()].map(item => Math.abs(item.delta || 0)), 1);
       const ctx = state.audioContext;
       const now = ctx.currentTime;
       const osc1 = ctx.createOscillator();
@@ -943,22 +836,22 @@
 
       osc1.type = "sine";
       osc2.type = "triangle";
-      osc1.frequency.setValueAtTime(880, now);
-      osc1.frequency.exponentialRampToValueAtTime(1320, now + 0.08);
-      osc2.frequency.setValueAtTime(1320, now);
-      osc2.frequency.exponentialRampToValueAtTime(1760, now + 0.08);
+      osc1.frequency.setValueAtTime(maxDelta >= 50 ? 740 : 880, now);
+      osc1.frequency.exponentialRampToValueAtTime(maxDelta >= 50 ? 1480 : 1320, now + 0.12);
+      osc2.frequency.setValueAtTime(maxDelta >= 50 ? 1110 : 1320, now);
+      osc2.frequency.exponentialRampToValueAtTime(maxDelta >= 50 ? 2220 : 1760, now + 0.12);
 
       gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.09, now + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+      gain.gain.exponentialRampToValueAtTime(maxDelta >= 50 ? 0.12 : 0.09, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + (maxDelta >= 50 ? 0.32 : 0.22));
 
       osc1.connect(gain);
       osc2.connect(gain);
       gain.connect(ctx.destination);
       osc1.start(now);
       osc2.start(now + 0.01);
-      osc1.stop(now + 0.22);
-      osc2.stop(now + 0.22);
+      osc1.stop(now + (maxDelta >= 50 ? 0.32 : 0.22));
+      osc2.stop(now + (maxDelta >= 50 ? 0.32 : 0.22));
     }
 
     async function apiGet(path) {
